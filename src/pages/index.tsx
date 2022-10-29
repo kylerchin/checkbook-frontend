@@ -1,8 +1,8 @@
 import * as React from 'react';
+import {useEffect, useState} from 'react';
+import { io } from "socket.io-client";
 
-import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
-
 /**
  * SVGR Support
  * Caveat: No React Props Type.
@@ -11,13 +11,44 @@ import Seo from '@/components/Seo';
  * @see https://stackoverflow.com/questions/68103844/how-to-override-next-js-svg-module-declaration
  */
 
-// !STARTERCONF -> Select !STARTERCONF and CMD + SHIFT + F
+// STARTERCONF -> Select !STARTERCONF and CMD + SHIFT + F
 // Before you begin editing, follow all comments with `STARTERCONF`,
 // to customize the default configuration.
 
+const socket = io("http://localhost:3000");
+
 export default function HomePage() {
+  const [initsearchquery,setinitsearchquery] = useState("");
+
+  const connectToServer = () => {
+    if (socket.connected === false) {
+    console.log("connecting....");
+    socket.connect();
+    }
+  }
+
+  useEffect(() => {
+    socket.emit("mainautocomplete", {
+      querystring: initsearchquery
+    })
+  }, [initsearchquery]);
+
+  useEffect(() => {
+    connectToServer();
+
+    setInterval(() => {
+      connectToServer();
+    }, 1000)
+  }, [])
+
+  function handleChange(event:any) {
+    console.log(event.target.value);
+
+    setinitsearchquery(event.target.value);
+  }
+
   return (
-    <Layout>
+    <>
       {/* <Seo templateTitle='Home' /> */}
       <Seo />
 
@@ -29,9 +60,9 @@ export default function HomePage() {
               <div className='mt-2'>
                 <input
                   id='checkbooksearch1'
-                  className=' w-full rounded-full bg-gray-100 px-2 py-2
-                
-                '
+                  className=' w-full rounded-full bg-gray-100 px-2 py-2'
+                  value={initsearchquery}
+                  onChange={handleChange}
                   placeholder='Search for a vendor, department, or keyword'
                 />
               </div>
@@ -39,6 +70,6 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-    </Layout>
+    </>
   );
 }
