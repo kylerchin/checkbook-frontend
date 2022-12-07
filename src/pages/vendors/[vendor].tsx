@@ -3,6 +3,7 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import { titleCase } from 'true-case';
 
+import { Navbar } from '@/components/nav';
 import Seo from '@/components/Seo';
 export default function Vendors(props: any) {
   // Render data...
@@ -11,55 +12,91 @@ export default function Vendors(props: any) {
     console.log(props.data.totalcost);
   });
 
+  useEffect(() => {
+    async () => {
+      const inputobjectpermonth = {
+        params: {
+          vendor: props.vendorname,
+        },
+      };
+
+      fetch(
+        `https://djkenster.checkbook.mejiaforcontroller.com/vendortransactionsovertimedeptpermonth/`,
+        {
+          method: 'POST',
+          body: JSON.stringify(inputobjectpermonth),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+    };
+  }, []);
+
   return (
-    <div className='container mx-auto mx-2 mt-4 dark:text-gray-100'>
-      <Seo
-        title={`${titleCase(
-          props.data.totalcost[0].vendor_name
-        )}|LA Checkbook Vendor`}
-      />
-      <Link href='/' className='underline'>
-        <p className='underline hover:text-blue-900 dark:text-blue-200 hover:dark:text-blue-50'>
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            fill='none'
-            viewBox='0 0 24 24'
-            strokeWidth={1.5}
-            stroke='currentColor'
-            className='mr-2 inline h-5 w-5'
-          >
-            <path
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              d='M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18'
-            />
-          </svg>
-          Back to Search
-        </p>
-      </Link>
-      <h1>{titleCase(props.data.totalcost[0].vendor_name)}</h1>
-      <p className='text-lg'>
-        {'Since 2014, '}
-        {parseInt(props.data.totalnumberoftransactions[0].count)} transactions
-        totaling{' '}
-        <span className='font-semibold'>
-          ${parseInt(props.data.totalcost[0].sum).toLocaleString('en-US')}
-        </span>
-      </p>
-      {props.data.thisyearsum && props.data.thisyearsum[0] ? (
+    <>
+      <Navbar themeChanger={props.themeChanger} />
+      <div className='container mx-auto mx-2 mt-4 dark:text-gray-100'>
+        <Seo
+          title={`${titleCase(
+            props.data.totalcost[0].vendor_name
+          )}|LA Checkbook Vendor`}
+        />
+        <Link href='/' className='underline'>
+          <p className='underline hover:text-blue-900 dark:text-blue-200 hover:dark:text-blue-50'>
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
+              strokeWidth={1.5}
+              stroke='currentColor'
+              className='mr-2 inline h-5 w-5'
+            >
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                d='M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18'
+              />
+            </svg>
+            Back to Search
+          </p>
+        </Link>
+        <h1>{titleCase(props.data.totalcost[0].vendor_name)}</h1>
         <p className='text-lg'>
-          In 2022, {parseInt(props.data.thisyearsum[0].count)} transactions
+          {'Since 2014, '}
+          {parseInt(props.data.totalnumberoftransactions[0].count)} transactions
           totaling{' '}
           <span className='font-semibold'>
-            ${parseInt(props.data.thisyearsum[0].sum).toLocaleString('en-US')}
+            ${parseInt(props.data.totalcost[0].sum).toLocaleString('en-US')}
           </span>
         </p>
-      ) : (
-        <p className='text-lg'>No Transactions in 2022</p>
-      )}
-      <p className='text-sm'>Loaded in {props.data.timeelapsed.toFixed(1)}ms</p>
+        {props.data.thisyearsum && props.data.thisyearsum[0] ? (
+          <p className='text-lg'>
+            In 2022, {parseInt(props.data.thisyearsum[0].count)} transactions
+            totaling{' '}
+            <span className='font-semibold'>
+              ${parseInt(props.data.thisyearsum[0].sum).toLocaleString('en-US')}
+            </span>
+          </p>
+        ) : (
+          <p className='text-lg'>No Transactions in 2022</p>
+        )}
+        <p className='text-sm'>
+          Loaded in {props.data.timeelapsed.toFixed(1)}ms
+        </p>
 
-      {/*
+        <div className='flex flex-row gap-x-1'>
+          <div className='rounded-full bg-black px-2 py-1 text-white dark:border dark:border-gray-500'>
+            Summary
+          </div>
+          <div className='rounded-full border border-black bg-white px-2 py-1 text-black'>
+            Table
+          </div>
+        </div>
+
+        <div className='rounded-md px-2 py-1 dark:bg-bruhlessdark'></div>
+
+        {/*
 
         <div className='rounded-sm bg-gray-100 py-3 px-2'>
         <h3>Spending over time</h3>
@@ -108,7 +145,8 @@ export default function Vendors(props: any) {
       </div>
 
         */}
-    </div>
+      </div>
+    </>
   );
 }
 
@@ -141,6 +179,7 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       data: data,
+      vendorname: context.params.vendor,
     },
   };
 }

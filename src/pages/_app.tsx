@@ -49,16 +49,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   function updateSystem() {
     const bodySelected = document.querySelector('body');
-
-    if (bodySelected) {
-      bodySelected.classList.add('dark:bg-gray-900');
-    }
-
     const htmlSelected = document.querySelector('html');
-
-    if (htmlSelected) {
-      htmlSelected.classList.add('dark');
-    }
 
     // On page load or when changing themes, best to add inline in `head` to avoid FOUC
     if (
@@ -68,11 +59,20 @@ function MyApp({ Component, pageProps }: AppProps) {
     ) {
       if (bodySelected) {
         bodySelected.classList.add('dark');
-        bodySelected.classList.add('dark:bg-gray-900');
+        bodySelected.classList.add('dark:bg-bruhdark');
+        bodySelected.classList.add('dark:bg-bruhdark');
+      }
+
+      if (htmlSelected) {
+        htmlSelected.classList.add('dark');
       }
     } else {
       if (bodySelected) {
         bodySelected.classList.remove('dark');
+      }
+
+      if (htmlSelected) {
+        htmlSelected.classList.remove('dark');
       }
     }
   }
@@ -82,6 +82,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   });
 
   function makeLight() {
+    console.log('make light');
     // Whenever the user explicitly chooses light mode
     localStorage.theme = 'light';
     updateSystem();
@@ -89,12 +90,14 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   function makeDark() {
     // Whenever the user explicitly chooses dark mode
+    console.log('make dark');
     localStorage.theme = 'dark';
     updateSystem();
   }
 
   function makeSystem() {
     // Whenever the user explicitly chooses to respect the OS preference
+    console.log('make sys');
     localStorage.removeItem('theme');
     updateSystem();
   }

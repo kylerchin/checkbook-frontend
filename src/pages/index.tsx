@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import { titleCase } from 'true-case';
 
-import Seo from '@/components/Seo';
+import { Navbar } from '../components/nav';
+import Seo from '../components/Seo';
 /**
  * SVGR Support
  * Caveat: No React Props Type.
@@ -46,7 +47,7 @@ function ButtonToExpand(props: ButtonToExpandInterface) {
   );
 }
 
-export default function HomePage() {
+export default function HomePage(props: any) {
   const [initsearchquery, setinitsearchquery] = useState('');
   const disableneedfirsttype = true;
   const [autocompleteresults, setautocompleteresults] = useState<any>(null);
@@ -175,11 +176,13 @@ export default function HomePage() {
 
   return (
     <>
+      <Navbar themeChanger={props.themeChanger} />
+
       {/* <Seo templateTitle='Home' /> */}
       <Seo />
 
-      <main className='dark:bg-gray-900'>
-        <section className='bg-white dark:bg-gray-900 dark:text-gray-50'>
+      <main className='dark:bg-bruhdark'>
+        <section className='bg-white dark:bg-bruhdark dark:text-gray-50'>
           <div
             className={`layout flex min-h-screen flex-col ${
               disableneedfirsttype || firstqueryinserted
@@ -189,7 +192,7 @@ export default function HomePage() {
           >
             <div className=''>
               <div className='flex flex-row'>
-                <h1 className='font-base dark:text-gray-100'>
+                <h1 className='font-sm md:font-base dark:text-gray-100'>
                   Search LA City Spending
                 </h1>
 
@@ -222,7 +225,7 @@ export default function HomePage() {
               <div className='mt-2'>
                 <input
                   id='checkbooksearch1'
-                  className=' w-full rounded-full bg-gray-100 px-2 py-2 dark:bg-gray-700 dark:text-gray-50'
+                  className=' w-full rounded-full bg-gray-100 px-2 py-2 dark:bg-bruhlessdark dark:text-gray-50'
                   value={initsearchquery}
                   onChange={handleChange}
                   placeholder='Search for a vendor, department, or keyword'
@@ -251,7 +254,7 @@ export default function HomePage() {
                 filtereddepts.map((eachDept: any, deptindex: number) => (
                   <a
                     key={deptindex}
-                    className='flex w-full flex-row border-b  border-gray-500 hover:bg-gray-200 hover:bg-gray-200 hover:dark:bg-gray-700 lg:w-4/6 '
+                    className='flex w-full flex-row border-b  border-gray-500 hover:bg-gray-200 hover:bg-gray-200 hover:dark:bg-bruhlessdark lg:w-4/6 '
                     href={`/dept/${encodeURIComponent(
                       eachDept.department_name.toLowerCase().trim()
                     )}`}
@@ -261,7 +264,7 @@ export default function HomePage() {
                         eachDept.department_name.replace(/( )?department/gi, '')
                       )}
                     </div>
-                    <div className='justify-right align-right bold right-align text-right font-bold'>
+                    <div className='justify-right align-right bold right-align text-right font-bold tabular-nums'>
                       ${parseInt(eachDept.sum).toLocaleString('en-US')}
                     </div>
                   </a>
@@ -304,11 +307,13 @@ export default function HomePage() {
                               <div className='flex-grow'>
                                 {titleCase(eachVendor.vendor_name)}
                               </div>
-                              <div className='justify-right align-right bold right-align text-right font-bold'>
-                                $
-                                {parseInt(eachVendor.sum).toLocaleString(
-                                  'en-US'
-                                )}
+                              <div className='justify-right align-right bold right-align text-right font-bold tabular-nums'>
+                                <p className='tabular-nums'>
+                                  $
+                                  {parseInt(eachVendor.sum).toLocaleString(
+                                    'en-US'
+                                  )}
+                                </p>
                               </div>
                             </a>
                           )

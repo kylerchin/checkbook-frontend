@@ -10,9 +10,11 @@ module.exports = {
     colors: colors,
     extend: {
       fontFamily: {
-        primary: ['Inter', ...fontFamily.sans],
+        primary: ['Inter var', 'Inter', ...fontFamily.sans],
       },
       colors: {
+        bruhdark: "#0D1117",
+        bruhlessdark: "#161B22",
         primary: {
           // Customize it on globals.css :root
           50: 'rgb(var(--tw-color-primary-50) / <alpha-value>)',
