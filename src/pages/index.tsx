@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import { titleCase } from 'true-case';
 
+import backends from '@/backends.json';
+
 import { Navbar } from '../components/nav';
 import Seo from '../components/Seo';
 /**
@@ -17,7 +19,7 @@ import Seo from '../components/Seo';
 // Before you begin editing, follow all comments with `STARTERCONF`,
 // to customize the default configuration.
 
-const socket = io('https://socket-checkbook-t4gf5mnipq-uw.a.run.app');
+const socket = io(backends.socket);
 
 interface ButtonToExpandInterface {
   showautocomplete: any;

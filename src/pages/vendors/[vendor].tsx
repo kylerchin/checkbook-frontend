@@ -5,6 +5,8 @@ import { titleCase } from 'true-case';
 
 import { Navbar } from '@/components/nav';
 import Seo from '@/components/Seo';
+
+import backends from '@/backends.json';
 export default function Vendors(props: any) {
   // Render data...
 
@@ -20,16 +22,13 @@ export default function Vendors(props: any) {
         },
       };
 
-      fetch(
-        `https://djkenster.checkbook.mejiaforcontroller.com/vendortransactionsovertimedeptpermonth/`,
-        {
-          method: 'POST',
-          body: JSON.stringify(inputobjectpermonth),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      fetch(`${backends.http}/vendortransactionsovertimedeptpermonth/`, {
+        method: 'POST',
+        body: JSON.stringify(inputobjectpermonth),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
     };
   }, []);
 
@@ -160,16 +159,13 @@ export async function getServerSideProps(context: any) {
     },
   };
 
-  const res = await fetch(
-    `https://djkenster.checkbook.mejiaforcontroller.com/vendorpage/`,
-    {
-      method: 'POST',
-      body: JSON.stringify(inputobject),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-  );
+  const res = await fetch(`${backends.http}/vendorpage/`, {
+    method: 'POST',
+    body: JSON.stringify(inputobject),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
   const data = await res.json();
 
   console.log('data came back');

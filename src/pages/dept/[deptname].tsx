@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import backends from '@/backends.json';
+
 export default function Departments(props: any): JSX.Element {
   // Render data...
 
@@ -20,13 +22,10 @@ export async function getServerSideProps(context: any) {
     },
   };
 
-  const res = await fetch(
-    `https://djkenster.checkbook.mejiaforcontroller.com/deptpage/`,
-    {
-      method: 'POST',
-      body: JSON.stringify(inputobject),
-    }
-  );
+  const res = await fetch(`${backends.http}/deptpage/`, {
+    method: 'POST',
+    body: JSON.stringify(inputobject),
+  });
   const data = await res.json();
 
   // Pass data to the page via props
