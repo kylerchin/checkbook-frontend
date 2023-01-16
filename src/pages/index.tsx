@@ -17,7 +17,7 @@ import Seo from '../components/Seo';
 // Before you begin editing, follow all comments with `STARTERCONF`,
 // to customize the default configuration.
 
-const socket = io('https://checkkirby.lacontroller.io/');
+const socket = io('https://socket-checkbook-t4gf5mnipq-uw.a.run.app');
 
 interface ButtonToExpandInterface {
   showautocomplete: any;

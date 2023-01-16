@@ -10,6 +10,7 @@
     "lint:fix": "eslint src --fix && yarn format",
     "lint:strict": "eslint src",
     "typecheck": "tsc --noEmit --incremental false",
+    "cloudrunstart": "next start -p  ${PORT:-8080}",
     "test:watch": "jest --watch",
     "test": "jest",
     "format": "prettier -w .",
