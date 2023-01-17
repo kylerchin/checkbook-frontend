@@ -123,6 +123,7 @@ export default function HomePage(props: any) {
       if (socket.connected !== socketconnected) {
         setsocketconnected(socket.connected);
       }
+      socket.emit('allaliases', {});
     }, 1000);
 
     const myInterval = setInterval(() => {
