@@ -295,8 +295,8 @@ export default function HomePage(props: any) {
                         value='vendors'
                       />
                     </div>
-                    {showautocomplete.aliasforwarding != false && (
-                      <p className=' text-gray-700 dark:text-gray-300'>
+                    {showautocomplete.aliasforwarding !== false && (
+                      <p className='italics text-gray-700 dark:text-gray-300'>
                         Also showing results for{' '}
                         <span className='font-semibold text-gray-700 dark:text-gray-200'>
                           {showautocomplete.aliasforwarding}
