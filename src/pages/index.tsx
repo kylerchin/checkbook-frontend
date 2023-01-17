@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import { titleCase } from 'true-case';
 
+import { vendorNameReplace } from '@/components/vendorNameReplace';
+
 import backends from '@/backends.json';
 
 import { Navbar } from '../components/nav';
@@ -307,7 +309,7 @@ export default function HomePage(props: any) {
                               )}`}
                             >
                               <div className='flex-grow'>
-                                {titleCase(eachVendor.vendor_name)}
+                                {vendorNameReplace(eachVendor.vendor_name)}
                               </div>
                               <div className='justify-right align-right bold right-align text-right font-bold tabular-nums'>
                                 <p className='tabular-nums'>

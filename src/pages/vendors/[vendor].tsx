@@ -5,6 +5,7 @@ import { titleCase } from 'true-case';
 
 import { Navbar } from '@/components/nav';
 import Seo from '@/components/Seo';
+import { vendorNameReplace } from '@/components/vendorNameReplace';
 
 import backends from '@/backends.json';
 export default function Vendors(props: any) {
@@ -60,7 +61,7 @@ export default function Vendors(props: any) {
             Back to Search
           </p>
         </Link>
-        <h1>{titleCase(props.data.totalcost[0].vendor_name)}</h1>
+        <h1>{vendorNameReplace(props.data.totalcost[0].vendor_name)}</h1>
         <p className='text-lg'>
           {'Since 2014, '}
           {parseInt(props.data.totalcost[0].count)} transactions totaling{' '}
