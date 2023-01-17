@@ -63,22 +63,21 @@ export default function Vendors(props: any) {
         <h1>{titleCase(props.data.totalcost[0].vendor_name)}</h1>
         <p className='text-lg'>
           {'Since 2014, '}
-          {parseInt(props.data.totalnumberoftransactions[0].count)} transactions
-          totaling{' '}
+          {parseInt(props.data.totalcost[0].count)} transactions totaling{' '}
           <span className='font-semibold'>
             ${parseInt(props.data.totalcost[0].sum).toLocaleString('en-US')}
           </span>
         </p>
         {props.data.thisyearsum && props.data.thisyearsum[0] ? (
           <p className='text-lg'>
-            In 2022, {parseInt(props.data.thisyearsum[0].count)} transactions
+            In 2023, {parseInt(props.data.thisyearsum[0].count)} transactions
             totaling{' '}
             <span className='font-semibold'>
               ${parseInt(props.data.thisyearsum[0].sum).toLocaleString('en-US')}
             </span>
           </p>
         ) : (
-          <p className='text-lg'>No Transactions in 2022</p>
+          <p className='text-lg'>No Transactions in 2023</p>
         )}
         <p className='text-sm'>
           Loaded in {props.data.timeelapsed.toFixed(1)}ms
