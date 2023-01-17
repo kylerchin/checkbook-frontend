@@ -77,7 +77,7 @@ export default function HomePage(props: any) {
       hi: 'hello',
     });
     socket.emit('mainautocomplete', {
-      querystring: initsearchquery,
+      querystring: initsearchquery.toUpperCase(),
     });
 
     setTimeout(() => {
@@ -85,7 +85,7 @@ export default function HomePage(props: any) {
         hi: 'hello',
       });
       socket.emit('mainautocomplete', {
-        querystring: initsearchquery,
+        querystring: initsearchquery.toUpperCase(),
       });
     }, 100);
   });
