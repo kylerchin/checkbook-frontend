@@ -3,6 +3,10 @@ import { useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import { titleCase } from 'true-case';
 
+import { vendorNameReplace } from '@/components/vendorNameReplace';
+
+import backends from '@/backends.json';
+
 import { Navbar } from '../components/nav';
 import Seo from '../components/Seo';
 /**
@@ -17,7 +21,7 @@ import Seo from '../components/Seo';
 // Before you begin editing, follow all comments with `STARTERCONF`,
 // to customize the default configuration.
 
-const socket = io('https://api.checkbook.mejiaforcontroller.com/');
+const socket = io(backends.socket);
 
 interface ButtonToExpandInterface {
   showautocomplete: any;
@@ -73,7 +77,7 @@ export default function HomePage(props: any) {
       hi: 'hello',
     });
     socket.emit('mainautocomplete', {
-      querystring: initsearchquery,
+      querystring: initsearchquery.toUpperCase(),
     });
 
     setTimeout(() => {
@@ -81,7 +85,7 @@ export default function HomePage(props: any) {
         hi: 'hello',
       });
       socket.emit('mainautocomplete', {
-        querystring: initsearchquery,
+        querystring: initsearchquery.toUpperCase(),
       });
     }, 100);
   });
@@ -291,9 +295,19 @@ export default function HomePage(props: any) {
                         value='vendors'
                       />
                     </div>
+
                     <div
                       className={`${showautocomplete.vendors ? '' : 'hidden'}`}
                     >
+                      {autocompleteresults.aliasforwarding !== false &&
+                        autocompleteresults.aliasforwarding !== undefined && (
+                          <p className='italics text-gray-700 dark:text-gray-300'>
+                            Also showing results for{' '}
+                            <span className='font-semibold text-gray-700 dark:text-gray-200'>
+                              {showautocomplete.aliasforwarding}
+                            </span>
+                          </p>
+                        )}
                       {autocompleteresults.rows &&
                         autocompleteresults.rows.map(
                           (eachVendor: any, vendorindex: number) => (
@@ -305,7 +319,7 @@ export default function HomePage(props: any) {
                               )}`}
                             >
                               <div className='flex-grow'>
-                                {titleCase(eachVendor.vendor_name)}
+                                {vendorNameReplace(eachVendor.vendor_name)}
                               </div>
                               <div className='justify-right align-right bold right-align text-right font-bold tabular-nums'>
                                 <p className='tabular-nums'>

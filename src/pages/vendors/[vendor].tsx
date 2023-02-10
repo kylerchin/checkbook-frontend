@@ -5,6 +5,9 @@ import { titleCase } from 'true-case';
 
 import { Navbar } from '@/components/nav';
 import Seo from '@/components/Seo';
+import { vendorNameReplace } from '@/components/vendorNameReplace';
+
+import backends from '@/backends.json';
 export default function Vendors(props: any) {
   // Render data...
 
@@ -20,16 +23,13 @@ export default function Vendors(props: any) {
         },
       };
 
-      fetch(
-        `https://djkenster.checkbook.mejiaforcontroller.com/vendortransactionsovertimedeptpermonth/`,
-        {
-          method: 'POST',
-          body: JSON.stringify(inputobjectpermonth),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      fetch(`${backends.http}/vendortransactionsovertimedeptpermonth/`, {
+        method: 'POST',
+        body: JSON.stringify(inputobjectpermonth),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
     };
   }, []);
 
@@ -61,25 +61,24 @@ export default function Vendors(props: any) {
             Back to Search
           </p>
         </Link>
-        <h1>{titleCase(props.data.totalcost[0].vendor_name)}</h1>
+        <h1>{vendorNameReplace(props.data.totalcost[0].vendor_name)}</h1>
         <p className='text-lg'>
           {'Since 2014, '}
-          {parseInt(props.data.totalnumberoftransactions[0].count)} transactions
-          totaling{' '}
+          {parseInt(props.data.totalcost[0].count)} transactions totaling{' '}
           <span className='font-semibold'>
             ${parseInt(props.data.totalcost[0].sum).toLocaleString('en-US')}
           </span>
         </p>
         {props.data.thisyearsum && props.data.thisyearsum[0] ? (
           <p className='text-lg'>
-            In 2022, {parseInt(props.data.thisyearsum[0].count)} transactions
+            In 2023, {parseInt(props.data.thisyearsum[0].count)} transactions
             totaling{' '}
             <span className='font-semibold'>
               ${parseInt(props.data.thisyearsum[0].sum).toLocaleString('en-US')}
             </span>
           </p>
         ) : (
-          <p className='text-lg'>No Transactions in 2022</p>
+          <p className='text-lg'>No Transactions in 2023</p>
         )}
         <p className='text-sm'>
           Loaded in {props.data.timeelapsed.toFixed(1)}ms
@@ -160,16 +159,13 @@ export async function getServerSideProps(context: any) {
     },
   };
 
-  const res = await fetch(
-    `https://djkenster.checkbook.mejiaforcontroller.com/vendorpage/`,
-    {
-      method: 'POST',
-      body: JSON.stringify(inputobject),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-  );
+  const res = await fetch(`${backends.http}/vendorpage/`, {
+    method: 'POST',
+    body: JSON.stringify(inputobject),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
   const data = await res.json();
 
   console.log('data came back');
