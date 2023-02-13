@@ -124,17 +124,6 @@ export default function HomePage(props: any) {
     });
   }, [initsearchquery]);
 
-  setInterval(() => {
-    if (deptsloaded === false) {
-      socket.emit('mainautocomplete', {
-        querystring: initsearchquery,
-      });
-      socket.emit('fetchdepts', {
-        hi: 'hello',
-      });
-    }
-  }, 300);
-
   useEffect(() => {
     connectToServer();
 
