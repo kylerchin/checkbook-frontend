@@ -323,15 +323,14 @@ export default function HomePage(props: any) {
                     <div
                       className={`${showautocomplete.vendors ? '' : 'hidden'}`}
                     >
-                      {autocompleteresults.aliasforwarding !== false &&
-                        autocompleteresults.aliasforwarding !== undefined && (
-                          <p className='italics text-gray-700 dark:text-gray-300'>
-                            Also showing results for{' '}
-                            <span className='font-semibold text-gray-700 dark:text-gray-200'>
-                              {showautocomplete.aliasforwarding}
-                            </span>
-                          </p>
-                        )}
+                      {autocompleteresults.aliasforwardingstatus === true && (
+                        <p className='italics text-gray-700 dark:text-gray-300'>
+                          Also showing results for{' '}
+                          <span className='font-semibold text-gray-700 dark:text-gray-200'>
+                            {showautocomplete.aliasforwardingto}
+                          </span>
+                        </p>
+                      )}
                       {autocompleteresults.rows &&
                         autocompleteresults.rows.map(
                           (eachVendor: any, vendorindex: number) => (
