@@ -96,7 +96,15 @@ export default function Vendors(props: any) {
 
         <div className='rounded-md px-2 py-1 dark:bg-bruhlessdark'>
           <TransactionTable
-            filter={{
+            optionalcolumns={[
+              'department_name',
+              'fund_name',
+              'program_name',
+              'expenditure_type',
+              'description',
+              'detailed_item_description',
+            ]}
+            filters={{
               vendor: {
                 query: props.vendorname,
                 matchtype: 'equals',

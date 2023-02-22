@@ -16,12 +16,25 @@ interface textinterface {
 }
 
 interface transactiontableinterface {
-  filter?: transactiontablefilterinterface;
+  filters?: transactiontablefilterinterface;
+  optionalcolumns: Array<string>;
 }
 
 interface requestinterface {
   newresults?: boolean;
 }
+
+const columnreadable = {
+  transaction_date: 'Date',
+  description: 'Description',
+  detailed_item_description: 'Item',
+  vendor_name: 'Vendor',
+  department_name: 'Dept',
+  fund_name: 'Fund',
+  program_name: 'Program',
+  expenditure_type: 'Expenditure Type',
+};
+
 export function TransactionTable(props: transactiontableinterface) {
   const currentShownRows = useRef<Array<any>>([]);
   const [timeelapsed, settimeelapsed] = useState<number>();
@@ -33,6 +46,8 @@ export function TransactionTable(props: transactiontableinterface) {
   const [currentShownRowsState, setCurrentShownRowsState] = useState<
     Array<any>
   >([]);
+
+  const filtersofcurrentlyshowndata = useRef<string>('');
 
   const socketconnectedref = useRef<boolean>(false);
 
@@ -47,13 +62,15 @@ export function TransactionTable(props: transactiontableinterface) {
     //but if it's a scroll request, send the existing props + the number of loaded rows and say it's a scroll request
 
     const requestobject: any = {
-      filter: props.filter,
+      filters: props.filters,
       offset: numberofloadedrows.current,
       //sortby: transaction_date OR item_description OR detailed_item_description OR vendor OR department
     };
 
     console.log('emitting request with', requestobject);
     socket.emit('getcheckbookrows', requestobject);
+
+    firstloadedboolref.current = true;
 
     return true;
   }
@@ -68,37 +85,46 @@ export function TransactionTable(props: transactiontableinterface) {
 
     let samereq = true;
 
-    if (props.filter) {
-      if (props.filter.vendor) {
-        if (
-          props.filter.vendor.query !== data.reqargs.filter.vendor.query &&
-          props.filter.vendor.matchtype !== data.reqargs.filter.vendor.matchtype
-        ) {
-          samereq = false;
-        }
-      }
+    if (
+      JSON.stringify(data.previouslysetfilters) !==
+      filtersofcurrentlyshowndata.current
+    ) {
+      samereq = false;
     }
 
     //if it's a new request, then set the current rows to the new rows
-    if (samereq === false) {
+    if (data.offsetnumber === 0 || samereq === false) {
       currentShownRows.current = data.rows;
       setCurrentShownRowsState(data.rows);
       numberofloadedrows.current = data.rows.length;
     } else {
       numberofloadedrows.current =
         numberofloadedrows.current + data.rows.length;
+      currentShownRows.current = [...currentShownRows.current, data.rows];
+      setCurrentShownRowsState(currentShownRows.current);
     }
+
+    filtersofcurrentlyshowndata.current = JSON.stringify(props.filters);
   });
 
   useEffect(() => {
     if (socketconnectedref.current === true) {
-      if (JSON.stringify(props.filter) === previouslyLoadedFilters.current) {
+      if (firstloadedboolref.current === true) {
         //do nothing
       } else {
-        previouslyLoadedFilters.current = JSON.stringify(props.filter);
         sendReq({});
       }
     }
+
+    setInterval(() => {
+      if (socketconnectedref.current === true) {
+        if (firstloadedboolref.current === true) {
+          //do nothing
+        } else {
+          sendReq({});
+        }
+      }
+    }, 300);
   });
 
   socket.on('connected', (sendback: any) => {
@@ -125,20 +151,47 @@ export function TransactionTable(props: transactiontableinterface) {
       <table>
         <thead>
           <tr>
-            <th>Dept</th>
             <th>Date</th>
-            <th>Desc</th>
-            <th>Detailed Desc</th>
+            {props.optionalcolumns.includes('department_name') && <th>Dept</th>}
+            {props.optionalcolumns.includes('vendor_name') && <th>Vendor</th>}
+            {props.optionalcolumns.includes('fund_name') && <th>Fund</th>}
+            {props.optionalcolumns.includes('program_name') && <th>Program</th>}
+            {props.optionalcolumns.includes('expenditure_type') && (
+              <th>Expend Type</th>
+            )}
+            {props.optionalcolumns.includes('description') && <th>Desc</th>}
+            {props.optionalcolumns.includes('detailed_item_description') && (
+              <th>Detailed Item Desc</th>
+            )}
             <th>Amount</th>
           </tr>
         </thead>
         <tbody>
           {currentShownRows.current.map((eachItem: any) => (
             <tr key={eachItem.id_number}>
-              <td>{eachItem.department_name}</td>
               <td>{eachItem.transaction_date}</td>
-              <td>{eachItem.description}</td>
-              <td>{eachItem.detailed_item_description}</td>
+              {props.optionalcolumns.includes('department_name') && (
+                <th>{eachItem.department_name}</th>
+              )}
+              {props.optionalcolumns.includes('vendor_name') && (
+                <th>{eachItem.vendor_name}</th>
+              )}
+              {props.optionalcolumns.includes('fund_name') && (
+                <th>{eachItem.fund_name}</th>
+              )}
+              {props.optionalcolumns.includes('program_name') && (
+                <th>{eachItem.program_name}</th>
+              )}
+              {props.optionalcolumns.includes('expenditure_type') && (
+                <th>{eachItem.expenditure_type}</th>
+              )}
+
+              {props.optionalcolumns.includes('description') && (
+                <th>{eachItem.description}</th>
+              )}
+              {props.optionalcolumns.includes('detailed_item_description') && (
+                <th>{eachItem.detailed_item_description}</th>
+              )}
               <td className='tabular-nums'>{eachItem.dollar_amount}</td>
             </tr>
           ))}
