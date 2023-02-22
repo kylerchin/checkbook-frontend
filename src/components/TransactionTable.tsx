@@ -235,7 +235,10 @@ export function TransactionTable(props: transactiontableinterface) {
       <div className='md:hidden'>
         <div className='flex flex-col gap-y-2'>
           {currentShownRows.current.map((eachItem: any) => (
-            <div className='bg-gray-800 px-2 py-1' key={eachItem.id_number}>
+            <div
+              className='bg-gray-100 px-2 py-1 dark:bg-gray-800'
+              key={eachItem.id_number}
+            >
               <div className='flex flex-row'>
                 <div className='mr-auto'>
                   <span>
