@@ -289,7 +289,10 @@ export default function HomePage(props: any) {
                   >
                     <div className='flex-grow'>
                       {titleCase(
-                        eachDept.department_name.replace(/( )?department/gi, '')
+                        eachDept.department_name.replace(
+                          /( )?department()?(of)?( )?/gi,
+                          ''
+                        )
                       )}
                     </div>
                     <div className='justify-right align-right bold right-align text-right font-bold tabular-nums'>

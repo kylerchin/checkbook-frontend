@@ -19,6 +19,7 @@ interface textinterface {
 interface transactiontableinterface {
   filters?: transactiontablefilterinterface;
   optionalcolumns: Array<string>;
+  forcescrollmethod?: string;
 }
 
 interface requestinterface {
@@ -43,7 +44,9 @@ export function TransactionTable(props: transactiontableinterface) {
   const currentShownRows = useRef<Array<any>>([]);
   const [timeelapsed, settimeelapsed] = useState<number>();
   const [firstloaded, setfirstloaded] = useState<boolean>(false);
+  const sizeofsearch = useRef<number>(0);
   const firstloadedboolref = useRef<boolean>(false);
+  const [sizeofsearchstate, setsizeofsearchstate] = useState<number>(0);
   const currentRows = useRef<Array<any>>([]);
   const currentRowsState = useState<Array<any>>([]);
   const currentLoadedParameters = useRef<any>(null);
@@ -71,6 +74,12 @@ export function TransactionTable(props: transactiontableinterface) {
       //sortby: transaction_date OR item_description OR detailed_item_description OR vendor OR department
     };
 
+    if (props.forcescrollmethod) {
+      if (props.forcescrollmethod != '') {
+        requestobject.forcescrollmethod = props.forcescrollmethod;
+      }
+    }
+
     console.log('emitting request with', requestobject);
     socket.emit('getcheckbookrows', requestobject);
 
@@ -82,6 +91,25 @@ export function TransactionTable(props: transactiontableinterface) {
   //on a new scroll or filter command, the software should determine if it should
   //1. fetch the whole thing or enter infinite scrolling mode via "scrollmode": "infinite" | "all" as a response from the backend
   // a) the front end in infinite mode would store a rows amount and fetch based on the offset number
+
+  socket.on('numberofrowsinreq', (data: any) => {
+    if (data.rows) {
+      if (data.rows[0]) {
+        if (data.rows[0].count) {
+          console.log('number of rows in req', parseInt(data.rows[0].count));
+          sizeofsearch.current = parseInt(data.rows[0].count);
+          setsizeofsearchstate(parseInt(data.rows[0].count));
+
+          if (sizeofsearch.current < 1500) {
+            if (sizeofsearch.current > currentShownRows.current.length) {
+              // sendReq({ newresults: true });
+              console.log('ask for next interation');
+            }
+          }
+        }
+      }
+    }
+  });
 
   socket.on('recievecheckbookrows', (data: any) => {
     //process and then update the state
@@ -111,25 +139,33 @@ export function TransactionTable(props: transactiontableinterface) {
     filtersofcurrentlyshowndata.current = JSON.stringify(props.filters);
   });
 
+  const loadfirsttime = () => {
+    socket.connect();
+
+    if (firstloadedboolref.current === false) {
+      sendReq({});
+    }
+  };
+
   useEffect(() => {
     if (socketconnectedref.current === true) {
-      if (firstloadedboolref.current === true) {
-        //do nothing
-      } else {
-        sendReq({});
-      }
+      loadfirsttime();
     }
+  });
+
+  useEffect(() => {
+    loadfirsttime();
 
     setInterval(() => {
-      socket.connect();
-
-      if (firstloadedboolref.current === true) {
-        //do nothing
-      } else {
-        sendReq({});
-      }
+      loadfirsttime();
     }, 300);
-  });
+
+    if (typeof window != 'undefined') {
+      window.addEventListener('mousemove', (e) => {
+        loadfirsttime();
+      });
+    }
+  }, []);
 
   socket.on('connected', (sendback: any) => {
     socketconnectedref.current = true;
@@ -143,7 +179,7 @@ export function TransactionTable(props: transactiontableinterface) {
   socket.connect();
 
   return (
-    <div>
+    <div className='py-1'>
       {false && (
         <button
           className='rounded bg-blue-800 px-2 py-2 text-white'
@@ -154,7 +190,22 @@ export function TransactionTable(props: transactiontableinterface) {
           Send Req
         </button>
       )}
-      <table className='hidden md:block'>
+      {firstloadedboolref.current === true && (
+        <p>
+          <span className='font-semibold'>
+            {currentShownRows.current.length}
+          </span>{' '}
+          of <span className='font-semibold'>{sizeofsearchstate}</span> rows
+          loaded.{' '}
+          <span>
+            {sizeofsearchstate > currentShownRows.current.length && (
+              <span>Scroll for more.</span>
+            )}
+          </span>
+        </p>
+      )}
+
+      <table className='hidden rounded-md px-2 py-1 dark:bg-bruhlessdark md:block'>
         <thead>
           <tr>
             <th>Date</th>
@@ -270,7 +321,12 @@ export function TransactionTable(props: transactiontableinterface) {
                 {props.optionalcolumns.includes('department_name') &&
                   eachItem.department_name && (
                     <span className=''>
-                      {titleCase(eachItem.department_name)}
+                      {titleCase(
+                        eachItem.department_name.replace(
+                          /( )?department()?(of)?( )?/gi,
+                          ''
+                        )
+                      )}
                     </span>
                   )}
               </p>
@@ -346,6 +402,12 @@ export function TransactionTable(props: transactiontableinterface) {
           ))}
         </div>
       </div>
+      {firstloadedboolref.current === true &&
+        sizeofsearchstate === currentShownRows.current.length && (
+          <p className='my-1 font-semibold'>
+            All rows loaded. Nothing past this!
+          </p>
+        )}
     </div>
   );
 }

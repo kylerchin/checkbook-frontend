@@ -24,7 +24,7 @@ jobs:
       - name: Authenticate Google Cloud
         uses: 'google-github-actions/auth@v1'
         with:
-          credentials_json: ${{ secrets.CLOUD_RUN_SERVICE_ACCOUNT }}
+          credentials: ${{ secrets.CLOUD_RUN_SERVICE_ACCOUNT }}
 
       # This step is where our service account will be authenticated
       - uses: google-github-actions/setup-gcloud@v1.0.1

@@ -37,7 +37,7 @@ export default function Vendors(props: any) {
   return (
     <>
       <Navbar themeChanger={props.themeChanger} />
-      <div className='container mx-auto mx-2 mt-4 dark:text-gray-100'>
+      <div className='mx-auto mx-2 mt-4 dark:text-gray-100'>
         <Seo
           title={`${titleCase(
             props.data.totalcost[0].vendor_name
@@ -103,7 +103,7 @@ export default function Vendors(props: any) {
           </div>
         </div>
 
-        <div className='rounded-md px-2 py-1 dark:bg-bruhlessdark'>
+        <div className=''>
           <TransactionTable
             optionalcolumns={[
               'department_name',
