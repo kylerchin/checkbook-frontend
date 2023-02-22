@@ -5,6 +5,7 @@ import { titleCase } from 'true-case';
 
 import { Navbar } from '@/components/nav';
 import Seo from '@/components/Seo';
+import { TransactionTable } from '@/components/TransactionTable';
 import { vendorNameReplace } from '@/components/vendorNameReplace';
 
 import backends from '@/backends.json';
@@ -93,7 +94,16 @@ export default function Vendors(props: any) {
           </div>
         </div>
 
-        <div className='rounded-md px-2 py-1 dark:bg-bruhlessdark'></div>
+        <div className='rounded-md px-2 py-1 dark:bg-bruhlessdark'>
+          <TransactionTable
+            filter={{
+              vendor: {
+                query: props.vendorname,
+                matchtype: 'equals',
+              },
+            }}
+          />
+        </div>
 
         {/*
 

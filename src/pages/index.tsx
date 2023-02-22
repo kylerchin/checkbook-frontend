@@ -54,6 +54,8 @@ function ButtonToExpand(props: ButtonToExpandInterface) {
 export default function HomePage(props: any) {
   const [initsearchquery, setinitsearchquery] = useState('');
   const disableneedfirsttype = true;
+  const [firstloaded, setfirstloaded] = useState<boolean>(false);
+  const firstloadedref = useRef(false);
   const [autocompleteresults, setautocompleteresults] = useState<any>(null);
   const [firstqueryinserted, setfirstqueryinserted] = useState(false);
   const [socketconnected, setsocketconnected] = useState<boolean>(
@@ -97,6 +99,8 @@ export default function HomePage(props: any) {
   socket.on('autocompleteresponse', (sendback: any) => {
     console.log('response recieved!');
 
+    setfirstloaded(true);
+    firstloadedref.current = true;
     setautocompleteresults(sendback);
   });
 
@@ -123,6 +127,26 @@ export default function HomePage(props: any) {
       hi: 'hello',
     });
   }, [initsearchquery]);
+
+  useEffect(() => {
+    const tortureuntilitloads = () => {
+      if (firstloaded === false && firstloadedref.current === false) {
+        socket.emit('mainautocomplete', {
+          querystring: initsearchquery,
+        });
+
+        socket.emit('fetchdepts', {
+          hi: 'hello',
+        });
+      }
+    };
+
+    tortureuntilitloads();
+
+    setInterval(() => {
+      tortureuntilitloads();
+    }, 200);
+  });
 
   useEffect(() => {
     connectToServer();
