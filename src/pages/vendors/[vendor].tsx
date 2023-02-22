@@ -65,9 +65,12 @@ export default function Vendors(props: any) {
         <h1>{vendorNameReplace(props.data.totalcost[0].vendor_name)}</h1>
         <p className='text-lg'>
           {'Since 2014, '}
-          {parseInt(props.data.totalcost[0].count)} transactions totaling{' '}
+          {parseFloat(props.data.totalcost[0].count)} transactions totaling{' '}
           <span className='font-semibold'>
-            ${parseInt(props.data.totalcost[0].sum).toLocaleString('en-US')}
+            {parseFloat(props.data.totalcost[0].sum).toLocaleString('default', {
+              style: 'currency',
+              currency: 'USD',
+            })}
           </span>
         </p>
         {props.data.thisyearsum && props.data.thisyearsum[0] ? (
@@ -75,7 +78,13 @@ export default function Vendors(props: any) {
             In 2023, {parseInt(props.data.thisyearsum[0].count)} transactions
             totaling{' '}
             <span className='font-semibold'>
-              ${parseInt(props.data.thisyearsum[0].sum).toLocaleString('en-US')}
+              {parseInt(props.data.thisyearsum[0].sum).toLocaleString(
+                'default',
+                {
+                  style: 'currency',
+                  currency: 'USD',
+                }
+              )}
             </span>
           </p>
         ) : (
@@ -99,7 +108,7 @@ export default function Vendors(props: any) {
             optionalcolumns={[
               'department_name',
               'fund_name',
-              'program_name',
+              'program',
               'expenditure_type',
               'description',
               'detailed_item_description',

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import * as React from 'react';
 import { io } from 'socket.io-client';
+import { titleCase } from 'true-case';
 
 import backends from '@/backends.json';
 
@@ -118,12 +119,11 @@ export function TransactionTable(props: transactiontableinterface) {
 
     setInterval(() => {
       socket.connect();
-      if (socketconnectedref.current === true) {
-        if (firstloadedboolref.current === true) {
-          //do nothing
-        } else {
-          sendReq({});
-        }
+
+      if (firstloadedboolref.current === true) {
+        //do nothing
+      } else {
+        sendReq({});
       }
     }, 300);
   });
@@ -141,14 +141,16 @@ export function TransactionTable(props: transactiontableinterface) {
 
   return (
     <div>
-      <button
-        className='rounded bg-blue-800 px-2 py-2 text-white'
-        onClick={(e) => {
-          sendReq({});
-        }}
-      >
-        Send Req
-      </button>
+      {false && (
+        <button
+          className='rounded bg-blue-800 px-2 py-2 text-white'
+          onClick={(e) => {
+            sendReq({});
+          }}
+        >
+          Send Req
+        </button>
+      )}
       <table>
         <thead>
           <tr>
@@ -156,7 +158,7 @@ export function TransactionTable(props: transactiontableinterface) {
             {props.optionalcolumns.includes('department_name') && <th>Dept</th>}
             {props.optionalcolumns.includes('vendor_name') && <th>Vendor</th>}
             {props.optionalcolumns.includes('fund_name') && <th>Fund</th>}
-            {props.optionalcolumns.includes('program_name') && <th>Program</th>}
+            {props.optionalcolumns.includes('program') && <th>Program</th>}
             {props.optionalcolumns.includes('expenditure_type') && (
               <th>Expend Type</th>
             )}
@@ -169,31 +171,60 @@ export function TransactionTable(props: transactiontableinterface) {
         </thead>
         <tbody>
           {currentShownRows.current.map((eachItem: any) => (
-            <tr key={eachItem.id_number}>
-              <td>{eachItem.transaction_date}</td>
+            <tr className='font-normal' key={eachItem.id_number}>
+              <td className='border-collapse border border-gray-500 font-normal'>
+                {new Date(eachItem.transaction_date).toLocaleDateString(
+                  'default',
+                  {
+                    year: '2-digit',
+                    month: '2-digit',
+                    day: '2-digit',
+                  }
+                )}
+              </td>
               {props.optionalcolumns.includes('department_name') && (
-                <th>{eachItem.department_name}</th>
+                <th className='border-collapse border border-gray-500  font-normal'>
+                  {titleCase(eachItem.department_name)}
+                </th>
               )}
               {props.optionalcolumns.includes('vendor_name') && (
-                <th>{eachItem.vendor_name}</th>
+                <th className='border-collapse border border-gray-500 font-normal'>
+                  {titleCase(eachItem.vendor_name)}
+                </th>
               )}
               {props.optionalcolumns.includes('fund_name') && (
-                <th>{eachItem.fund_name}</th>
+                <th className='border-collapse border border-gray-500 font-normal'>
+                  {titleCase(eachItem.fund_name)}
+                </th>
               )}
-              {props.optionalcolumns.includes('program_name') && (
-                <th>{eachItem.program_name}</th>
+              {props.optionalcolumns.includes('program') && (
+                <th className='border-collapse border border-gray-500 font-normal'>
+                  {titleCase(eachItem.program)}
+                </th>
               )}
               {props.optionalcolumns.includes('expenditure_type') && (
-                <th>{eachItem.expenditure_type}</th>
+                <th className='border-collapse border border-gray-500 font-normal'>
+                  {titleCase(eachItem.expenditure_type)}
+                </th>
               )}
 
               {props.optionalcolumns.includes('description') && (
-                <th>{eachItem.description}</th>
+                <th className='border-collapse border border-gray-500 font-normal'>
+                  {titleCase(eachItem.description)}
+                </th>
               )}
               {props.optionalcolumns.includes('detailed_item_description') && (
-                <th>{eachItem.detailed_item_description}</th>
+                <th className='border-collapse border border-gray-500 font-normal'>
+                  {titleCase(eachItem.detailed_item_description)}
+                </th>
               )}
-              <td className='tabular-nums'>{eachItem.dollar_amount}</td>
+              <td className='border-collapse border border-gray-500 tabular-nums'>
+                {parseFloat(eachItem.dollar_amount).toLocaleString('default', {
+                  style: 'currency',
+                  currency: 'USD',
+                  currencySign: 'accounting',
+                })}
+              </td>
             </tr>
           ))}
         </tbody>
