@@ -117,6 +117,7 @@ export function TransactionTable(props: transactiontableinterface) {
     }
 
     setInterval(() => {
+      socket.connect();
       if (socketconnectedref.current === true) {
         if (firstloadedboolref.current === true) {
           //do nothing
