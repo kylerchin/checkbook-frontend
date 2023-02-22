@@ -327,7 +327,9 @@ export default function HomePage(props: any) {
                         <p className='italics text-gray-700 dark:text-gray-300'>
                           Also showing results for{' '}
                           <span className='font-semibold text-gray-700 dark:text-gray-200'>
-                            {autocompleteresults.aliasforwardingto}
+                            {vendorNameReplace(
+                              autocompleteresults.aliasforwardingto
+                            )}
                           </span>
                         </p>
                       )}
