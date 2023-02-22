@@ -36,6 +36,9 @@ const columnreadable = {
   expenditure_type: 'Expenditure Type',
 };
 
+const desktopnotamountcell =
+  'justify-left align-left border-collapse border border-gray-500 px-2 text-left  font-normal';
+
 export function TransactionTable(props: transactiontableinterface) {
   const currentShownRows = useRef<Array<any>>([]);
   const [timeelapsed, settimeelapsed] = useState<number>();
@@ -151,7 +154,7 @@ export function TransactionTable(props: transactiontableinterface) {
           Send Req
         </button>
       )}
-      <table>
+      <table className='hidden md:block'>
         <thead>
           <tr>
             <th>Date</th>
@@ -183,38 +186,38 @@ export function TransactionTable(props: transactiontableinterface) {
                 )}
               </td>
               {props.optionalcolumns.includes('department_name') && (
-                <th className='justify-left align-left border-collapse border border-gray-500 px-2 text-left  font-normal'>
+                <th className={desktopnotamountcell}>
                   {titleCase(eachItem.department_name)}
                 </th>
               )}
               {props.optionalcolumns.includes('vendor_name') && (
-                <th className='justify-left align-left border-collapse border border-gray-500 px-2 text-left font-normal'>
+                <th className={desktopnotamountcell}>
                   {titleCase(eachItem.vendor_name)}
                 </th>
               )}
               {props.optionalcolumns.includes('fund_name') && (
-                <th className='justify-left align-left border-collapse border border-gray-500 px-2 text-left font-normal'>
+                <th className={desktopnotamountcell}>
                   {titleCase(eachItem.fund_name)}
                 </th>
               )}
               {props.optionalcolumns.includes('program') && (
-                <th className='justify-left align-left border-collapse border border-gray-500 px-2 text-left  font-normal'>
+                <th className={desktopnotamountcell}>
                   {titleCase(eachItem.program)}
                 </th>
               )}
               {props.optionalcolumns.includes('expenditure_type') && (
-                <th className='justify-left align-left border-collapse border border-gray-500 px-2  text-left font-normal'>
+                <th className={desktopnotamountcell}>
                   {titleCase(eachItem.expenditure_type)}
                 </th>
               )}
 
               {props.optionalcolumns.includes('description') && (
-                <th className='justify-left align-left border-collapse border border-gray-500 px-2 text-left font-normal'>
+                <th className={desktopnotamountcell}>
                   {titleCase(eachItem.description)}
                 </th>
               )}
               {props.optionalcolumns.includes('detailed_item_description') && (
-                <th className='justify-left align-left border-collapse border  border-gray-500 px-2 text-left font-normal'>
+                <th className={desktopnotamountcell}>
                   {titleCase(eachItem.detailed_item_description)}
                 </th>
               )}
@@ -229,6 +232,117 @@ export function TransactionTable(props: transactiontableinterface) {
           ))}
         </tbody>
       </table>
+      <div className='md:hidden'>
+        <div className='flex flex-col gap-y-2'>
+          {currentShownRows.current.map((eachItem: any) => (
+            <div className='bg-gray-800 px-2 py-1' key={eachItem.id_number}>
+              <div className='flex flex-row'>
+                <div className='mr-auto'>
+                  <span>
+                    {new Date(eachItem.transaction_date).toLocaleDateString(
+                      'default',
+                      {
+                        year: '2-digit',
+                        month: '2-digit',
+                        day: '2-digit',
+                      }
+                    )}
+                  </span>
+                </div>
+
+                <div>
+                  <span className='justify-right ml-auto flex-grow font-semibold'>
+                    {parseFloat(eachItem.dollar_amount).toLocaleString(
+                      'default',
+                      {
+                        style: 'currency',
+                        currency: 'USD',
+                        currencySign: 'accounting',
+                      }
+                    )}
+                  </span>
+                </div>
+              </div>
+              <p>
+                {props.optionalcolumns.includes('department_name') &&
+                  eachItem.department_name && (
+                    <span className=''>
+                      {titleCase(eachItem.department_name)}
+                    </span>
+                  )}
+              </p>
+              <p>
+                {props.optionalcolumns.includes('vendor_name') &&
+                  eachItem.vendor_name && (
+                    <span className=''>
+                      <span className='text-gray-600 dark:text-gray-400'>
+                        Vendor:{' '}
+                      </span>
+                      {titleCase(eachItem.vendor_name)}
+                    </span>
+                  )}
+              </p>
+              <p>
+                {props.optionalcolumns.includes('fund_name') &&
+                  eachItem.program && (
+                    <span className=''>
+                      <span className='text-gray-600 dark:text-gray-400'>
+                        Fund:{' '}
+                      </span>
+                      {titleCase(eachItem.fund_name)}
+                    </span>
+                  )}
+              </p>
+              <p>
+                {props.optionalcolumns.includes('program') &&
+                  eachItem['program'] && (
+                    <span className=''>
+                      <span className='text-gray-600 dark:text-gray-400'>
+                        Program:{' '}
+                      </span>
+                      {titleCase(eachItem.program)}
+                    </span>
+                  )}
+              </p>
+              <p>
+                {props.optionalcolumns.includes('expenditure_type') &&
+                  eachItem['expenditure_type'] && (
+                    <span className=''>
+                      <span className='text-gray-600 dark:text-gray-400'>
+                        Expenditure Type:{' '}
+                      </span>
+                      {titleCase(eachItem.expenditure_type)}
+                    </span>
+                  )}
+              </p>
+              <p>
+                {props.optionalcolumns.includes('description') &&
+                  eachItem.description && (
+                    <span className=''>
+                      <span className='text-gray-600 dark:text-gray-400'>
+                        Desc:{' '}
+                      </span>
+                      {titleCase(eachItem.description)}
+                    </span>
+                  )}
+              </p>
+              <p>
+                {props.optionalcolumns.includes('detailed_item_description') &&
+                  eachItem['detailed_item_description'] && (
+                    <span className=''>
+                      <span className='text-gray-600 dark:text-gray-400'>
+                        Item:{' '}
+                      </span>
+                      <span>
+                        {titleCase(eachItem.detailed_item_description)}
+                      </span>
+                    </span>
+                  )}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
