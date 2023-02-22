@@ -183,42 +183,42 @@ export function TransactionTable(props: transactiontableinterface) {
                 )}
               </td>
               {props.optionalcolumns.includes('department_name') && (
-                <th className='border-collapse border border-gray-500  font-normal'>
+                <th className='justify-left  border-collapse border border-gray-500  font-normal'>
                   {titleCase(eachItem.department_name)}
                 </th>
               )}
               {props.optionalcolumns.includes('vendor_name') && (
-                <th className='border-collapse border border-gray-500 font-normal'>
+                <th className='justify-left  border-collapse border border-gray-500 font-normal'>
                   {titleCase(eachItem.vendor_name)}
                 </th>
               )}
               {props.optionalcolumns.includes('fund_name') && (
-                <th className='border-collapse border border-gray-500 font-normal'>
+                <th className='justify-left  border-collapse border border-gray-500 font-normal'>
                   {titleCase(eachItem.fund_name)}
                 </th>
               )}
               {props.optionalcolumns.includes('program') && (
-                <th className='border-collapse border border-gray-500 font-normal'>
+                <th className='justify-left  border-collapse border border-gray-500 font-normal'>
                   {titleCase(eachItem.program)}
                 </th>
               )}
               {props.optionalcolumns.includes('expenditure_type') && (
-                <th className='border-collapse border border-gray-500 font-normal'>
+                <th className='justify-left  border-collapse border border-gray-500 font-normal'>
                   {titleCase(eachItem.expenditure_type)}
                 </th>
               )}
 
               {props.optionalcolumns.includes('description') && (
-                <th className='border-collapse border border-gray-500 font-normal'>
+                <th className='justify-left  border-collapse border border-gray-500 font-normal'>
                   {titleCase(eachItem.description)}
                 </th>
               )}
               {props.optionalcolumns.includes('detailed_item_description') && (
-                <th className='border-collapse border border-gray-500 font-normal'>
+                <th className='justify-left  border-collapse border border-gray-500 font-normal'>
                   {titleCase(eachItem.detailed_item_description)}
                 </th>
               )}
-              <td className='border-collapse border border-gray-500 tabular-nums'>
+              <td className='justify-right  border-collapse border border-gray-500 tabular-nums'>
                 {parseFloat(eachItem.dollar_amount).toLocaleString('default', {
                   style: 'currency',
                   currency: 'USD',
