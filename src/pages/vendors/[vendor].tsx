@@ -119,14 +119,14 @@ export default function Vendors(props: any) {
         )}
 
         {props.data.totalcost[0].vendor_name.match(/privacy-/gi) && (
-          <p className='text-purple-800 dark:text-purple-300'>
+          <p className='leading-tight text-purple-800 dark:text-purple-300'>
             This Vendor Page is the list of Transactions for the{' '}
             <span className='font-bold'>
               {departmentNameReplace(
                 vendorNameReplace(props.data.totalcost[0].vendor_name)
               )}
             </span>{' '}
-            Department where the Vendor Name cannot be disclosed.
+            Department where the vendor was not disclosed.
           </p>
         )}
 
