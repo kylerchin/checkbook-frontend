@@ -486,7 +486,7 @@ export function TransactionTable(props: transactiontableinterface) {
         <div className='flex flex-col gap-y-2'>
           {currentShownRows.current.map((eachItem: any) => (
             <div
-              className='bg-gray-100 px-2 py-1 dark:bg-gray-800'
+              className='rounded-sm overflow-x-hidden bg-gray-100 px-2 py-1 dark:bg-gray-800'
               key={eachItem.id_number}
             >
               <div className='flex flex-row'>
@@ -600,7 +600,7 @@ export function TransactionTable(props: transactiontableinterface) {
               {props.optionalcolumns.includes('description') &&
                 eachItem.description && (
                   <p>
-                    <span className=''>
+                    <span className='break-words'>
                       <span className='text-gray-600 dark:text-gray-400'>
                         Desc:{' '}
                       </span>
@@ -612,7 +612,7 @@ export function TransactionTable(props: transactiontableinterface) {
               {props.optionalcolumns.includes('detailed_item_description') &&
                 eachItem['detailed_item_description'] && (
                   <p>
-                    <span className=''>
+                    <span className='break-words'>
                       <span className='text-gray-600 dark:text-gray-400'>
                         Item:{' '}
                       </span>
