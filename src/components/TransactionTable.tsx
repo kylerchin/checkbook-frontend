@@ -69,6 +69,30 @@ const columnreadable = {
 const desktopnotamountcell =
   'justify-left align-left border-collapse border border-gray-500 px-1 lg:px-2 text-left text-xs lg:text-sm xl:text-base font-normal';
 
+interface vendorelementinterface {
+  vendor_name: string;
+}
+
+export function VendorElement(props: vendorelementinterface) {
+  return (
+    <>
+      {props.vendor_name.match(/privacy-/gi) && (
+        <>
+          <Icon
+            className='inline align-middle  text-gray-600 dark:text-gray-400'
+            path={mdiIncognitoCircle}
+            size={1}
+          />
+          <span className='ml-1 text-gray-700 dark:text-gray-300'>
+            Privacy-
+          </span>
+        </>
+      )}
+      {vendorNameReplace(props.vendor_name)}
+    </>
+  );
+}
+
 export function TransactionTable(props: transactiontableinterface) {
   const currentShownRows = useRef<Array<any>>([]);
   const [timeelapsed, settimeelapsed] = useState<number>();
@@ -295,10 +319,13 @@ export function TransactionTable(props: transactiontableinterface) {
       {firstloadedboolref.current === true && (
         <p>
           <span className='font-semibold'>
-            {currentShownRows.current.length}
+            {currentShownRows.current.length.toLocaleString('default')}
           </span>{' '}
-          of <span className='font-semibold'>{sizeofsearchstate}</span> rows
-          loaded.{' '}
+          of{' '}
+          <span className='font-semibold'>
+            {sizeofsearchstate.toLocaleString('default')}
+          </span>{' '}
+          rows loaded.{' '}
           <span>
             {sizeofsearchstate > currentShownRows.current.length && (
               <span>Scroll for more.</span>
@@ -404,19 +431,7 @@ export function TransactionTable(props: transactiontableinterface) {
                       )}`}
                     >
                       <span className='underline decoration-sky-600/80 hover:decoration-sky-500'>
-                        {eachItem.vendor_name.match(/privacy-/gi) && (
-                          <>
-                            <Icon
-                              className='inline align-middle  text-gray-600 dark:text-gray-400'
-                              path={mdiIncognitoCircle}
-                              size={1}
-                            />
-                            <span className='ml-1 text-gray-700 dark:text-gray-300'>
-                              Privacy-
-                            </span>
-                          </>
-                        )}
-                        {vendorNameReplace(eachItem.vendor_name)}
+                        <VendorElement vendor_name={eachItem.vendor_name} />
                       </span>
                     </Link>
                   )}
@@ -528,20 +543,8 @@ export function TransactionTable(props: transactiontableinterface) {
                           eachItem.vendor_name.toLowerCase().trim()
                         )}`}
                       >
-                        {eachItem.vendor_name.match(/privacy-/gi) && (
-                          <>
-                            <Icon
-                              className='inline align-middle  text-gray-600 dark:text-gray-400'
-                              path={mdiIncognitoCircle}
-                              size={1}
-                            />
-                            <span className='ml-1 text-gray-700 dark:text-gray-300'>
-                              Privacy-
-                            </span>
-                          </>
-                        )}
                         <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
-                          {vendorNameReplace(eachItem.vendor_name)}
+                          <VendorElement vendor_name={eachItem.vendor_name} />
                         </span>
                       </Link>
                     </span>

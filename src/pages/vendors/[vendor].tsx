@@ -86,7 +86,10 @@ export default function Vendors(props: any) {
         <h4>Vendor</h4>
         <p className='lg:text-lg'>
           {'Since 2014, '}
-          {parseFloat(props.data.totalcost[0].count)} transactions totaling{' '}
+          {parseInt(props.data.totalcost[0].count).toLocaleString(
+            'default'
+          )}{' '}
+          transactions totaling{' '}
           <span className='font-semibold'>
             {parseFloat(props.data.totalcost[0].sum).toLocaleString('default', {
               style: 'currency',
@@ -96,10 +99,13 @@ export default function Vendors(props: any) {
         </p>
         {props.data.thisyearsum && props.data.thisyearsum[0] ? (
           <p className='lg:text-lg'>
-            In 2023, {parseInt(props.data.thisyearsum[0].count)} transactions
-            totaling{' '}
+            In 2023,{' '}
+            {parseInt(props.data.thisyearsum[0].count).toLocaleString(
+              'default'
+            )}{' '}
+            transactions totaling{' '}
             <span className='font-semibold'>
-              {parseInt(props.data.thisyearsum[0].sum).toLocaleString(
+              {parseFloat(props.data.thisyearsum[0].sum).toLocaleString(
                 'default',
                 {
                   style: 'currency',

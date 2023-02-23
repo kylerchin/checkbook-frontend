@@ -1,11 +1,9 @@
-import { mdiIncognitoCircle } from '@mdi/js';
-import Icon from '@mdi/react';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 
 import { departmentNameReplace } from '@/components/departmentNameReplace';
-import { vendorNameReplace } from '@/components/vendorNameReplace';
+import { VendorElement } from '@/components/TransactionTable';
 
 import backends from '@/backends.json';
 
@@ -327,9 +325,11 @@ export default function HomePage(props: any) {
                         <p className='italics text-gray-700 dark:text-gray-300'>
                           Also showing results for{' '}
                           <span className='font-semibold text-gray-700 dark:text-gray-200'>
-                            {vendorNameReplace(
-                              autocompleteresults.aliasforwardingto
-                            )}
+                            <VendorElement
+                              vendor_name={
+                                autocompleteresults.aliasforwardingto
+                              }
+                            />
                           </span>
                         </p>
                       )}
@@ -343,10 +343,11 @@ export default function HomePage(props: any) {
                                 eachVendor.vendor_name.toLowerCase().trim()
                               )}`}
                             >
-                              
                               <div className='mr-2'>
                                 <span>
-                                  {vendorNameReplace(eachVendor.vendor_name)}
+                                  <VendorElement
+                                    vendor_name={eachVendor.vendor_name}
+                                  />
                                 </span>
                               </div>
 
