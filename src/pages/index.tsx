@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
-import { titleCase } from 'true-case';
 
+import { departmentNameReplace } from '@/components/departmentNameReplace';
 import { vendorNameReplace } from '@/components/vendorNameReplace';
 
 import backends from '@/backends.json';
@@ -288,12 +288,7 @@ export default function HomePage(props: any) {
                     )}`}
                   >
                     <div className='flex-grow'>
-                      {titleCase(
-                        eachDept.department_name.replace(
-                          /( )?department()?(of)?( )?/gi,
-                          ''
-                        )
-                      )}
+                      {departmentNameReplace(eachDept.department_name)}
                     </div>
                     <div className='justify-right align-right bold right-align text-right font-bold tabular-nums'>
                       ${parseInt(eachDept.sum).toLocaleString('en-US')}

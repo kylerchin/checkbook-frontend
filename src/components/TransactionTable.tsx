@@ -3,6 +3,8 @@ import * as React from 'react';
 import { io } from 'socket.io-client';
 import { titleCase } from 'true-case';
 
+import { departmentNameReplace } from '@/components/departmentNameReplace';
+
 import backends from '@/backends.json';
 
 const socket = io(backends.socket);
@@ -321,12 +323,7 @@ export function TransactionTable(props: transactiontableinterface) {
                 {props.optionalcolumns.includes('department_name') &&
                   eachItem.department_name && (
                     <span className=''>
-                      {titleCase(
-                        eachItem.department_name.replace(
-                          /( )?department()?(of)?( )?/gi,
-                          ''
-                        )
-                      )}
+                      {departmentNameReplace(eachItem.department_name)}
                     </span>
                   )}
               </p>
