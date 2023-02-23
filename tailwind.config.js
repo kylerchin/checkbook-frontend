@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { fontFamily } = require('tailwindcss/defaultTheme');
-const colors = require('tailwindcss/colors')
+const colors = require('tailwindcss/colors');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -13,8 +13,8 @@ module.exports = {
         primary: ['Inter var', 'Inter', ...fontFamily.sans],
       },
       colors: {
-        bruhdark: "#0D1117",
-        bruhlessdark: "#161B22",
+        bruhdark: '#0D1117',
+        bruhlessdark: '#161B22',
         primary: {
           // Customize it on globals.css :root
           50: 'rgb(var(--tw-color-primary-50) / <alpha-value>)',
@@ -57,5 +57,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [require('@tailwindcss/forms'), require('tailwind-scrollbar')({ nocompatible: true })],
 };
