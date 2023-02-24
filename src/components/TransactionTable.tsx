@@ -40,7 +40,7 @@ const columnreadable = {
 };
 
 const desktopnotamountcell =
-  'justify-left align-left border-collapse border border-gray-500 px-1 lg:px-2 text-left text-xs lg:text-sm font-normal';
+  'justify-left align-left border-collapse border border-gray-500 px-1 lg:px-2 text-left text-xs lg:text-sm xl:text-base font-normal';
 
 export function TransactionTable(props: transactiontableinterface) {
   const currentShownRows = useRef<Array<any>>([]);
@@ -228,7 +228,7 @@ export function TransactionTable(props: transactiontableinterface) {
         <tbody>
           {currentShownRows.current.map((eachItem: any) => (
             <tr className='font-normal' key={eachItem.id_number}>
-              <td className='border-collapse border border-gray-500 font-normal'>
+              <td className='border-collapse border border-gray-500 text-xs font-normal lg:text-sm xl:text-base'>
                 {new Date(eachItem.transaction_date).toLocaleDateString(
                   'default',
                   {
@@ -274,7 +274,7 @@ export function TransactionTable(props: transactiontableinterface) {
                   {titleCase(eachItem.detailed_item_description)}
                 </th>
               )}
-              <td className='justify-right align-right border-collapse border border-gray-500 px-1 text-right text-xs tabular-nums  lg:px-2 lg:text-sm '>
+              <td className='justify-right align-right border-collapse border border-gray-500 px-1 text-right text-xs tabular-nums  lg:px-2 lg:text-sm xl:text-base'>
                 {parseFloat(eachItem.dollar_amount).toLocaleString('default', {
                   style: 'currency',
                   currency: 'USD',
