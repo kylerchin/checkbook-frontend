@@ -40,7 +40,7 @@ const columnreadable = {
 };
 
 const desktopnotamountcell =
-  'justify-left align-left border-collapse border border-gray-500 px-2 text-left  font-normal';
+  'justify-left align-left border-collapse border border-gray-500 px-1 lg:px-2 text-left text-xs lg:text-sm font-normal';
 
 export function TransactionTable(props: transactiontableinterface) {
   const currentShownRows = useRef<Array<any>>([]);
@@ -207,7 +207,7 @@ export function TransactionTable(props: transactiontableinterface) {
         </p>
       )}
 
-      <table className='hidden rounded-md px-2 py-1 dark:bg-bruhlessdark md:block'>
+      <table className='hidden rounded-md px-1 py-1 dark:bg-bruhlessdark md:block lg:px-2'>
         <thead>
           <tr>
             <th>Date</th>
@@ -274,7 +274,7 @@ export function TransactionTable(props: transactiontableinterface) {
                   {titleCase(eachItem.detailed_item_description)}
                 </th>
               )}
-              <td className='justify-right align-right border-collapse border border-gray-500 px-2 text-right tabular-nums'>
+              <td className='justify-right align-right border-collapse border border-gray-500 px-1 text-right text-xs tabular-nums  lg:px-2 lg:text-sm '>
                 {parseFloat(eachItem.dollar_amount).toLocaleString('default', {
                   style: 'currency',
                   currency: 'USD',
