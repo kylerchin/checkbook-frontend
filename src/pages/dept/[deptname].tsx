@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { TransactionTable } from '@/components/TransactionTable';
+
 import backends from '@/backends.json';
 
 export default function Departments(props: any): JSX.Element {
@@ -7,7 +9,26 @@ export default function Departments(props: any): JSX.Element {
 
   return (
     <>
-      <div></div>
+      <div>
+        <div className=''>
+          <TransactionTable
+            optionalcolumns={[
+              'vendor_name',
+              'fund_name',
+              'program',
+              'expenditure_type',
+              'description',
+              'detailed_item_description',
+            ]}
+            filters={{
+              department: {
+                query: props.deptname,
+                matchtype: 'equals',
+              },
+            }}
+          />
+        </div>
+      </div>
     </>
   );
 }
@@ -29,5 +50,5 @@ export async function getServerSideProps(context: any) {
   const data = await res.json();
 
   // Pass data to the page via props
-  return { props: { data } };
+  return { props: { data, deptname: context.params.deptname } };
 }

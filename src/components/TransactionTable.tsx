@@ -11,6 +11,7 @@ const socket = io(backends.socket);
 
 interface transactiontablefilterinterface {
   vendor?: textinterface;
+  department?: textinterface;
 }
 
 interface textinterface {
