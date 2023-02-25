@@ -37,7 +37,7 @@ export default function Vendors(props: any) {
   return (
     <>
       <Navbar themeChanger={props.themeChanger} />
-      <div className='mx-auto mx-2 mt-4 dark:text-gray-100'>
+      <div className='mx-auto mx-2 mt-2 dark:text-gray-100 md:mt-4'>
         <Seo
           title={`${titleCase(
             props.data.totalcost[0].vendor_name
@@ -62,8 +62,10 @@ export default function Vendors(props: any) {
             Back to Search
           </p>
         </Link>
-        <h1>{vendorNameReplace(props.data.totalcost[0].vendor_name)}</h1>
-        <p className='text-lg'>
+        <h1 className='text-sm md:text-base'>
+          {vendorNameReplace(props.data.totalcost[0].vendor_name)}
+        </h1>
+        <p className='lg:text-lg'>
           {'Since 2014, '}
           {parseFloat(props.data.totalcost[0].count)} transactions totaling{' '}
           <span className='font-semibold'>
@@ -74,7 +76,7 @@ export default function Vendors(props: any) {
           </span>
         </p>
         {props.data.thisyearsum && props.data.thisyearsum[0] ? (
-          <p className='text-lg'>
+          <p className='lg:text-lg'>
             In 2023, {parseInt(props.data.thisyearsum[0].count)} transactions
             totaling{' '}
             <span className='font-semibold'>
