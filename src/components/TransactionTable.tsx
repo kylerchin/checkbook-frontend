@@ -59,6 +59,8 @@ export function TransactionTable(props: transactiontableinterface) {
   const [currentShownRowsState, setCurrentShownRowsState] = useState<
     Array<any>
   >([]);
+  const [socketconnected, setsocketconnected] = useState<boolean>(false);
+  const [recievedresponse, setrecievedresponse] = useState<boolean>(false);
 
   const filtersofcurrentlyshowndata = useRef<string>('');
 
@@ -118,6 +120,7 @@ export function TransactionTable(props: transactiontableinterface) {
   });
 
   socket.on('recievecheckbookrows', (data: any) => {
+    setrecievedresponse(true);
     //process and then update the state
     settimeelapsed(data.timeelapsed);
 
@@ -179,11 +182,13 @@ export function TransactionTable(props: transactiontableinterface) {
 
   socket.on('connected', (sendback: any) => {
     socketconnectedref.current = true;
+    setsocketconnected(true);
     sendReq({});
   });
 
   socket.on('disconnect', (sendback: any) => {
     socketconnectedref.current = false;
+    setsocketconnected(false);
   });
 
   socket.connect();
@@ -225,6 +230,38 @@ export function TransactionTable(props: transactiontableinterface) {
         </p>
       )}
 
+      <div className='flex flex-row'>
+        <div className='relative my-auto'>
+          <div
+            className={`x-3 min-x-3 absolute top-auto bottom-auto my-auto ml-2 h-3 shrink-0 animate-ping rounded-full ${
+              socketconnected ? 'bg-green-500' : 'bg-amber-500'
+            }`}
+            style={{
+              width: '12px',
+            }}
+          ></div>
+          <div
+            className={`x-3 min-x-3 relative my-auto ml-2 h-3 shrink-0 rounded-full ${
+              socketconnected ? 'bg-green-500' : 'bg-amber-500'
+            }`}
+            style={{
+              width: '12px',
+            }}
+          ></div>
+        </div>
+        <p className='mt-auto mb-auto ml-1'>
+          {socketconnected ? 'Connected' : 'Connecting...'}
+        </p>
+      </div>
+      {recievedresponse === false && socketconnected && (
+        <div className='flex flex-row gap-x-2'>
+          <div
+            className='inline-block h-8 w-8 animate-[spinner-grow_0.75s_linear_infinite] rounded-full bg-current align-[-0.125em] opacity-0 motion-reduce:animate-[spinner-grow_1.5s_linear_infinite]'
+            role='status'
+          ></div>
+          <p className='text-xs'>Fetching rows...</p>
+        </div>
+      )}
       <table className='hidden rounded-md px-1 py-1  md:block lg:px-2'>
         <thead>
           <tr className='dark:bg-bruhlessdark'>
