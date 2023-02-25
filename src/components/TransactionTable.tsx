@@ -94,6 +94,20 @@ export function TransactionTable(props: transactiontableinterface) {
     console.log('emitting request with', requestobject);
     socket.emit('getcheckbookrows', requestobject);
 
+    fetch(`${backends.http}/fetchrows`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestobject),
+    })
+      .then(async (response) => {
+        const jsonresponse = await response.json();
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+
     firstloadedboolref.current = true;
 
     return true;
