@@ -340,11 +340,6 @@ export function TransactionTable(props: transactiontableinterface) {
                   {titleCase(eachItem.account_name)}
                 </th>
               )}
-              {props.optionalcolumns.includes('account_name') && (
-                <th className={desktopnotamountcell}>
-                  {titleCase(eachItem.account_name)}
-                </th>
-              )}
               {props.optionalcolumns.includes('program') && (
                 <th className={desktopnotamountcell}>
                   {titleCase(eachItem.program)}
@@ -412,9 +407,11 @@ export function TransactionTable(props: transactiontableinterface) {
                   </span>
                 </div>
               </div>
-              <p>
-                {props.optionalcolumns.includes('department_name') &&
-                  eachItem.department_name && (
+
+              {props.optionalcolumns.includes('department_name') &&
+                eachItem.department_name && (
+                  <p>
+                    {' '}
                     <a
                       href={`/vendors/${encodeURIComponent(
                         eachItem.vendor_name.toLowerCase().trim()
@@ -424,11 +421,12 @@ export function TransactionTable(props: transactiontableinterface) {
                         {departmentNameReplace(eachItem.department_name)}
                       </span>
                     </a>
-                  )}
-              </p>
-              <p>
-                {props.optionalcolumns.includes('vendor_name') &&
-                  eachItem.vendor_name && (
+                  </p>
+                )}
+
+              {props.optionalcolumns.includes('vendor_name') &&
+                eachItem.vendor_name && (
+                  <p>
                     <span className=''>
                       <span className='text-gray-600 dark:text-gray-400'>
                         Vendor:{' '}
@@ -443,55 +441,74 @@ export function TransactionTable(props: transactiontableinterface) {
                         </span>
                       </a>
                     </span>
-                  )}
-              </p>
-              <p>
-                {props.optionalcolumns.includes('fund_name') &&
-                  eachItem.program && (
+                  </p>
+                )}
+
+              {props.optionalcolumns.includes('fund_name') && eachItem.program && (
+                <p>
+                  <span className=''>
+                    <span className='text-gray-600 dark:text-gray-400'>
+                      Fund:{' '}
+                    </span>
+                    {titleCase(eachItem.fund_name)}
+                  </span>
+                </p>
+              )}
+              {props.optionalcolumns.includes('account_name') &&
+                eachItem.program && (
+                  <p>
                     <span className=''>
                       <span className='text-gray-600 dark:text-gray-400'>
                         Fund:{' '}
                       </span>
-                      {titleCase(eachItem.fund_name)}
+                      {titleCase(eachItem.account_name)}
                     </span>
-                  )}
-              </p>
-              <p>
-                {props.optionalcolumns.includes('program') &&
-                  eachItem['program'] && (
+                  </p>
+                )}
+
+              {props.optionalcolumns.includes('program') &&
+                eachItem['program'] && (
+                  <p>
+                    {' '}
                     <span className=''>
                       <span className='text-gray-600 dark:text-gray-400'>
                         Program:{' '}
                       </span>
                       {titleCase(eachItem.program)}
                     </span>
-                  )}
-              </p>
-              <p>
-                {props.optionalcolumns.includes('expenditure_type') &&
-                  eachItem['expenditure_type'] && (
+                  </p>
+                )}
+
+              {props.optionalcolumns.includes('expenditure_type') &&
+                eachItem['expenditure_type'] && (
+                  <p>
+                    {' '}
                     <span className=''>
                       <span className='text-gray-600 dark:text-gray-400'>
                         Expenditure Type:{' '}
                       </span>
                       {titleCase(eachItem.expenditure_type)}
-                    </span>
-                  )}
-              </p>
-              <p>
-                {props.optionalcolumns.includes('description') &&
-                  eachItem.description && (
+                    </span>{' '}
+                  </p>
+                )}
+
+              {props.optionalcolumns.includes('description') &&
+                eachItem.description && (
+                  <p>
+                    {' '}
                     <span className=''>
                       <span className='text-gray-600 dark:text-gray-400'>
                         Desc:{' '}
                       </span>
                       {titleCase(eachItem.description)}
-                    </span>
-                  )}
-              </p>
-              <p>
-                {props.optionalcolumns.includes('detailed_item_description') &&
-                  eachItem['detailed_item_description'] && (
+                    </span>{' '}
+                  </p>
+                )}
+
+              {props.optionalcolumns.includes('detailed_item_description') &&
+                eachItem['detailed_item_description'] && (
+                  <p>
+                    {' '}
                     <span className=''>
                       <span className='text-gray-600 dark:text-gray-400'>
                         Item:{' '}
@@ -500,8 +517,8 @@ export function TransactionTable(props: transactiontableinterface) {
                         {titleCase(eachItem.detailed_item_description)}
                       </span>
                     </span>
-                  )}
-              </p>
+                  </p>
+                )}
             </div>
           ))}
         </div>
