@@ -469,7 +469,6 @@ export function TransactionTable(props: transactiontableinterface) {
               {props.optionalcolumns.includes('program') &&
                 eachItem['program'] && (
                   <p>
-                    {' '}
                     <span className=''>
                       <span className='text-gray-600 dark:text-gray-400'>
                         Program:{' '}
@@ -482,7 +481,6 @@ export function TransactionTable(props: transactiontableinterface) {
               {props.optionalcolumns.includes('expenditure_type') &&
                 eachItem['expenditure_type'] && (
                   <p>
-                    {' '}
                     <span className=''>
                       <span className='text-gray-600 dark:text-gray-400'>
                         Expenditure Type:{' '}
@@ -495,20 +493,18 @@ export function TransactionTable(props: transactiontableinterface) {
               {props.optionalcolumns.includes('description') &&
                 eachItem.description && (
                   <p>
-                    {' '}
                     <span className=''>
                       <span className='text-gray-600 dark:text-gray-400'>
                         Desc:{' '}
                       </span>
                       {titleCase(eachItem.description)}
-                    </span>{' '}
+                    </span>
                   </p>
                 )}
 
               {props.optionalcolumns.includes('detailed_item_description') &&
                 eachItem['detailed_item_description'] && (
                   <p>
-                    {' '}
                     <span className=''>
                       <span className='text-gray-600 dark:text-gray-400'>
                         Item:{' '}
