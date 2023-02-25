@@ -275,7 +275,7 @@ export function TransactionTable(props: transactiontableinterface) {
               {props.optionalcolumns.includes('vendor_name') && (
                 <th className={desktopnotamountcell}>
                   <a
-                    href={`/vendor/${encodeURIComponent(
+                    href={`/vendors/${encodeURIComponent(
                       eachItem.vendor_name.toLowerCase().trim()
                     )}`}
                   >
@@ -359,9 +359,15 @@ export function TransactionTable(props: transactiontableinterface) {
               <p>
                 {props.optionalcolumns.includes('department_name') &&
                   eachItem.department_name && (
-                    <span className=''>
-                      {departmentNameReplace(eachItem.department_name)}
-                    </span>
+                    <a
+                      href={`/vendors/${encodeURIComponent(
+                        eachItem.vendor_name.toLowerCase().trim()
+                      )}`}
+                    >
+                      <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
+                        {departmentNameReplace(eachItem.department_name)}
+                      </span>
+                    </a>
                   )}
               </p>
               <p>
@@ -372,7 +378,7 @@ export function TransactionTable(props: transactiontableinterface) {
                         Vendor:{' '}
                       </span>
                       <a
-                        href={`/vendor/${encodeURIComponent(
+                        href={`/vendors/${encodeURIComponent(
                           eachItem.vendor_name.toLowerCase().trim()
                         )}`}
                       >
