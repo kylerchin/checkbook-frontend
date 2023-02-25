@@ -62,7 +62,7 @@ export default function Vendors(props: any) {
             Back to Search
           </p>
         </Link>
-        <h1 className='text-sm md:text-base'>
+        <h1 className=''>
           {vendorNameReplace(props.data.totalcost[0].vendor_name)}
         </h1>
         <p className='lg:text-lg'>
@@ -110,6 +110,7 @@ export default function Vendors(props: any) {
             optionalcolumns={[
               'department_name',
               'fund_name',
+              'account_name',
               'program',
               'expenditure_type',
               'description',

@@ -44,6 +44,7 @@ export default function Departments(props: any): JSX.Element {
               optionalcolumns={[
                 'vendor_name',
                 'fund_name',
+                'account_name',
                 'program',
                 'expenditure_type',
                 'description',

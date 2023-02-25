@@ -34,6 +34,7 @@ const columnreadable = {
   transaction_date: 'Date',
   description: 'Description',
   detailed_item_description: 'Item',
+  account_name: 'Account',
   vendor_name: 'Vendor',
   department_name: 'Dept',
   fund_name: 'Fund',
@@ -59,7 +60,9 @@ export function TransactionTable(props: transactiontableinterface) {
   const [currentShownRowsState, setCurrentShownRowsState] = useState<
     Array<any>
   >([]);
-  const [socketconnected, setsocketconnected] = useState<boolean>(false);
+  const [socketconnected, setsocketconnected] = useState<boolean>(
+    socket.connected
+  );
   const [recievedresponse, setrecievedresponse] = useState<boolean>(false);
 
   const filtersofcurrentlyshowndata = useRef<string>('');
@@ -170,7 +173,9 @@ export function TransactionTable(props: transactiontableinterface) {
     }, 300);
 
     setInterval(() => {
-      socket.connect();
+      if (socket.connected === false) {
+        socket.connect();
+      }
     }, 200);
 
     if (typeof window != 'undefined') {
@@ -256,8 +261,10 @@ export function TransactionTable(props: transactiontableinterface) {
       {recievedresponse === false && socketconnected && (
         <div className='flex flex-row gap-x-2'>
           <div
-            className='inline-block h-8 w-8 animate-[spinner-grow_0.75s_linear_infinite] rounded-full bg-current align-[-0.125em] opacity-0 motion-reduce:animate-[spinner-grow_1.5s_linear_infinite]'
-            role='status'
+            className='x-3 min-x-3 relative my-auto ml-2 h-3 shrink-0 animate-ping rounded-full bg-blue-500'
+            style={{
+              width: '12px',
+            }}
           ></div>
           <p className='text-xs'>Fetching rows...</p>
         </div>
@@ -269,6 +276,7 @@ export function TransactionTable(props: transactiontableinterface) {
             {props.optionalcolumns.includes('department_name') && <th>Dept</th>}
             {props.optionalcolumns.includes('vendor_name') && <th>Vendor</th>}
             {props.optionalcolumns.includes('fund_name') && <th>Fund</th>}
+            {props.optionalcolumns.includes('account_name') && <th>Account</th>}
             {props.optionalcolumns.includes('program') && <th>Program</th>}
             {props.optionalcolumns.includes('expenditure_type') && (
               <th>Expend Type</th>
@@ -303,7 +311,7 @@ export function TransactionTable(props: transactiontableinterface) {
                       eachItem.department_name.toLowerCase().trim()
                     )}`}
                   >
-                    <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
+                    <span className='underline decoration-sky-500/50 hover:decoration-sky-500'>
                       {titleCase(eachItem.department_name)}
                     </span>
                   </a>
@@ -316,7 +324,7 @@ export function TransactionTable(props: transactiontableinterface) {
                       eachItem.vendor_name.toLowerCase().trim()
                     )}`}
                   >
-                    <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
+                    <span className='underline decoration-sky-500/50 hover:decoration-sky-500'>
                       {titleCase(eachItem.vendor_name)}
                     </span>
                   </a>
@@ -327,11 +335,22 @@ export function TransactionTable(props: transactiontableinterface) {
                   {titleCase(eachItem.fund_name)}
                 </th>
               )}
+              {props.optionalcolumns.includes('account_name') && (
+                <th className={desktopnotamountcell}>
+                  {titleCase(eachItem.account_name)}
+                </th>
+              )}
+              {props.optionalcolumns.includes('account_name') && (
+                <th className={desktopnotamountcell}>
+                  {titleCase(eachItem.account_name)}
+                </th>
+              )}
               {props.optionalcolumns.includes('program') && (
                 <th className={desktopnotamountcell}>
                   {titleCase(eachItem.program)}
                 </th>
               )}
+
               {props.optionalcolumns.includes('expenditure_type') && (
                 <th className={desktopnotamountcell}>
                   {titleCase(eachItem.expenditure_type)}

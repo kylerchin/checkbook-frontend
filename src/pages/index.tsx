@@ -74,7 +74,7 @@ export default function HomePage(props: any) {
   const [filtereddepts, setfiltereddepts] = useState<Array<any>>([]);
 
   socket.on('connected', (sendback: any) => {
-    setsocketconnected(socket.connected);
+    setsocketconnected(true);
     socket.emit('fetchdepts', {
       hi: 'hello',
     });
@@ -93,7 +93,7 @@ export default function HomePage(props: any) {
   });
 
   socket.on('disconnected', (sendback: any) => {
-    setsocketconnected(socket.connected);
+    setsocketconnected(false);
   });
 
   socket.on('autocompleteresponse', (sendback: any) => {
@@ -220,7 +220,7 @@ export default function HomePage(props: any) {
           >
             <div className=''>
               <div className='flex flex-row'>
-                <h1 className='font-sm md:font-base dark:text-gray-100'>
+                <h1 className='text-lg dark:text-gray-100 '>
                   Search LA City Spending
                 </h1>
 
