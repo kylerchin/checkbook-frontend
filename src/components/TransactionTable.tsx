@@ -166,6 +166,10 @@ export function TransactionTable(props: transactiontableinterface) {
       loadfirsttime();
     }, 300);
 
+    setInterval(() => {
+      socket.connect();
+    }, 200);
+
     if (typeof window != 'undefined') {
       window.addEventListener('mousemove', (e) => {
         loadfirsttime();
@@ -221,9 +225,9 @@ export function TransactionTable(props: transactiontableinterface) {
         </p>
       )}
 
-      <table className='hidden rounded-md px-1 py-1 dark:bg-bruhlessdark md:block lg:px-2'>
+      <table className='hidden rounded-md px-1 py-1  md:block lg:px-2'>
         <thead>
-          <tr>
+          <tr className='dark:bg-bruhlessdark'>
             <th>Date</th>
             {props.optionalcolumns.includes('department_name') && <th>Dept</th>}
             {props.optionalcolumns.includes('vendor_name') && <th>Vendor</th>}
@@ -241,7 +245,10 @@ export function TransactionTable(props: transactiontableinterface) {
         </thead>
         <tbody>
           {currentShownRows.current.map((eachItem: any) => (
-            <tr className='font-normal' key={eachItem.id_number}>
+            <tr
+              className='font-normal dark:bg-bruhlessdark'
+              key={eachItem.id_number}
+            >
               <td className='border-collapse border border-gray-500 text-xs font-normal lg:text-sm xl:text-base'>
                 {new Date(eachItem.transaction_date).toLocaleDateString(
                   'default',
@@ -254,12 +261,28 @@ export function TransactionTable(props: transactiontableinterface) {
               </td>
               {props.optionalcolumns.includes('department_name') && (
                 <th className={desktopnotamountcell}>
-                  {titleCase(eachItem.department_name)}
+                  <a
+                    href={`/dept/${encodeURIComponent(
+                      eachItem.department_name.toLowerCase().trim()
+                    )}`}
+                  >
+                    <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
+                      {titleCase(eachItem.department_name)}
+                    </span>
+                  </a>
                 </th>
               )}
               {props.optionalcolumns.includes('vendor_name') && (
                 <th className={desktopnotamountcell}>
-                  {titleCase(eachItem.vendor_name)}
+                  <a
+                    href={`/vendor/${encodeURIComponent(
+                      eachItem.vendor_name.toLowerCase().trim()
+                    )}`}
+                  >
+                    <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
+                      {titleCase(eachItem.vendor_name)}
+                    </span>
+                  </a>
                 </th>
               )}
               {props.optionalcolumns.includes('fund_name') && (
@@ -348,7 +371,11 @@ export function TransactionTable(props: transactiontableinterface) {
                       <span className='text-gray-600 dark:text-gray-400'>
                         Vendor:{' '}
                       </span>
-                      <a href={`/vendor/${eachItem.vendor_name}`}>
+                      <a
+                        href={`/vendor/${encodeURIComponent(
+                          eachItem.vendor_name.toLowerCase().trim()
+                        )}`}
+                      >
                         <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
                           {titleCase(eachItem.vendor_name)}
                         </span>
