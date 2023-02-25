@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import * as React from 'react';
 import { io } from 'socket.io-client';
@@ -48,6 +49,8 @@ export function TransactionTable(props: transactiontableinterface) {
   const [timeelapsed, settimeelapsed] = useState<number>();
   const [firstloaded, setfirstloaded] = useState<boolean>(false);
   const sizeofsearch = useRef<number>(0);
+  const router = useRouter();
+  const { debugmode } = router.query;
   const firstloadedboolref = useRef<boolean>(false);
   const [sizeofsearchstate, setsizeofsearchstate] = useState<number>(0);
   const currentRows = useRef<Array<any>>([]);
@@ -182,8 +185,8 @@ export function TransactionTable(props: transactiontableinterface) {
   socket.connect();
 
   return (
-    <div className='py-1'>
-      {false && (
+    <div className='py-1 dark:text-gray-100'>
+      {debugmode && (
         <button
           className='rounded bg-blue-800 px-2 py-2 text-white'
           onClick={(e) => {
@@ -191,6 +194,16 @@ export function TransactionTable(props: transactiontableinterface) {
           }}
         >
           Send Req
+        </button>
+      )}
+      {debugmode && (
+        <button
+          className='rounded bg-purple-800 px-2 py-2 text-white'
+          onClick={(e) => {
+            socket.connect();
+          }}
+        >
+          Connect Socket
         </button>
       )}
       {firstloadedboolref.current === true && (
@@ -335,7 +348,11 @@ export function TransactionTable(props: transactiontableinterface) {
                       <span className='text-gray-600 dark:text-gray-400'>
                         Vendor:{' '}
                       </span>
-                      {titleCase(eachItem.vendor_name)}
+                      <a href={`/vendor/${eachItem.vendor_name}`}>
+                        <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
+                          {titleCase(eachItem.vendor_name)}
+                        </span>
+                      </a>
                     </span>
                   )}
               </p>

@@ -341,10 +341,11 @@ export default function HomePage(props: any) {
                                 eachVendor.vendor_name.toLowerCase().trim()
                               )}`}
                             >
-                              <div className='flex-grow'>
+                              <div className='mr-2'>
                                 {vendorNameReplace(eachVendor.vendor_name)}
                               </div>
-                              <div className='justify-right align-right bold right-align text-right font-bold tabular-nums'>
+
+                              <div className='justify-right align-right bold right-align ml-auto  text-right font-bold tabular-nums'>
                                 <p className='tabular-nums'>
                                   $
                                   {parseInt(eachVendor.sum).toLocaleString(
@@ -352,6 +353,17 @@ export default function HomePage(props: any) {
                                   )}
                                 </p>
                               </div>
+                              {false && (
+                                <div className='justify-right align-right ml-2 mr-2 w-32 '>
+                                  <p className='justify-right right-align align-right text-right tabular-nums text-gray-600 dark:text-zinc-300'>
+                                    (
+                                    {parseInt(eachVendor.count).toLocaleString(
+                                      'en-US'
+                                    )}
+                                    {' rows)'}
+                                  </p>
+                                </div>
+                              )}
                             </a>
                           )
                         )}
