@@ -214,7 +214,7 @@ export default function HomePage(props: any) {
           <div
             className={`layout flex min-h-screen flex-col ${
               disableneedfirsttype || firstqueryinserted
-                ? 'mt-4'
+                ? 'mt-2 lg:mt-4'
                 : 'items-center  justify-center'
             }`}
           >
