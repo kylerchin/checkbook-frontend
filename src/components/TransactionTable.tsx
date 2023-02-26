@@ -9,6 +9,26 @@ import { departmentNameReplace } from '@/components/departmentNameReplace';
 
 import backends from '@/backends.json';
 
+const columnsshortened: any = {
+  de: 'description',
+  dep: 'department_name',
+  v: 'vendor_name',
+  d: 'dollar_amount',
+  t: 'transaction_date',
+  p: 'program',
+  f: 'fund_name',
+  id: 'id_number',
+  e: 'expenditure_type',
+  di: 'detailed_item_description',
+  a: 'account_name',
+};
+
+const columnsinverseshortened: any = {};
+
+for (const key in columnsshortened) {
+  columnsinverseshortened[columnsshortened[key]] = key;
+}
+
 const socket = io(backends.socket);
 
 interface transactiontablefilterinterface {
@@ -105,6 +125,14 @@ export function TransactionTable(props: transactiontableinterface) {
     })
       .then(async (response) => {
         const jsonresponse = await response.json();
+
+        const cleanedrows = jsonresponse.rows.map((row: any) => {
+          const newrow: any = {};
+
+          for (const key in row) {
+            newrow[columnsinverseshortened[key]] = row[key];
+          }
+        });
       })
       .catch((error) => {
         console.error('Error:', error);
