@@ -154,13 +154,16 @@ export function TransactionTable(props: transactiontableinterface) {
 
           //if it's a new request, then set the current rows to the new rows
           if (data.offsetnumber === 0 || samereq === false) {
-            currentShownRows.current = data.rows;
-            setCurrentShownRowsState(data.rows);
-            numberofloadedrows.current = data.rows.length;
+            currentShownRows.current = cleanedrows;
+            setCurrentShownRowsState(cleanedrows);
+            numberofloadedrows.current = cleanedrows.length;
           } else {
             numberofloadedrows.current =
-              numberofloadedrows.current + data.rows.length;
-            currentShownRows.current = [...currentShownRows.current, data.rows];
+              numberofloadedrows.current + cleanedrows.length;
+            currentShownRows.current = [
+              ...currentShownRows.current,
+              cleanedrows,
+            ];
             setCurrentShownRowsState(currentShownRows.current);
           }
 
