@@ -220,7 +220,7 @@ export default function HomePage(props: any) {
           >
             <div className=''>
               <div className='flex flex-row'>
-                <h1 className='text-lg dark:text-gray-100 '>
+                <h1 className=' dark:text-gray-100 '>
                   Search LA City Spending
                 </h1>
 
