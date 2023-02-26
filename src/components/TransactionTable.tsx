@@ -83,6 +83,7 @@ export function TransactionTable(props: transactiontableinterface) {
     const requestobject: any = {
       filters: props.filters,
       offset: numberofloadedrows.current,
+      optionalcolumns: props.optionalcolumns,
       //sortby: transaction_date OR item_description OR detailed_item_description OR vendor OR department
     };
 
