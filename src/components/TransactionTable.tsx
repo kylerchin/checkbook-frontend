@@ -136,6 +136,35 @@ export function TransactionTable(props: transactiontableinterface) {
               newrow[key] = row[key];
             }
           }
+
+          setrecievedresponse(true);
+          //process and then update the state
+          settimeelapsed(jsonresponse.timeelapsed);
+
+          let samereq = true;
+
+          const data = jsonresponse;
+
+          if (
+            JSON.stringify(data.previouslysetfilters) !==
+            filtersofcurrentlyshowndata.current
+          ) {
+            samereq = false;
+          }
+
+          //if it's a new request, then set the current rows to the new rows
+          if (data.offsetnumber === 0 || samereq === false) {
+            currentShownRows.current = data.rows;
+            setCurrentShownRowsState(data.rows);
+            numberofloadedrows.current = data.rows.length;
+          } else {
+            numberofloadedrows.current =
+              numberofloadedrows.current + data.rows.length;
+            currentShownRows.current = [...currentShownRows.current, data.rows];
+            setCurrentShownRowsState(currentShownRows.current);
+          }
+
+          filtersofcurrentlyshowndata.current = JSON.stringify(props.filters);
         });
       })
       .catch((error) => {
@@ -283,39 +312,43 @@ export function TransactionTable(props: transactiontableinterface) {
         </p>
       )}
 
-      <div className='flex flex-row'>
-        <div className='relative my-auto'>
-          <div
-            className={`x-3 min-x-3 absolute top-auto bottom-auto my-auto ml-2 h-3 shrink-0 animate-ping rounded-full ${
-              socketconnected ? 'bg-green-500' : 'bg-amber-500'
-            }`}
-            style={{
-              width: '12px',
-            }}
-          ></div>
-          <div
-            className={`x-3 min-x-3 relative my-auto ml-2 h-3 shrink-0 rounded-full ${
-              socketconnected ? 'bg-green-500' : 'bg-amber-500'
-            }`}
-            style={{
-              width: '12px',
-            }}
-          ></div>
-        </div>
-        <p className='mt-auto mb-auto ml-1'>
-          {socketconnected ? 'Connected' : 'Connecting...'}
-        </p>
-      </div>
-      {recievedresponse === false && socketconnected && (
-        <div className='flex flex-row gap-x-2'>
-          <div
-            className='x-3 min-x-3 relative my-auto ml-2 h-3 shrink-0 animate-ping rounded-full bg-blue-500'
-            style={{
-              width: '12px',
-            }}
-          ></div>
-          <p className='text-xs'>Fetching rows...</p>
-        </div>
+      {false && (
+        <>
+          <div className='flex flex-row'>
+            <div className='relative my-auto'>
+              <div
+                className={`x-3 min-x-3 absolute top-auto bottom-auto my-auto ml-2 h-3 shrink-0 animate-ping rounded-full ${
+                  socketconnected ? 'bg-green-500' : 'bg-amber-500'
+                }`}
+                style={{
+                  width: '12px',
+                }}
+              ></div>
+              <div
+                className={`x-3 min-x-3 relative my-auto ml-2 h-3 shrink-0 rounded-full ${
+                  socketconnected ? 'bg-green-500' : 'bg-amber-500'
+                }`}
+                style={{
+                  width: '12px',
+                }}
+              ></div>
+            </div>
+            <p className='mt-auto mb-auto ml-1'>
+              {socketconnected ? 'Connected' : 'Connecting...'}
+            </p>
+          </div>
+          {recievedresponse === false && socketconnected && (
+            <div className='flex flex-row gap-x-2'>
+              <div
+                className='x-3 min-x-3 relative my-auto ml-2 h-3 shrink-0 animate-ping rounded-full bg-blue-500'
+                style={{
+                  width: '12px',
+                }}
+              ></div>
+              <p className='text-xs'>Fetching rows...</p>
+            </div>
+          )}
+        </>
       )}
       <table className='hidden rounded-md px-1 py-1  md:block lg:px-2'>
         <thead>
