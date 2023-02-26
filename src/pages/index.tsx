@@ -343,14 +343,7 @@ export default function HomePage(props: any) {
                                 eachVendor.vendor_name.toLowerCase().trim()
                               )}`}
                             >
-                              {eachVendor.vendor_name.match(/privacy-/gi) && (
-                                <>
-                                  <Icon path={mdiIncognitoCircle} size={1} />
-                                  <span className='ml-1 text-gray-700 dark:text-gray-400'>
-                                    Privacy-
-                                  </span>
-                                </>
-                              )}
+                              
                               <div className='mr-2'>
                                 <span>
                                   {vendorNameReplace(eachVendor.vendor_name)}
