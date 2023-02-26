@@ -130,7 +130,11 @@ export function TransactionTable(props: transactiontableinterface) {
           const newrow: any = {};
 
           for (const key in row) {
-            newrow[columnsinverseshortened[key]] = row[key];
+            if (columnsshortened[key]) {
+              newrow[columnsshortened[key]] = row[key];
+            } else {
+              newrow[key] = row[key];
+            }
           }
         });
       })
