@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import * as React from 'react';
@@ -320,7 +321,7 @@ export function TransactionTable(props: transactiontableinterface) {
               </td>
               {props.optionalcolumns.includes('department_name') && (
                 <th className={desktopnotamountcell}>
-                  <a
+                  <Link
                     href={`/dept/${encodeURIComponent(
                       eachItem.department_name.toLowerCase().trim()
                     )}`}
@@ -328,12 +329,12 @@ export function TransactionTable(props: transactiontableinterface) {
                     <span className='underline decoration-sky-500/50 hover:decoration-sky-500'>
                       {titleCase(eachItem.department_name)}
                     </span>
-                  </a>
+                  </Link>
                 </th>
               )}
               {props.optionalcolumns.includes('vendor_name') && (
                 <th className={desktopnotamountcell}>
-                  <a
+                  <Link
                     href={`/vendors/${encodeURIComponent(
                       eachItem.vendor_name.toLowerCase().trim()
                     )}`}
@@ -341,7 +342,7 @@ export function TransactionTable(props: transactiontableinterface) {
                     <span className='underline decoration-sky-500/50 hover:decoration-sky-500'>
                       {titleCase(eachItem.vendor_name)}
                     </span>
-                  </a>
+                  </Link>
                 </th>
               )}
               {props.optionalcolumns.includes('fund_name') && (
@@ -445,7 +446,7 @@ export function TransactionTable(props: transactiontableinterface) {
                       <span className='text-gray-600 dark:text-gray-400'>
                         Vendor:{' '}
                       </span>
-                      <a
+                      <Link
                         href={`/vendors/${encodeURIComponent(
                           eachItem.vendor_name.toLowerCase().trim()
                         )}`}
@@ -453,7 +454,7 @@ export function TransactionTable(props: transactiontableinterface) {
                         <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
                           {titleCase(eachItem.vendor_name)}
                         </span>
-                      </a>
+                      </Link>
                     </span>
                   </p>
                 )}
