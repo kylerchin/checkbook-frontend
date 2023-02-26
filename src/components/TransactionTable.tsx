@@ -114,7 +114,43 @@ export function TransactionTable(props: transactiontableinterface) {
     }
 
     console.log('emitting request with', requestobject);
-    socket.emit('getcheckbookrows', requestobject);
+    //socket.emit('getcheckbookrows', requestobject);
+
+    fetch(`${backends.http}/countrows`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestobject),
+    })
+      .then(async (response) => {
+        const jsonresponse = await response.json();
+
+        console.log('jsonresponse', jsonresponse);
+
+        if (jsonresponse.rows) {
+          if (jsonresponse.rows[0]) {
+            if (jsonresponse.rows[0].count) {
+              console.log(
+                'number of rows in req',
+                parseInt(jsonresponse.rows[0].count)
+              );
+              sizeofsearch.current = parseInt(jsonresponse.rows[0].count);
+              setsizeofsearchstate(parseInt(jsonresponse.rows[0].count));
+
+              if (sizeofsearch.current < 1500) {
+                if (sizeofsearch.current > currentShownRows.current.length) {
+                  // sendReq({ newresults: true });
+                  console.log('ask for next interation');
+                }
+              }
+            }
+          }
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
 
     fetch(`${backends.http}/fetchrows`, {
       method: 'POST',
@@ -137,38 +173,39 @@ export function TransactionTable(props: transactiontableinterface) {
             }
           }
 
-          setrecievedresponse(true);
-          //process and then update the state
-          settimeelapsed(jsonresponse.timeelapsed);
-
-          let samereq = true;
-
-          const data = jsonresponse;
-
-          if (
-            JSON.stringify(data.previouslysetfilters) !==
-            filtersofcurrentlyshowndata.current
-          ) {
-            samereq = false;
-          }
-
-          //if it's a new request, then set the current rows to the new rows
-          if (data.offsetnumber === 0 || samereq === false) {
-            currentShownRows.current = cleanedrows;
-            setCurrentShownRowsState(cleanedrows);
-            numberofloadedrows.current = cleanedrows.length;
-          } else {
-            numberofloadedrows.current =
-              numberofloadedrows.current + cleanedrows.length;
-            currentShownRows.current = [
-              ...currentShownRows.current,
-              cleanedrows,
-            ];
-            setCurrentShownRowsState(currentShownRows.current);
-          }
-
-          filtersofcurrentlyshowndata.current = JSON.stringify(props.filters);
+          return newrow;
         });
+
+        console.log('cleanedrows', cleanedrows);
+
+        setrecievedresponse(true);
+        //process and then update the state
+        settimeelapsed(jsonresponse.timeelapsed);
+
+        let samereq = true;
+
+        const data = jsonresponse;
+
+        if (
+          JSON.stringify(data.previouslysetfilters) !==
+          filtersofcurrentlyshowndata.current
+        ) {
+          samereq = false;
+        }
+
+        //if it's a new request, then set the current rows to the new rows
+        if (data.offsetnumber === 0 || samereq === false) {
+          currentShownRows.current = cleanedrows;
+          setCurrentShownRowsState(cleanedrows);
+          numberofloadedrows.current = cleanedrows.length;
+        } else {
+          numberofloadedrows.current =
+            numberofloadedrows.current + cleanedrows.length;
+          currentShownRows.current = [...currentShownRows.current, cleanedrows];
+          setCurrentShownRowsState(currentShownRows.current);
+        }
+
+        filtersofcurrentlyshowndata.current = JSON.stringify(props.filters);
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -182,54 +219,6 @@ export function TransactionTable(props: transactiontableinterface) {
   //on a new scroll or filter command, the software should determine if it should
   //1. fetch the whole thing or enter infinite scrolling mode via "scrollmode": "infinite" | "all" as a response from the backend
   // a) the front end in infinite mode would store a rows amount and fetch based on the offset number
-
-  socket.on('numberofrowsinreq', (data: any) => {
-    if (data.rows) {
-      if (data.rows[0]) {
-        if (data.rows[0].count) {
-          console.log('number of rows in req', parseInt(data.rows[0].count));
-          sizeofsearch.current = parseInt(data.rows[0].count);
-          setsizeofsearchstate(parseInt(data.rows[0].count));
-
-          if (sizeofsearch.current < 1500) {
-            if (sizeofsearch.current > currentShownRows.current.length) {
-              // sendReq({ newresults: true });
-              console.log('ask for next interation');
-            }
-          }
-        }
-      }
-    }
-  });
-
-  socket.on('recievecheckbookrows', (data: any) => {
-    setrecievedresponse(true);
-    //process and then update the state
-    settimeelapsed(data.timeelapsed);
-
-    let samereq = true;
-
-    if (
-      JSON.stringify(data.previouslysetfilters) !==
-      filtersofcurrentlyshowndata.current
-    ) {
-      samereq = false;
-    }
-
-    //if it's a new request, then set the current rows to the new rows
-    if (data.offsetnumber === 0 || samereq === false) {
-      currentShownRows.current = data.rows;
-      setCurrentShownRowsState(data.rows);
-      numberofloadedrows.current = data.rows.length;
-    } else {
-      numberofloadedrows.current =
-        numberofloadedrows.current + data.rows.length;
-      currentShownRows.current = [...currentShownRows.current, data.rows];
-      setCurrentShownRowsState(currentShownRows.current);
-    }
-
-    filtersofcurrentlyshowndata.current = JSON.stringify(props.filters);
-  });
 
   const loadfirsttime = () => {
     socket.connect();
@@ -390,28 +379,32 @@ export function TransactionTable(props: transactiontableinterface) {
               </td>
               {props.optionalcolumns.includes('department_name') && (
                 <th className={desktopnotamountcell}>
-                  <Link
-                    href={`/dept/${encodeURIComponent(
-                      eachItem.department_name.toLowerCase().trim()
-                    )}`}
-                  >
-                    <span className='underline decoration-sky-500/50 hover:decoration-sky-500'>
-                      {titleCase(eachItem.department_name)}
-                    </span>
-                  </Link>
+                  {eachItem.department_name && (
+                    <Link
+                      href={`/dept/${encodeURIComponent(
+                        eachItem.department_name.toLowerCase().trim()
+                      )}`}
+                    >
+                      <span className='underline decoration-sky-600/80 hover:decoration-sky-500'>
+                        {titleCase(eachItem.department_name)}
+                      </span>
+                    </Link>
+                  )}
                 </th>
               )}
               {props.optionalcolumns.includes('vendor_name') && (
                 <th className={desktopnotamountcell}>
-                  <Link
-                    href={`/vendors/${encodeURIComponent(
-                      eachItem.vendor_name.toLowerCase().trim()
-                    )}`}
-                  >
-                    <span className='underline decoration-sky-500/50 hover:decoration-sky-500'>
-                      {titleCase(eachItem.vendor_name)}
-                    </span>
-                  </Link>
+                  {eachItem.vendor_name && (
+                    <Link
+                      href={`/vendors/${encodeURIComponent(
+                        eachItem.vendor_name.toLowerCase().trim()
+                      )}`}
+                    >
+                      <span className='underline decoration-sky-600/80 hover:decoration-sky-500'>
+                        {titleCase(eachItem.vendor_name)}
+                      </span>
+                    </Link>
+                  )}
                 </th>
               )}
               {props.optionalcolumns.includes('fund_name') && (
@@ -447,11 +440,13 @@ export function TransactionTable(props: transactiontableinterface) {
                 </th>
               )}
               <td className='justify-right align-right border-collapse border border-gray-500 px-1 text-right text-xs tabular-nums  lg:px-2 lg:text-sm xl:text-base'>
-                {parseFloat(eachItem.dollar_amount).toLocaleString('default', {
-                  style: 'currency',
-                  currency: 'USD',
-                  currencySign: 'accounting',
-                })}
+                {parseFloat(eachItem.dollar_amount)
+                  .toLocaleString('default', {
+                    style: 'currency',
+                    currency: 'USD',
+                    currencySign: 'accounting',
+                  })
+                  .replace(/us/gi, '')}
               </td>
             </tr>
           ))}
@@ -480,14 +475,13 @@ export function TransactionTable(props: transactiontableinterface) {
 
                 <div>
                   <span className='justify-right ml-auto flex-grow font-semibold'>
-                    {parseFloat(eachItem.dollar_amount).toLocaleString(
-                      'default',
-                      {
+                    {parseFloat(eachItem.dollar_amount)
+                      .toLocaleString('default', {
                         style: 'currency',
                         currency: 'USD',
                         currencySign: 'accounting',
-                      }
-                    )}
+                      })
+                      .replace(/us/gi, '')}
                   </span>
                 </div>
               </div>
@@ -495,10 +489,9 @@ export function TransactionTable(props: transactiontableinterface) {
               {props.optionalcolumns.includes('department_name') &&
                 eachItem.department_name && (
                   <p>
-                    {' '}
                     <a
-                      href={`/vendors/${encodeURIComponent(
-                        eachItem.vendor_name.toLowerCase().trim()
+                      href={`/dept/${encodeURIComponent(
+                        eachItem.department_name.toLowerCase().trim()
                       )}`}
                     >
                       <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
