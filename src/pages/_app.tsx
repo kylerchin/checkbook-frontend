@@ -11,6 +11,8 @@ import '@/styles/globals.css';
 // !STARTERCONF This is for demo purposes, remove @/styles/colors.css import immediately
 import '@/styles/colors.css';
 
+import { ThemeContext } from './../themeManager';
+
 const tagManagerArgs = {
   gtmId: 'GTM-MQG62S5',
 };
@@ -45,47 +47,71 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
   }, []);
 
-  const [darkmode, setdarkmode] = useState<boolean | null>(null);
+  const [currentColour, setCurrentColour] = useState<string>('system');
+
+  const dontburnmyeyes = () => {
+    const bodySelected = document.querySelector('body');
+
+    if (bodySelected) {
+      bodySelected.classList.remove('dontburnmyeyesoutplz');
+    }
+  };
 
   function updateSystem() {
-    const bodySelected = document.querySelector('body');
-    const htmlSelected = document.querySelector('html');
+    let tosetcolour = 'system';
 
-    // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-    if (
-      localStorage.theme === 'dark' ||
-      (!('theme' in localStorage) &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
-      if (bodySelected) {
-        bodySelected.classList.add('dark');
-        bodySelected.classList.add('dark:bg-bruhdark');
-        bodySelected.classList.add('dark:bg-bruhdark');
+    if (typeof document !== 'undefined') {
+      console.log('inside document');
+      const bodySelected = document.querySelector('body');
+      const htmlSelected = document.querySelector('html');
+
+      if (localStorage.theme === 'dark') {
+        tosetcolour = 'dark';
+      }
+      if (localStorage.theme === 'light') {
+        tosetcolour = 'light';
       }
 
-      if (htmlSelected) {
-        htmlSelected.classList.add('dark');
-      }
-    } else {
-      if (bodySelected) {
-        bodySelected.classList.remove('dark');
+      if (currentColour !== tosetcolour) {
+        setCurrentColour(tosetcolour);
       }
 
-      if (htmlSelected) {
-        htmlSelected.classList.remove('dark');
+      if (typeof window != undefined) {
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (
+          localStorage.theme === 'dark' ||
+          (!('theme' in localStorage) &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches)
+        ) {
+          if (bodySelected) {
+            bodySelected.classList.add('dark');
+            bodySelected.classList.add('dark:bg-bruhdark');
+            bodySelected.classList.add('dark:bg-bruhdark');
+          }
+
+          if (htmlSelected) {
+            htmlSelected.classList.add('dark');
+          }
+        } else {
+          if (bodySelected) {
+            bodySelected.classList.remove('dark');
+            dontburnmyeyes();
+          }
+
+          if (htmlSelected) {
+            htmlSelected.classList.remove('dark');
+          }
+        }
       }
     }
   }
-
-  useEffect(() => {
-    updateSystem();
-  });
 
   function makeLight() {
     console.log('make light');
     // Whenever the user explicitly chooses light mode
     localStorage.theme = 'light';
     updateSystem();
+    dontburnmyeyes();
   }
 
   function makeDark() {
@@ -100,15 +126,28 @@ function MyApp({ Component, pageProps }: AppProps) {
     console.log('make sys');
     localStorage.removeItem('theme');
     updateSystem();
+    dontburnmyeyes();
   }
+
+  updateSystem();
 
   const themeChanger: any = {
     makeLight,
     makeDark,
     makeSystem,
+    updateSystem,
+    currentColour,
   };
 
-  return <Component {...pageProps} themeChanger={themeChanger} />;
+  useEffect(() => {
+    updateSystem();
+  });
+
+  return (
+    <ThemeContext.Provider value={themeChanger}>
+      <Component {...pageProps} themeChanger={themeChanger} />
+    </ThemeContext.Provider>
+  );
 }
 
 export default MyApp;
