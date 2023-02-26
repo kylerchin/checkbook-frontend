@@ -1,8 +1,11 @@
+import { mdiIncognitoCircle } from '@mdi/js';
+import Icon from '@mdi/react';
 import Link from 'next/link';
 import * as React from 'react';
 import { useEffect } from 'react';
 import { titleCase } from 'true-case';
 
+import { departmentNameReplace } from '@/components/departmentNameReplace';
 import { Navbar } from '@/components/nav';
 import Seo from '@/components/Seo';
 import { TransactionTable } from '@/components/TransactionTable';
@@ -62,9 +65,25 @@ export default function Vendors(props: any) {
             Back to Search
           </p>
         </Link>
+
         <h1 className=''>
+          <>
+            {props.data.totalcost[0].vendor_name.match(/privacy-/gi) && (
+              <>
+                <Icon
+                  className='inline align-middle  text-gray-600 dark:text-gray-400'
+                  path={mdiIncognitoCircle}
+                  size={2}
+                />
+                <span className='ml-1 text-gray-600 dark:text-gray-400'>
+                  Privacy-
+                </span>
+              </>
+            )}
+          </>
           {vendorNameReplace(props.data.totalcost[0].vendor_name)}
         </h1>
+        <h4>Vendor</h4>
         <p className='lg:text-lg'>
           {'Since 2014, '}
           {parseFloat(props.data.totalcost[0].count)} transactions totaling{' '}
@@ -90,8 +109,21 @@ export default function Vendors(props: any) {
             </span>
           </p>
         ) : (
-          <p className='text-lg'>No Transactions in 2023</p>
+          <p className='lg:text-lg'>No Transactions in 2023</p>
         )}
+
+        {props.data.totalcost[0].vendor_name.match(/privacy-/gi) && (
+          <p className='text-purple-800 dark:text-purple-300'>
+            This Vendor Page is the list of Transactions for the{' '}
+            <span className='font-bold'>
+              {departmentNameReplace(
+                vendorNameReplace(props.data.totalcost[0].vendor_name)
+              )}
+            </span>{' '}
+            Department where the Vendor Name cannot be disclosed.
+          </p>
+        )}
+
         <p className='text-sm'>
           Loaded in {props.data.timeelapsed.toFixed(1)}ms
         </p>

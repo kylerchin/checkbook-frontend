@@ -37,7 +37,9 @@ export default function Departments(props: any): JSX.Element {
             Back to Search
           </p>
         </Link>
+
         <h1>{departmentNameReplace(props.deptname)}</h1>
+        <h4>Department</h4>
         <div>
           <div className=''>
             <TransactionTable

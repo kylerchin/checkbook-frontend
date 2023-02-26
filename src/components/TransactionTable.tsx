@@ -1,3 +1,5 @@
+import { mdiIncognitoCircle } from '@mdi/js';
+import Icon from '@mdi/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
@@ -6,6 +8,7 @@ import { io } from 'socket.io-client';
 import { titleCase } from 'true-case';
 
 import { departmentNameReplace } from '@/components/departmentNameReplace';
+import { vendorNameReplace } from '@/components/vendorNameReplace';
 
 import backends from '@/backends.json';
 
@@ -401,7 +404,19 @@ export function TransactionTable(props: transactiontableinterface) {
                       )}`}
                     >
                       <span className='underline decoration-sky-600/80 hover:decoration-sky-500'>
-                        {titleCase(eachItem.vendor_name)}
+                        {eachItem.vendor_name.match(/privacy-/gi) && (
+                          <>
+                            <Icon
+                              className='inline align-middle  text-gray-600 dark:text-gray-400'
+                              path={mdiIncognitoCircle}
+                              size={1}
+                            />
+                            <span className='ml-1 text-gray-700 dark:text-gray-300'>
+                              Privacy-
+                            </span>
+                          </>
+                        )}
+                        {vendorNameReplace(eachItem.vendor_name)}
                       </span>
                     </Link>
                   )}
@@ -513,8 +528,20 @@ export function TransactionTable(props: transactiontableinterface) {
                           eachItem.vendor_name.toLowerCase().trim()
                         )}`}
                       >
+                        {eachItem.vendor_name.match(/privacy-/gi) && (
+                          <>
+                            <Icon
+                              className='inline align-middle  text-gray-600 dark:text-gray-400'
+                              path={mdiIncognitoCircle}
+                              size={1}
+                            />
+                            <span className='ml-1 text-gray-700 dark:text-gray-300'>
+                              Privacy-
+                            </span>
+                          </>
+                        )}
                         <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
-                          {titleCase(eachItem.vendor_name)}
+                          {vendorNameReplace(eachItem.vendor_name)}
                         </span>
                       </Link>
                     </span>
