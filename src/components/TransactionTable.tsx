@@ -254,7 +254,7 @@ export function TransactionTable(props: transactiontableinterface) {
   // a) the front end in infinite mode would store a rows amount and fetch based on the offset number
 
   const loadfirsttime = () => {
-    socket.connect();
+   // socket.connect();
 
     if (firstloadedboolref.current === false) {
       sendReq({});
@@ -270,15 +270,7 @@ export function TransactionTable(props: transactiontableinterface) {
   useEffect(() => {
     loadfirsttime();
 
-    setInterval(() => {
-      loadfirsttime();
-    }, 300);
-
-    setInterval(() => {
-      if (socket.connected === false) {
-        socket.connect();
-      }
-    }, 200);
+  
 
     if (typeof window != 'undefined') {
       window.addEventListener('mousemove', (e) => {
@@ -298,7 +290,7 @@ export function TransactionTable(props: transactiontableinterface) {
     setsocketconnected(false);
   });
 
-  socket.connect();
+ // socket.connect();
 
   return (
     <div className='py-1 dark:text-gray-100'>
