@@ -392,7 +392,7 @@ export function TransactionTable(props: transactiontableinterface) {
             )}
             {props.optionalcolumns.includes('description') && <th>Desc</th>}
             {props.optionalcolumns.includes('detailed_item_description') && (
-              <th>Detailed Item Desc</th>
+              <th>Item</th>
             )}
             <th>Amount</th>
           </tr>
