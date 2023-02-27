@@ -579,7 +579,7 @@ export function TransactionTable(props: transactiontableinterface) {
                   <p>
                     <span className=''>
                       <span className='text-gray-600 dark:text-gray-400'>
-                        Fund:{' '}
+                        Account:{' '}
                       </span>
                       {titleCase(eachItem.account_name)}
                     </span>
