@@ -202,7 +202,8 @@ export function TransactionTable(props: transactiontableinterface) {
 
           if (jsonresponse.dupallrows) {
             for (const columnnamedup in jsonresponse.dupallrows) {
-              newrow[columnsshortened[columnnamedup]] = jsonresponse.dupallrows[columnnamedup];
+              newrow[columnsshortened[columnnamedup]] =
+                jsonresponse.dupallrows[columnnamedup];
             }
           }
 
@@ -254,7 +255,7 @@ export function TransactionTable(props: transactiontableinterface) {
   // a) the front end in infinite mode would store a rows amount and fetch based on the offset number
 
   const loadfirsttime = () => {
-   // socket.connect();
+    // socket.connect();
 
     if (firstloadedboolref.current === false) {
       sendReq({});
@@ -269,8 +270,6 @@ export function TransactionTable(props: transactiontableinterface) {
 
   useEffect(() => {
     loadfirsttime();
-
-  
 
     if (typeof window != 'undefined') {
       window.addEventListener('mousemove', (e) => {
@@ -290,7 +289,7 @@ export function TransactionTable(props: transactiontableinterface) {
     setsocketconnected(false);
   });
 
- // socket.connect();
+  // socket.connect();
 
   return (
     <div className='py-1 dark:text-gray-100'>
@@ -357,18 +356,14 @@ export function TransactionTable(props: transactiontableinterface) {
               {socketconnected ? 'Connected' : 'Connecting...'}
             </p>
           </div>
-          {recievedresponse === false && socketconnected && (
-            <div className='flex flex-row gap-x-2'>
-              <div
-                className='x-3 min-x-3 relative my-auto ml-2 h-3 shrink-0 animate-ping rounded-full bg-blue-500'
-                style={{
-                  width: '12px',
-                }}
-              ></div>
-              <p className='text-xs'>Fetching rows...</p>
-            </div>
-          )}
         </>
+      )}
+
+      {recievedresponse === false && (
+        <div className='flex flex-row gap-x-2'>
+          <div className='x-5 min-x-3 relative my-auto ml-2 h-5 shrink-0 animate-ping rounded-full bg-blue-500 md:ml-4'></div>
+          <p className='text-base font-semibold'>Fetching rows</p>
+        </div>
       )}
       <table className='hidden rounded-md px-1 py-1  md:block lg:px-2'>
         <thead>
@@ -484,7 +479,7 @@ export function TransactionTable(props: transactiontableinterface) {
         <div className='flex flex-col gap-y-2'>
           {currentShownRows.current.map((eachItem: any) => (
             <div
-              className='rounded-sm overflow-x-hidden bg-gray-200 px-2 py-1 dark:bg-gray-900'
+              className='overflow-x-hidden rounded-sm bg-gray-200 px-2 py-1 dark:bg-gray-900'
               key={eachItem.id_number}
             >
               <div className='flex flex-row'>
