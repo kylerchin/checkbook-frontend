@@ -202,7 +202,7 @@ export function TransactionTable(props: transactiontableinterface) {
 
           if (jsonresponse.dupallrows) {
             for (const columnnamedup in jsonresponse.dupallrows) {
-              newrow[columnnamedup] = jsonresponse.dupallrows[columnnamedup];
+              newrow[columnsshortened[columnnamedup]] = jsonresponse.dupallrows[columnnamedup];
             }
           }
 
