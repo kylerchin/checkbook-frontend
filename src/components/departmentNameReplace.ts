@@ -12,6 +12,7 @@ export function departmentNameReplace(inputstring: string) {
     removetheworddepartment = inputstring.replace(/( )?department( )?(of)?( )?/gi, '')
 .replace(/los angeles housing/gi,"Housing")
    .replace(/Los Angelesconvention and Tourism Development/i,"Los Angeles Convention and Tourism Development")
+   .replace(/_/gi,"-")
 ;
   }
 
