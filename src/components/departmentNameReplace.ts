@@ -9,7 +9,9 @@ export function departmentNameReplace(inputstring: string) {
   if (inputstring.match(/non/gi)) {
     console.log('non found')
   } else {
-    removetheworddepartment = inputstring.replace(/( )?department( )?(of)?( )?/gi, '');
+    removetheworddepartment = inputstring.replace(/( )?department( )?(of)?( )?/gi, '')
+.replace(/los angeles housing/gi,"Housing")
+;
   }
 
   return titleCase(removetheworddepartment);
