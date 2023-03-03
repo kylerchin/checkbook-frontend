@@ -275,22 +275,34 @@ export function TransactionTable(props: transactiontableinterface) {
           //if it's a new request, then set the current rows to the new rows
 
           if (data.offsetnumber === 0 || samereq === false) {
-            currentShownRows.current = cleanedrows;
-            setCurrentShownRowsState(cleanedrows);
-            numberofloadedrows.current = cleanedrows.length;
+            if (data.offsetnumber === 0) {
+              currentShownRows.current = cleanedrows;
+              setCurrentShownRowsState(cleanedrows);
+              numberofloadedrows.current = cleanedrows.length;
+            }
           } else {
-            console.log(
-              'numberofloadedrows.current',
-              numberofloadedrows.current
-            );
-            console.log('cleanedrows.length', cleanedrows.length);
-            numberofloadedrows.current =
-              numberofloadedrows.current + cleanedrows.length;
-            currentShownRows.current = [
-              ...currentShownRows.current,
-              cleanedrows,
-            ];
-            setCurrentShownRowsState(currentShownRows.current);
+            if (data.offsetnumber === numberofloadedrows.current) {
+              console.log(
+                'numberofloadedrows.current',
+                numberofloadedrows.current
+              );
+              console.log('cleanedrows.length', cleanedrows.length);
+              numberofloadedrows.current =
+                numberofloadedrows.current + cleanedrows.length;
+              currentShownRows.current = [
+                ...currentShownRows.current,
+                cleanedrows,
+              ];
+              setCurrentShownRowsState(currentShownRows.current);
+            } else {
+              console.log('offset incorrect');
+              console.log(
+                'currently showing',
+                numberofloadedrows.current,
+                'offset response',
+                data.offsetnumber
+              );
+            }
           }
 
           filtersofcurrentlyshowndata.current = thisRequestFilters;
