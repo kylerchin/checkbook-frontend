@@ -7,7 +7,10 @@ interface nav {
 export function Navbar(props: nav) {
   return (
     <>
-      <div className='flex flex-row bg-gray-200 py-1 px-2 drop-shadow-lg dark:bg-bruhlessdark dark:text-gray-200 md:px-4'>
+      <nav
+        id='navbar'
+        className='sticky top-0 z-10 flex flex-row bg-gray-200 py-1 px-2 drop-shadow-lg dark:bg-bruhlessdark dark:text-gray-200 md:px-4'
+      >
         <div className='my-auto flex flex-row gap-x-5 font-semibold'>
           <Link href='/'>
             <p className='underline hover:text-gray-800 dark:hover:text-gray-300'>
@@ -23,7 +26,7 @@ export function Navbar(props: nav) {
         <div className='align-right ml-auto'>
           <ChangeColour />
         </div>
-      </div>
+      </nav>
     </>
   );
 }

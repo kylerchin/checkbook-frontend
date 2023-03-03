@@ -18,6 +18,12 @@ class MyDocument extends Document {
         <Head></Head>
         <body className='scrollbar-rounded-full scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-900 dark:scrollbar-track-bruhdark dark:scrollbar-thumb-zinc-300'>
           <Main />
+          <style>
+            {`#__next {
+                position: static;
+                width: 100%;
+              }`}
+          </style>
           <NextScript />
         </body>
       </Html>

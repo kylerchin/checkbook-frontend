@@ -111,6 +111,10 @@ export function TransactionTable(props: transactiontableinterface) {
   const [currentShownRowsState, setCurrentShownRowsState] = useState<
     Array<any>
   >([]);
+
+  const ticking = useRef(false);
+  const lastKnownScrollPosition = useRef(0);
+
   const [socketconnected, setsocketconnected] = useState<boolean>(
     socket.connected
   );
@@ -459,7 +463,7 @@ export function TransactionTable(props: transactiontableinterface) {
   // socket.connect();
 
   return (
-    <div className='py-1 dark:text-gray-100'>
+    <div className='relative py-1 dark:text-gray-100'>
       {debugmode && (
         <button
           className='rounded bg-blue-800 px-2 py-2 text-white'
@@ -481,21 +485,23 @@ export function TransactionTable(props: transactiontableinterface) {
         </button>
       )}
       {firstloadedboolref.current === true && (
-        <p>
-          <span className='font-semibold'>
-            {currentShownRows.current.length.toLocaleString('default')}
-          </span>{' '}
-          of{' '}
-          <span className='font-semibold'>
-            {sizeofsearchstate.toLocaleString('default')}
-          </span>{' '}
-          rows loaded.{' '}
-          <span>
-            {sizeofsearchstate > currentShownRows.current.length && (
-              <span>Scroll for more.</span>
-            )}
-          </span>
-        </p>
+        <div className='sticky top-[50px] z-20 bg-white align-top dark:bg-bruhlessdark'>
+          <p className=''>
+            <span className='font-semibold'>
+              {currentShownRows.current.length.toLocaleString('default')}
+            </span>{' '}
+            of{' '}
+            <span className='font-semibold'>
+              {sizeofsearchstate.toLocaleString('default')}
+            </span>{' '}
+            rows loaded.{' '}
+            <span>
+              {sizeofsearchstate > currentShownRows.current.length && (
+                <span>Scroll for more.</span>
+              )}
+            </span>
+          </p>
+        </div>
       )}
 
       {false && (
@@ -553,7 +559,7 @@ export function TransactionTable(props: transactiontableinterface) {
         } lg:px-2`}
       >
         <thead>
-          <tr className='text-xs dark:bg-bruhlessdark lg:text-sm xl:text-lg'>
+          <tr className=' text-xs dark:bg-bruhlessdark lg:text-sm xl:text-lg'>
             <th className=''>Date</th>
             {props.optionalcolumns.includes('department_name') && <th>Dept</th>}
             {props.optionalcolumns.includes('vendor_name') && <th>Vendor</th>}
