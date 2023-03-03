@@ -127,6 +127,24 @@ export function TransactionTable(props: transactiontableinterface) {
 
   const currentlySetFilterHash = useRef<string>('');
 
+  const lastRefBuffer70 = useRef(null);
+  const lastRefMobileBuffer15 = useRef(null);
+  const lastRefMobile = useRef(null);
+  const lastRefSecondLast = useRef(null);
+  const lastRef = useRef(null);
+
+  function isInViewport(element: any, buffer: any) {
+    const rect = element.getBoundingClientRect();
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <=
+        (window.innerHeight + buffer ||
+          document.documentElement.clientHeight + buffer) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+  }
+
   //executed by new props change or scroll
   function sendReq(requestoptions: requestinterface) {
     //so if it's a trigger for a prop change, trigger a brand new fresh request
@@ -346,6 +364,58 @@ export function TransactionTable(props: transactiontableinterface) {
     return true;
   }
 
+  const checkIfLoadMore = () => {
+    let loadMore = false;
+
+    let actOn = [];
+
+    if (window.innerWidth >= 768) {
+      actOn = [lastRef.current, lastRefBuffer70.current];
+    } else {
+      actOn = [lastRefMobile.current, lastRefMobileBuffer15.current];
+    }
+
+    actOn.forEach((eachItem) => {
+      if (eachItem) {
+        if (isInViewport(eachItem, 100)) {
+          loadMore = true;
+        }
+      }
+    });
+
+    if (loadMore) {
+      if (currentShownRows.current.length < sizeofsearch.current) {
+        sendReq({});
+      }
+    }
+  };
+
+  const setLastObjRefMobile = (ref: any, index: number, length: number) => {
+    if (length - 1 === index) {
+      lastRefMobile.current = ref;
+    }
+
+    if (length - 15 === index) {
+      lastRefMobileBuffer15.current = ref;
+    }
+  };
+
+  const setLastObjRef = (ref: any, index: number, length: number) => {
+    if (length > 70) {
+      if (length - 71 === index) {
+        lastRefBuffer70.current = ref;
+      }
+    }
+
+    if (length - 1 === index) {
+      lastRef.current = ref;
+    }
+
+    if (length - 2 === index) {
+      lastRefSecondLast.current = ref;
+    }
+  };
+
   //on a new scroll or filter command, the software should determine if it should
   //1. fetch the whole thing or enter infinite scrolling mode via "scrollmode": "infinite" | "all" as a response from the backend
   // a) the front end in infinite mode would store a rows amount and fetch based on the offset number
@@ -500,10 +570,13 @@ export function TransactionTable(props: transactiontableinterface) {
           </tr>
         </thead>
         <tbody>
-          {currentShownRows.current.map((eachItem: any) => (
+          {currentShownRows.current.map((eachItem: any, index) => (
             <tr
               className='font-normal dark:bg-bruhlessdark'
               key={eachItem.id_number}
+              ref={(ref) => {
+                setLastObjRef(ref, index, currentShownRows.current.length);
+              }}
             >
               <td className='border-collapse border border-gray-500 text-xs font-normal lg:text-sm xl:text-base'>
                 {new Date(eachItem.transaction_date).toLocaleDateString(
@@ -593,10 +666,13 @@ export function TransactionTable(props: transactiontableinterface) {
       </table>
       <div className='md:hidden'>
         <div className='flex flex-col gap-y-2'>
-          {currentShownRows.current.map((eachItem: any) => (
+          {currentShownRows.current.map((eachItem: any, index: number) => (
             <div
               className='overflow-x-hidden rounded-sm bg-gray-200 px-2 py-1 dark:bg-gray-900'
               key={eachItem.id_number}
+              ref={(ref) => {
+                setLastObjRefMobile(ref, index, currentRows.current.length);
+              }}
             >
               <div className='flex flex-row'>
                 <div className='mr-auto'>
