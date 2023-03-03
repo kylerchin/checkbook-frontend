@@ -825,7 +825,9 @@ export function TransactionTable(props: transactiontableinterface) {
                           {' '}
                           Qty:{' '}
                         </span>
-                        <span>{titleCase(eachItem.quantity)}</span>
+                        <span>
+                          {Number(eachItem.quantity).toLocaleString('default')}
+                        </span>
                       </span>
                     )}
                   </p>
@@ -843,7 +845,9 @@ export function TransactionTable(props: transactiontableinterface) {
                       <span className='text-gray-600 dark:text-gray-400'>
                         Qty:{' '}
                       </span>
-                      <span>{titleCase(eachItem.quantity)}</span>
+                      <span>
+                        {Number(eachItem.quantity).toLocaleString('default')}
+                      </span>
                     </span>
                   </p>
                 )}
