@@ -51,6 +51,7 @@ export default function Departments(props: any): JSX.Element {
                 'expenditure_type',
                 'description',
                 'detailed_item_description',
+                'quantity',
               ]}
               filters={{
                 department: {
