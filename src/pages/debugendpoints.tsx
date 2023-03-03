@@ -17,6 +17,7 @@ export default function Departments(props: any): JSX.Element {
     fetch('https://djkensterprod.lacontroller.io/fetchcheckbookmetaraw')
       .then((response) => response.json())
       .then((data) => {
+        console.log('checkbookdata', data);
         setCheckbookdata(data);
       });
   }, []);
@@ -54,7 +55,7 @@ export default function Departments(props: any): JSX.Element {
           <>
             <p>
               Rows:{' '}
-              <span className='tabular-nums'>
+              <span className='font-semibold tabular-nums'>
                 {parseInt(
                   checkbookdata.checkbookrowsize[0].count
                 ).toLocaleString('default')}
@@ -62,7 +63,7 @@ export default function Departments(props: any): JSX.Element {
             </p>
             <p>
               File Size in Bytes:{' '}
-              <span className='tabular-nums'>
+              <span className='font-semibold tabular-nums'>
                 {parseInt(
                   checkbookdata.checkbooklastupdated[0].filesize
                 ).toLocaleString('default')}
@@ -70,15 +71,22 @@ export default function Departments(props: any): JSX.Element {
             </p>
             <p>
               File Size Shortened:{' '}
-              <span className='tabular-nums'>
-                {byteSize(
-                  parseInt(checkbookdata.checkbooklastupdated[0].filesize)
-                )}
+              <span className='font-semibold tabular-nums'>
+                {
+                  byteSize(
+                    parseInt(checkbookdata.checkbooklastupdated[0].filesize)
+                  ).value
+                }
+                {
+                  byteSize(
+                    parseInt(checkbookdata.checkbooklastupdated[0].filesize)
+                  ).unit
+                }
               </span>
             </p>
             <p>
               Time of File Download from Socrata:{' '}
-              <span>
+              <span className='font-semibold'>
                 {new Date(
                   checkbookdata.checkbooklastupdated[0].timeoffiledownload
                 ).toLocaleString('default')}
@@ -86,7 +94,7 @@ export default function Departments(props: any): JSX.Element {
             </p>
             <p>
               Time of File Upload to Postgres:{' '}
-              <span>
+              <span className='font-semibold'>
                 {new Date(
                   checkbookdata.checkbooklastupdated[0].lastuploaded
                 ).toLocaleString('default')}
@@ -95,7 +103,7 @@ export default function Departments(props: any): JSX.Element {
             {checkbookdata.checkbooklastupdated[0].lastindexed ? (
               <p>
                 Time of Last Index:{' '}
-                <span>
+                <span className='font-semibold'>
                   {new Date(
                     checkbookdata.checkbooklastupdated[0].lastindexed
                   ).toLocaleString('default')}
