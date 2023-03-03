@@ -217,101 +217,104 @@ export function TransactionTable(props: transactiontableinterface) {
       .then(async (response) => {
         const jsonresponse = await response.json();
 
-        const cleanedrows = jsonresponse.rows.map((row: any) => {
-          const newrow: any = {};
+        if (jsonresponse.rows) {
+          const cleanedrows = jsonresponse.rows.map((row: any) => {
+            const newrow: any = {};
 
-          //this section cleans up the column names from the shortened column names used for network compression
+            //this section cleans up the column names from the shortened column names used for network compression
 
-          for (const key in row) {
-            if (columnsshortened[key]) {
-              newrow[columnsshortened[key]] = row[key];
+            for (const key in row) {
+              if (columnsshortened[key]) {
+                newrow[columnsshortened[key]] = row[key];
+              } else {
+                newrow[key] = row[key];
+              }
+            }
+
+            //this section adds the duplicate columns to the row
+
+            if (jsonresponse.dupallrows) {
+              for (const columnnamedup in jsonresponse.dupallrows) {
+                newrow[columnsshortened[columnnamedup]] =
+                  jsonresponse.dupallrows[columnnamedup];
+              }
+            }
+
+            return newrow;
+          });
+
+          console.log('cleanedrows', cleanedrows);
+
+          setrecievedresponse(true);
+          //process and then update the state
+          settimeelapsed(jsonresponse.timeelapsed);
+
+          let samereq = true;
+
+          const data = jsonresponse;
+
+          //cancel the response if the currently shown filters / sort (filtersofcurrentlyshowndata) match the requested filters (which is contained in props) and this response doesn't match the requested filters
+
+          let cancel = false;
+
+          //check if currently shown filters match the prop requested filters
+          if (
+            JSON.stringify(props.filters) ===
+            filtersofcurrentlyshowndata.current
+          ) {
+            //is this filter different than the currently requested + already loaded filters
+            if (filtersofcurrentlyshowndata.current !== thisRequestFilters) {
+              cancel = true;
+            }
+          }
+
+          if (cancel === false) {
+            if (reqFilterHash !== currentlySetFilterHash.current) {
+              samereq = false;
+              console.log('different request');
+            }
+
+            //if it's a new request, then set the current rows to the new rows
+
+            if (data.offsetnumber === 0 || samereq === false) {
+              if (data.offsetnumber === 0) {
+                currentShownRows.current = cleanedrows;
+                setCurrentShownRowsState(cleanedrows);
+                numberofloadedrows.current = cleanedrows.length;
+              }
             } else {
-              newrow[key] = row[key];
+              if (data.offsetnumber === numberofloadedrows.current) {
+                console.log(
+                  'numberofloadedrows.current',
+                  numberofloadedrows.current
+                );
+                console.log('cleanedrows.length', cleanedrows.length);
+                numberofloadedrows.current =
+                  numberofloadedrows.current + cleanedrows.length;
+                currentShownRows.current = [
+                  ...currentShownRows.current,
+                  cleanedrows,
+                ];
+                setCurrentShownRowsState(currentShownRows.current);
+              } else {
+                console.log('offset incorrect');
+                console.log(
+                  'currently showing',
+                  numberofloadedrows.current,
+                  'offset response',
+                  data.offsetnumber
+                );
+              }
             }
-          }
 
-          //this section adds the duplicate columns to the row
+            filtersofcurrentlyshowndata.current = thisRequestFilters;
+            currentlySetFilterHash.current = reqFilterHash;
 
-          if (jsonresponse.dupallrows) {
-            for (const columnnamedup in jsonresponse.dupallrows) {
-              newrow[columnsshortened[columnnamedup]] =
-                jsonresponse.dupallrows[columnnamedup];
-            }
-          }
-
-          return newrow;
-        });
-
-        console.log('cleanedrows', cleanedrows);
-
-        setrecievedresponse(true);
-        //process and then update the state
-        settimeelapsed(jsonresponse.timeelapsed);
-
-        let samereq = true;
-
-        const data = jsonresponse;
-
-        //cancel the response if the currently shown filters / sort (filtersofcurrentlyshowndata) match the requested filters (which is contained in props) and this response doesn't match the requested filters
-
-        let cancel = false;
-
-        //check if currently shown filters match the prop requested filters
-        if (
-          JSON.stringify(props.filters) === filtersofcurrentlyshowndata.current
-        ) {
-          //is this filter different than the currently requested + already loaded filters
-          if (filtersofcurrentlyshowndata.current !== thisRequestFilters) {
-            cancel = true;
-          }
-        }
-
-        if (cancel === false) {
-          if (reqFilterHash !== currentlySetFilterHash.current) {
-            samereq = false;
-            console.log('different request');
-          }
-
-          //if it's a new request, then set the current rows to the new rows
-
-          if (data.offsetnumber === 0 || samereq === false) {
-            if (data.offsetnumber === 0) {
-              currentShownRows.current = cleanedrows;
-              setCurrentShownRowsState(cleanedrows);
-              numberofloadedrows.current = cleanedrows.length;
-            }
-          } else {
-            if (data.offsetnumber === numberofloadedrows.current) {
-              console.log(
-                'numberofloadedrows.current',
-                numberofloadedrows.current
-              );
-              console.log('cleanedrows.length', cleanedrows.length);
-              numberofloadedrows.current =
-                numberofloadedrows.current + cleanedrows.length;
-              currentShownRows.current = [
-                ...currentShownRows.current,
-                cleanedrows,
-              ];
-              setCurrentShownRowsState(currentShownRows.current);
-            } else {
-              console.log('offset incorrect');
-              console.log(
-                'currently showing',
-                numberofloadedrows.current,
-                'offset response',
-                data.offsetnumber
-              );
-            }
-          }
-
-          filtersofcurrentlyshowndata.current = thisRequestFilters;
-          currentlySetFilterHash.current = reqFilterHash;
-
-          if (sizeofsearch.current < 3000) {
-            if (sizeofsearch.current > currentShownRows.current.length) {
-              sendReq({});
-              console.log('asking for next interation');
+            if (sizeofsearch.current < 3000) {
+              if (sizeofsearch.current > currentShownRows.current.length) {
+                sendReq({});
+                console.log('asking for next interation');
+              }
             }
           }
         }
