@@ -70,7 +70,7 @@ const columnreadable = {
 };
 
 const desktopnotamountcell =
-  'justify-left align-left border-collapse border border-gray-500 px-1 lg:px-2 text-left text-xs lg:text-sm xl:text-base font-normal';
+  'max-w-[200px] xl:max-w-xs 2xl:max-w-auto justify-left align-left border-collapse border border-gray-500 px-0.5 lg:px-1 text-left text-xs lg:text-sm xl:text-base font-normal';
 
 interface vendorelementinterface {
   vendor_name: string;
@@ -485,8 +485,8 @@ export function TransactionTable(props: transactiontableinterface) {
         </button>
       )}
       {firstloadedboolref.current === true && (
-        <div className='sticky top-[48px] z-20 bg-white align-top  dark:bg-bruhdark md:top-[50px]'>
-          <p className=''>
+        <div className='sticky top-[48px] z-10 bg-white align-top  dark:bg-bruhdark md:top-[50px]'>
+          <p className='ml-2'>
             <span className='font-semibold'>
               {currentShownRows.current.length.toLocaleString('default')}
             </span>{' '}
@@ -606,7 +606,7 @@ export function TransactionTable(props: transactiontableinterface) {
                       )}`}
                     >
                       <span className='underline decoration-sky-600/80 hover:decoration-sky-500'>
-                        {titleCase(eachItem.department_name)}
+                        {departmentNameReplace(eachItem.department_name)}
                       </span>
                     </Link>
                   )}
@@ -857,7 +857,7 @@ export function TransactionTable(props: transactiontableinterface) {
       </div>
       {firstloadedboolref.current === true &&
         sizeofsearchstate === currentShownRows.current.length && (
-          <p className='my-1 font-semibold'>
+          <p className='my-1 ml-2 font-semibold'>
             All rows loaded. Nothing past this!
           </p>
         )}

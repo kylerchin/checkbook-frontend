@@ -10,13 +10,14 @@ export default function Departments(props: any): JSX.Element {
   return (
     <>
       <Navbar themeChanger={props.themeChanger} />
-      <div className='relative mx-auto mx-2 mt-2 dark:text-gray-100 md:mt-4'>
+      <div className='relative mt-2 dark:text-gray-100 md:mt-4'>
         <Seo title='Table Explorer | LA Checkbook' />
 
         <div className='relative'>
           <div className='relative'>
             <TransactionTable
               optionalcolumns={[
+                'department_name',
                 'vendor_name',
                 'fund_name',
                 'program',

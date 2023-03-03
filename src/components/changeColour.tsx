@@ -44,7 +44,7 @@ export function ChangeColour() {
             </div>
           </Popover.Button>
 
-          <Popover.Panel className='absolute right-0 top-10 z-20 rounded-lg bg-gray-100 text-black dark:bg-slate-900'>
+          <Popover.Panel className='absolute right-0 top-10 z-40 rounded-lg bg-gray-100 text-black dark:bg-slate-900'>
             <div className='z-20'>
               <div
                 className='border px-2 py-1 dark:border-gray-600 dark:text-white'

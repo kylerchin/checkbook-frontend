@@ -40,14 +40,15 @@ export default function Vendors(props: any) {
   return (
     <>
       <Navbar themeChanger={props.themeChanger} />
-      <div className='mx-auto mx-2 mt-2 dark:text-gray-100 md:mt-4'>
+      <div className='relative mx-auto dark:text-gray-100 '>
         <Seo
           title={`${titleCase(
             props.data.totalcost[0].vendor_name
           )}|LA Checkbook Vendor`}
         />
-        <Link href='/' className='underline'>
-          <p className='underline hover:text-blue-900 dark:text-blue-200 hover:dark:text-blue-50'>
+
+        <Link href='/' className='ml-2 underline'>
+          <p className='ml-2 underline hover:text-blue-900 dark:text-blue-200 hover:dark:text-blue-50'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -66,7 +67,7 @@ export default function Vendors(props: any) {
           </p>
         </Link>
 
-        <h1 className=''>
+        <h1 className='ml-2'>
           <>
             {props.data.totalcost[0].vendor_name.match(/privacy-/gi) && (
               <>
@@ -83,8 +84,8 @@ export default function Vendors(props: any) {
           </>
           {vendorNameReplace(props.data.totalcost[0].vendor_name)}
         </h1>
-        <h4>Vendor</h4>
-        <p className='lg:text-lg'>
+        <h4 className='ml-2'>Vendor</h4>
+        <p className='ml-2 lg:text-lg'>
           {'Since 2014, '}
           {parseInt(props.data.totalcost[0].count).toLocaleString(
             'default'
@@ -98,7 +99,7 @@ export default function Vendors(props: any) {
           </span>
         </p>
         {props.data.thisyearsum && props.data.thisyearsum[0] ? (
-          <p className='lg:text-lg'>
+          <p className='ml-2 lg:text-lg'>
             In 2023,{' '}
             {parseInt(props.data.thisyearsum[0].count).toLocaleString(
               'default'
@@ -115,11 +116,11 @@ export default function Vendors(props: any) {
             </span>
           </p>
         ) : (
-          <p className='lg:text-lg'>No Transactions in 2023</p>
+          <p className='ml-2 lg:text-lg'>No Transactions in 2023</p>
         )}
 
         {props.data.totalcost[0].vendor_name.match(/privacy-/gi) && (
-          <p className='leading-tight text-purple-800 dark:text-purple-300'>
+          <p className='ml-2 leading-tight text-purple-800 dark:text-purple-300'>
             This Vendor Page is the list of Transactions for the{' '}
             <span className='font-bold'>
               {departmentNameReplace(
@@ -130,11 +131,12 @@ export default function Vendors(props: any) {
           </p>
         )}
 
-        <p className='text-sm'>
-          Loaded in {props.data.timeelapsed.toFixed(1)}ms
-        </p>
-
-        <div className='flex flex-row gap-x-1'>
+        {false && (
+          <p className='text-sm'>
+            Loaded in {props.data.timeelapsed.toFixed(1)}ms
+          </p>
+        )}
+        <div className='ml-2 flex flex-row gap-x-1'>
           <div className='rounded-full bg-black px-2 py-1 text-white dark:border dark:border-gray-500'>
             Summary
           </div>
@@ -143,7 +145,7 @@ export default function Vendors(props: any) {
           </div>
         </div>
 
-        <div className=''>
+        <div className='relative'>
           <TransactionTable
             optionalcolumns={[
               'department_name',

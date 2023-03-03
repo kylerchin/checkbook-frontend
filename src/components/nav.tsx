@@ -9,7 +9,7 @@ export function Navbar(props: nav) {
     <>
       <nav
         id='navbar'
-        className='sticky top-0 z-10 flex flex-row bg-gray-200 py-1 px-2 drop-shadow-lg dark:bg-bruhlessdark dark:text-gray-200 md:px-4'
+        className='sticky top-0 z-20 flex flex-row bg-gray-200 py-1 px-2 drop-shadow-lg dark:bg-bruhlessdark dark:text-gray-200 md:px-4'
       >
         <div className='my-auto flex flex-row gap-x-5 font-semibold'>
           <Link href='/'>
