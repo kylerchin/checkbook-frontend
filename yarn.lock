@@ -1833,6 +1833,11 @@
   resolved "https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
+"@types/luxon@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.npmjs.org/@types/luxon/-/luxon-3.2.0.tgz"
+  integrity sha512-lGmaGFoaXHuOLXFvuju2bfvZRqxAqkHPx9Y9IQdQABrinJJshJwfNCKV+u7rR3kJbiqfTF/NhOkcxxAFrObyaA==
+
 "@types/minimist@^1.2.0":
   version "1.2.1"
   resolved "https://registry.npmjs.org/@types/minimist/-/minimist-1.2.1.tgz"

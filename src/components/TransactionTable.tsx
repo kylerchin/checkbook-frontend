@@ -8,6 +8,7 @@ import { io } from 'socket.io-client';
 import { titleCase } from 'true-case';
 
 import { departmentNameReplace } from '@/components/departmentNameReplace';
+import { simpleHash } from '@/components/simpleHash';
 import { vendorNameReplace } from '@/components/vendorNameReplace';
 
 import backends from '@/backends.json';
@@ -117,15 +118,25 @@ export function TransactionTable(props: transactiontableinterface) {
 
   const socketconnectedref = useRef<boolean>(false);
 
+  const sizeOfSearchObj = useRef<any>(null);
+
   const previouslyLoadedFilters = useRef<string>('');
 
   const numberofloadedrows = useRef<number>(0);
+
+  const currentlySetFilterHash = useRef<string>('');
 
   //executed by new props change or scroll
   function sendReq(requestoptions: requestinterface) {
     //so if it's a trigger for a prop change, trigger a brand new fresh request
 
     //but if it's a scroll request, send the existing props + the number of loaded rows and say it's a scroll request
+
+    const thisRequestFilters = JSON.stringify(props.filters);
+    const thisRequestOptionalColumns = JSON.stringify(props.optionalcolumns);
+    const thisRequestOffset = numberofloadedrows.current;
+
+    const reqFilterHash = simpleHash(thisRequestFilters);
 
     const requestobject: any = {
       filters: props.filters,
@@ -143,41 +154,58 @@ export function TransactionTable(props: transactiontableinterface) {
     console.log('emitting request with', requestobject);
     //socket.emit('getcheckbookrows', requestobject);
 
-    fetch(`${backends.http}/countrows`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestobject),
-    })
-      .then(async (response) => {
-        const jsonresponse = await response.json();
+    let cancelcountrows = false;
 
-        console.log('jsonresponse', jsonresponse);
+    if (sizeOfSearchObj.current) {
+      if (
+        sizeOfSearchObj.current.filterhash == simpleHash(thisRequestFilters)
+      ) {
+        cancelcountrows = true;
+      }
+    }
 
-        if (jsonresponse.rows) {
-          if (jsonresponse.rows[0]) {
-            if (jsonresponse.rows[0].count) {
-              console.log(
-                'number of rows in req',
-                parseInt(jsonresponse.rows[0].count)
-              );
-              sizeofsearch.current = parseInt(jsonresponse.rows[0].count);
-              setsizeofsearchstate(parseInt(jsonresponse.rows[0].count));
+    if (cancelcountrows === false) {
+      fetch(`${backends.http}/countrows`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestobject),
+      })
+        .then(async (response) => {
+          const jsonresponse = await response.json();
 
-              if (sizeofsearch.current < 1500) {
-                if (sizeofsearch.current > currentShownRows.current.length) {
-                  // sendReq({ newresults: true });
-                  console.log('ask for next interation');
+          console.log('jsonresponse', jsonresponse);
+
+          if (jsonresponse.rows) {
+            if (jsonresponse.rows[0]) {
+              if (jsonresponse.rows[0].count) {
+                console.log(
+                  'number of rows in req',
+                  parseInt(jsonresponse.rows[0].count)
+                );
+                sizeofsearch.current = parseInt(jsonresponse.rows[0].count);
+                setsizeofsearchstate(parseInt(jsonresponse.rows[0].count));
+
+                sizeOfSearchObj.current = {
+                  filterhash: reqFilterHash,
+                  size: sizeofsearch.current,
+                };
+
+                if (sizeofsearch.current < 3000) {
+                  if (sizeofsearch.current > currentShownRows.current.length) {
+                    // sendReq({});
+                    //console.log('ask for next interation');
+                  }
                 }
               }
             }
           }
-        }
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    }
 
     fetch(`${backends.http}/fetchrows`, {
       method: 'POST',
@@ -192,6 +220,8 @@ export function TransactionTable(props: transactiontableinterface) {
         const cleanedrows = jsonresponse.rows.map((row: any) => {
           const newrow: any = {};
 
+          //this section cleans up the column names from the shortened column names used for network compression
+
           for (const key in row) {
             if (columnsshortened[key]) {
               newrow[columnsshortened[key]] = row[key];
@@ -199,6 +229,8 @@ export function TransactionTable(props: transactiontableinterface) {
               newrow[key] = row[key];
             }
           }
+
+          //this section adds the duplicate columns to the row
 
           if (jsonresponse.dupallrows) {
             for (const columnnamedup in jsonresponse.dupallrows) {
@@ -220,26 +252,57 @@ export function TransactionTable(props: transactiontableinterface) {
 
         const data = jsonresponse;
 
+        //cancel the response if the currently shown filters / sort (filtersofcurrentlyshowndata) match the requested filters (which is contained in props) and this response doesn't match the requested filters
+
+        let cancel = false;
+
+        //check if currently shown filters match the prop requested filters
         if (
-          JSON.stringify(data.previouslysetfilters) !==
-          filtersofcurrentlyshowndata.current
+          JSON.stringify(props.filters) === filtersofcurrentlyshowndata.current
         ) {
-          samereq = false;
+          //is this filter different than the currently requested + already loaded filters
+          if (filtersofcurrentlyshowndata.current !== thisRequestFilters) {
+            cancel = true;
+          }
         }
 
-        //if it's a new request, then set the current rows to the new rows
-        if (data.offsetnumber === 0 || samereq === false) {
-          currentShownRows.current = cleanedrows;
-          setCurrentShownRowsState(cleanedrows);
-          numberofloadedrows.current = cleanedrows.length;
-        } else {
-          numberofloadedrows.current =
-            numberofloadedrows.current + cleanedrows.length;
-          currentShownRows.current = [...currentShownRows.current, cleanedrows];
-          setCurrentShownRowsState(currentShownRows.current);
-        }
+        if (cancel === false) {
+          if (reqFilterHash !== currentlySetFilterHash.current) {
+            samereq = false;
+            console.log('different request');
+          }
 
-        filtersofcurrentlyshowndata.current = JSON.stringify(props.filters);
+          //if it's a new request, then set the current rows to the new rows
+
+          if (data.offsetnumber === 0 || samereq === false) {
+            currentShownRows.current = cleanedrows;
+            setCurrentShownRowsState(cleanedrows);
+            numberofloadedrows.current = cleanedrows.length;
+          } else {
+            console.log(
+              'numberofloadedrows.current',
+              numberofloadedrows.current
+            );
+            console.log('cleanedrows.length', cleanedrows.length);
+            numberofloadedrows.current =
+              numberofloadedrows.current + cleanedrows.length;
+            currentShownRows.current = [
+              ...currentShownRows.current,
+              cleanedrows,
+            ];
+            setCurrentShownRowsState(currentShownRows.current);
+          }
+
+          filtersofcurrentlyshowndata.current = thisRequestFilters;
+          currentlySetFilterHash.current = reqFilterHash;
+
+          if (sizeofsearch.current < 3000) {
+            if (sizeofsearch.current > currentShownRows.current.length) {
+              sendReq({});
+              console.log('asking for next interation');
+            }
+          }
+        }
       })
       .catch((error) => {
         console.error('Error:', error);
