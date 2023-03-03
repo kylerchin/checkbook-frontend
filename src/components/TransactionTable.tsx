@@ -553,8 +553,8 @@ export function TransactionTable(props: transactiontableinterface) {
         } lg:px-2`}
       >
         <thead>
-          <tr className='dark:bg-bruhlessdark'>
-            <th>Date</th>
+          <tr className='text-xs dark:bg-bruhlessdark lg:text-sm xl:text-lg'>
+            <th className=''>Date</th>
             {props.optionalcolumns.includes('department_name') && <th>Dept</th>}
             {props.optionalcolumns.includes('vendor_name') && <th>Vendor</th>}
             {props.optionalcolumns.includes('fund_name') && <th>Fund</th>}
