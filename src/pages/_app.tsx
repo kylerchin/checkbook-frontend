@@ -14,7 +14,7 @@ import '@/styles/colors.css';
 import { ThemeContext } from './../themeManager';
 
 const tagManagerArgs = {
-  gtmId: 'GTM-MQG62S5',
+  gtmId: 'G-TRM4TBWR98',
 };
 try {
   datadogRum.init({
