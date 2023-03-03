@@ -655,7 +655,7 @@ export function TransactionTable(props: transactiontableinterface) {
               )}
 
               {props.optionalcolumns.includes('quantity') && (
-                <th className={`${desktopnotamountcell} tabular-nums`}>
+                <th className='justify-left align-left border-collapse border border-gray-500 px-0.5 text-left text-xs font-normal tabular-nums lg:px-1 lg:text-sm xl:text-base'>
                   {Number(eachItem.quantity) != 0 && eachItem.quantity}
                 </th>
               )}
