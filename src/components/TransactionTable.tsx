@@ -832,10 +832,10 @@ export function TransactionTable(props: transactiontableinterface) {
                 )}
 
               {props.optionalcolumns.includes('quantity') &&
-                (!eachItem['detailed_item_description'] ||
-                  props.optionalcolumns.includes(
-                    'detailed_item_description'
-                  )) &&
+                !(
+                  eachItem['detailed_item_description'] &&
+                  props.optionalcolumns.includes('detailed_item_description')
+                ) &&
                 eachItem['quantity'] &&
                 Number(eachItem['quantity']) != 0 && (
                   <p>
