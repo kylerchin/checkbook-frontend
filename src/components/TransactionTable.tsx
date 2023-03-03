@@ -485,7 +485,7 @@ export function TransactionTable(props: transactiontableinterface) {
         </button>
       )}
       {firstloadedboolref.current === true && (
-        <div className='sticky top-[48px] z-20 bg-white align-top dark:bg-bruhlessdark md:top-[50px]'>
+        <div className='sticky top-[48px] z-20 bg-white align-top dark:bg-gray-900 md:top-[50px]'>
           <p className=''>
             <span className='font-semibold'>
               {currentShownRows.current.length.toLocaleString('default')}
