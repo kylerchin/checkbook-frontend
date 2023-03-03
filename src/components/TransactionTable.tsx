@@ -293,7 +293,7 @@ export function TransactionTable(props: transactiontableinterface) {
                   numberofloadedrows.current + cleanedrows.length;
                 currentShownRows.current = [
                   ...currentShownRows.current,
-                  cleanedrows,
+                  ...cleanedrows,
                 ];
                 setCurrentShownRowsState(currentShownRows.current);
               } else {
