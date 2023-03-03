@@ -53,6 +53,7 @@ interface transactiontableinterface {
 
 interface requestinterface {
   newresults?: boolean;
+  forcescrollmethod?: string;
 }
 
 const columnreadable = {
@@ -145,9 +146,13 @@ export function TransactionTable(props: transactiontableinterface) {
       //sortby: transaction_date OR item_description OR detailed_item_description OR vendor OR department
     };
 
-    if (props.forcescrollmethod) {
-      if (props.forcescrollmethod != '') {
-        requestobject.forcescrollmethod = props.forcescrollmethod;
+    if (requestoptions.forcescrollmethod) {
+      requestobject.forcescrollmethod = requestoptions.forcescrollmethod;
+    } else {
+      if (props.forcescrollmethod) {
+        if (props.forcescrollmethod != '') {
+          requestobject.forcescrollmethod = props.forcescrollmethod;
+        }
       }
     }
 
@@ -315,8 +320,18 @@ export function TransactionTable(props: transactiontableinterface) {
               currentShownRows.current.length < 1001
             ) {
               if (sizeofsearch.current > currentShownRows.current.length) {
-                sendReq({});
                 console.log('asking for next interation');
+
+                if (sizeOfSearchObj.current) {
+                  if (
+                    sizeOfSearchObj.current.filterhash == reqFilterHash &&
+                    sizeofsearch.current < 3000
+                  ) {
+                    sendReq({ forcescrollmethod: 'all' });
+                  } else {
+                    sendReq({});
+                  }
+                }
               }
             }
           }
