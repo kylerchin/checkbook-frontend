@@ -1,5 +1,7 @@
+import byteSize from 'byte-size';
 import Link from 'next/link';
 import * as React from 'react';
+import { useEffect } from 'react';
 
 import { Navbar } from '@/components/nav';
 import Seo from '@/components/Seo';
@@ -8,6 +10,16 @@ import backends from '@/backends.json';
 
 export default function Departments(props: any): JSX.Element {
   // Render data...
+
+  const [checkbookdata, setCheckbookdata] = React.useState<any>(null);
+
+  useEffect(() => {
+    fetch('https://djkensterprod.lacontroller.io/fetchcheckbookmetaraw')
+      .then((response) => response.json())
+      .then((data) => {
+        setCheckbookdata(data);
+      });
+  }, []);
 
   return (
     <>
@@ -37,6 +49,65 @@ export default function Departments(props: any): JSX.Element {
 
         <p>Http endpoint: {backends.http}</p>
         <p>Socket endpoint: {backends.socket}</p>
+        <br />
+        {checkbookdata ? (
+          <>
+            <p>
+              Rows:{' '}
+              <span className='tabular-nums'>
+                {parseInt(
+                  checkbookdata.checkbookrowsize[0].count
+                ).toLocaleString('default')}
+              </span>
+            </p>
+            <p>
+              File Size in Bytes:{' '}
+              <span className='tabular-nums'>
+                {parseInt(
+                  checkbookdata.checkbooklastupdated[0].filesize
+                ).toLocaleString('default')}
+              </span>
+            </p>
+            <p>
+              File Size Shortened:{' '}
+              <span className='tabular-nums'>
+                {byteSize(
+                  parseInt(checkbookdata.checkbooklastupdated[0].filesize)
+                )}
+              </span>
+            </p>
+            <p>
+              Time of File Download from Socrata:{' '}
+              <span>
+                {new Date(
+                  checkbookdata.checkbooklastupdated[0].timeoffiledownload
+                ).toLocaleString('default')}
+              </span>
+            </p>
+            <p>
+              Time of File Upload to Postgres:{' '}
+              <span>
+                {new Date(
+                  checkbookdata.checkbooklastupdated[0].lastuploaded
+                ).toLocaleString('default')}
+              </span>
+            </p>
+            {checkbookdata.checkbooklastupdated[0].lastindexed ? (
+              <p>
+                Time of Last Index:{' '}
+                <span>
+                  {new Date(
+                    checkbookdata.checkbooklastupdated[0].lastindexed
+                  ).toLocaleString('default')}
+                </span>
+              </p>
+            ) : (
+              <p>Indexing not yet completed...</p>
+            )}
+          </>
+        ) : (
+          <p>Checkbook Data not fetched yet...</p>
+        )}
       </div>
     </>
   );
