@@ -31,7 +31,6 @@
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Lexend:wght@100;200;300;400;500;600;700;800;900&display=swap');
-  
 
 @layer base {
   /* inter var - latin */
@@ -54,7 +53,7 @@
     src: url('/fonts/Inter-roman.var.woff2?v=3.19') format('woff2');
     font-named-instance: 'Regular';
   }
-  
+
   @font-face {
     font-family: 'Inter var';
     font-style: italic;

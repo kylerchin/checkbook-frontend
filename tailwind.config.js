@@ -54,8 +54,12 @@ module.exports = {
       animation: {
         flicker: 'flicker 3s linear infinite',
         shimmer: 'shimmer 1.3s linear infinite',
+        pingfast: 'ping 0.25s cubic-bezier(0, 0, 0.2, 1) infinite;',
       },
     },
   },
-  plugins: [require('@tailwindcss/forms'), require('tailwind-scrollbar')({ nocompatible: true })],
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('tailwind-scrollbar')({ nocompatible: true }),
+  ],
 };

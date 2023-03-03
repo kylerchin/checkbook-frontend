@@ -1,5 +1,7 @@
+import byteSize from 'byte-size';
 import Link from 'next/link';
 import * as React from 'react';
+import { useEffect } from 'react';
 
 import { Navbar } from '@/components/nav';
 import Seo from '@/components/Seo';
@@ -8,6 +10,17 @@ import backends from '@/backends.json';
 
 export default function Departments(props: any): JSX.Element {
   // Render data...
+
+  const [checkbookdata, setCheckbookdata] = React.useState<any>(null);
+
+  useEffect(() => {
+    fetch('https://djkensterprod.lacontroller.io/fetchcheckbookmetaraw')
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('checkbookdata', data);
+        setCheckbookdata(data);
+      });
+  }, []);
 
   return (
     <>
@@ -37,6 +50,72 @@ export default function Departments(props: any): JSX.Element {
 
         <p>Http endpoint: {backends.http}</p>
         <p>Socket endpoint: {backends.socket}</p>
+        <br />
+        {checkbookdata ? (
+          <>
+            <p>
+              Rows:{' '}
+              <span className='font-semibold tabular-nums'>
+                {parseInt(
+                  checkbookdata.checkbookrowsize[0].count
+                ).toLocaleString('default')}
+              </span>
+            </p>
+            <p>
+              File Size in Bytes:{' '}
+              <span className='font-semibold tabular-nums'>
+                {parseInt(
+                  checkbookdata.checkbooklastupdated[0].filesize
+                ).toLocaleString('default')}
+              </span>
+            </p>
+            <p>
+              File Size Shortened:{' '}
+              <span className='font-semibold tabular-nums'>
+                {
+                  byteSize(
+                    parseInt(checkbookdata.checkbooklastupdated[0].filesize)
+                  ).value
+                }
+                {
+                  byteSize(
+                    parseInt(checkbookdata.checkbooklastupdated[0].filesize)
+                  ).unit
+                }
+              </span>
+            </p>
+            <p>
+              Time of File Download from Socrata:{' '}
+              <span className='font-semibold'>
+                {new Date(
+                  checkbookdata.checkbooklastupdated[0].timeoffiledownload
+                ).toLocaleString('default')}
+              </span>
+            </p>
+            <p>
+              Time of File Upload to Postgres:{' '}
+              <span className='font-semibold'>
+                {new Date(
+                  checkbookdata.checkbooklastupdated[0].lastuploaded
+                ).toLocaleString('default')}
+              </span>
+            </p>
+            {checkbookdata.checkbooklastupdated[0].lastindexed ? (
+              <p>
+                Time of Last Index:{' '}
+                <span className='font-semibold'>
+                  {new Date(
+                    checkbookdata.checkbooklastupdated[0].lastindexed
+                  ).toLocaleString('default')}
+                </span>
+              </p>
+            ) : (
+              <p>Indexing not yet completed...</p>
+            )}
+          </>
+        ) : (
+          <p>Checkbook Data not fetched yet...</p>
+        )}
       </div>
     </>
   );

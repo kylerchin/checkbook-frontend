@@ -153,6 +153,7 @@ export default function Vendors(props: any) {
               'expenditure_type',
               'description',
               'detailed_item_description',
+              'quantity',
             ]}
             filters={{
               vendor: {
