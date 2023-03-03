@@ -813,10 +813,23 @@ export function TransactionTable(props: transactiontableinterface) {
                         {titleCase(eachItem.detailed_item_description)}
                       </span>
                     </span>
+                    {eachItem['quantity'] && Number(eachItem['quantity']) != 0 && (
+                      <span className='break-words'>
+                        <span className='text-gray-600 dark:text-gray-400'>
+                          {' '}
+                          Qty:{' '}
+                        </span>
+                        <span>{titleCase(eachItem.quantity)}</span>
+                      </span>
+                    )}
                   </p>
                 )}
 
               {props.optionalcolumns.includes('quantity') &&
+                (!eachItem['detailed_item_description'] ||
+                  props.optionalcolumns.includes(
+                    'detailed_item_description'
+                  )) &&
                 eachItem['quantity'] &&
                 Number(eachItem['quantity']) != 0 && (
                   <p>
