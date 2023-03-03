@@ -656,7 +656,7 @@ export function TransactionTable(props: transactiontableinterface) {
 
               {props.optionalcolumns.includes('quantity') && (
                 <th className={`${desktopnotamountcell} tabular-nums`}>
-                  {eachItem.quantity}
+                  {Number(eachItem.quantity) != 0 && eachItem.quantity}
                 </th>
               )}
               <td className='justify-right align-right border-collapse border border-gray-500 px-1 text-right text-xs tabular-nums  lg:px-2 lg:text-sm xl:text-base'>
@@ -817,7 +817,8 @@ export function TransactionTable(props: transactiontableinterface) {
                 )}
 
               {props.optionalcolumns.includes('quantity') &&
-                eachItem['quantity'] && (
+                eachItem['quantity'] &&
+                Number(eachItem['quantity']) != 0 && (
                   <p>
                     <span className='break-words'>
                       <span className='text-gray-600 dark:text-gray-400'>
