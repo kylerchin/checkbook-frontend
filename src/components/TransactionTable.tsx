@@ -653,12 +653,12 @@ export function TransactionTable(props: transactiontableinterface) {
               )}
 
               {props.optionalcolumns.includes('description') && (
-                <th className={desktopnotamountcell}>
+                <th className={`${desktopnotamountcell} break-all`}>
                   {titleCase(eachItem.description)}
                 </th>
               )}
               {props.optionalcolumns.includes('detailed_item_description') && (
-                <th className={desktopnotamountcell}>
+                <th className={`${desktopnotamountcell} break-all`}>
                   {titleCase(eachItem.detailed_item_description)}
                 </th>
               )}
