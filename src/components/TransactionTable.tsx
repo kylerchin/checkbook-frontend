@@ -629,23 +629,26 @@ export function TransactionTable(props: transactiontableinterface) {
               )}
               {props.optionalcolumns.includes('fund_name') && (
                 <th className={desktopnotamountcell}>
-                  {titleCase(eachItem.fund_name)}
+                  {titleCase(eachItem.fund_name).replace(/ and /gi, ' & ')}
                 </th>
               )}
               {props.optionalcolumns.includes('account_name') && (
                 <th className={desktopnotamountcell}>
-                  {titleCase(eachItem.account_name)}
+                  {titleCase(eachItem.account_name).replace(/ and /gi, ' & ')}
                 </th>
               )}
               {props.optionalcolumns.includes('program') && (
                 <th className={desktopnotamountcell}>
-                  {titleCase(eachItem.program)}
+                  {titleCase(eachItem.program).replace(/ and /gi, ' & ')}
                 </th>
               )}
 
               {props.optionalcolumns.includes('expenditure_type') && (
                 <th className={desktopnotamountcell}>
-                  {titleCase(eachItem.expenditure_type)}
+                  {titleCase(eachItem.expenditure_type).replace(
+                    / and /gi,
+                    ' & '
+                  )}
                 </th>
               )}
 
