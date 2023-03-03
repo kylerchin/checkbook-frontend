@@ -310,7 +310,10 @@ export function TransactionTable(props: transactiontableinterface) {
             filtersofcurrentlyshowndata.current = thisRequestFilters;
             currentlySetFilterHash.current = reqFilterHash;
 
-            if (sizeofsearch.current < 3000) {
+            if (
+              sizeofsearch.current < 3000 ||
+              currentShownRows.current.length < 1001
+            ) {
               if (sizeofsearch.current > currentShownRows.current.length) {
                 sendReq({});
                 console.log('asking for next interation');
