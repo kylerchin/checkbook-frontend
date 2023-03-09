@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
@@ -283,12 +284,12 @@ export default function HomePage(props: any) {
               {showautocomplete.depts === true &&
                 deptsloaded === true &&
                 filtereddepts.map((eachDept: any, deptindex: number) => (
-                  <a
+                  <Link
                     key={deptindex}
                     className='flex w-full flex-row border-b  border-gray-500 hover:bg-gray-200 hover:bg-gray-200 hover:dark:bg-bruhlessdark lg:w-4/6 '
                     href={`/dept/${encodeURIComponent(
                       eachDept.department_name.toLowerCase().trim()
-                    )}`}
+                    )}${debugmode ? `?debug=true` : ``}`}
                   >
                     <div className='flex-grow'>
                       {departmentNameReplace(eachDept.department_name)}
@@ -296,7 +297,7 @@ export default function HomePage(props: any) {
                     <div className='justify-right align-right bold right-align text-right font-bold tabular-nums'>
                       ${parseInt(eachDept.sum).toLocaleString('en-US')}
                     </div>
-                  </a>
+                  </Link>
                 ))}
               {deptsloaded &&
                 filtereddepts.length === 0 &&
@@ -340,12 +341,12 @@ export default function HomePage(props: any) {
                         autocompleteresults.rows.map(
                           (eachVendor: any, vendorindex: number) => (
                             <>
-                              <a
+                              <Link
                                 key={vendorindex}
                                 className='flex w-full flex-row border-b border-gray-500 hover:bg-gray-200 hover:dark:bg-gray-700 lg:w-4/6'
                                 href={`/vendors/${encodeURIComponent(
                                   eachVendor.vendor_name.toLowerCase().trim()
-                                )}`}
+                                )}${debugmode ? `?debug=true` : ``}`}
                               >
                                 <div className='mr-2'>
                                   <span>
@@ -374,7 +375,7 @@ export default function HomePage(props: any) {
                                     </p>
                                   </div>
                                 )}
-                              </a>
+                              </Link>
                               {debugmode && (
                                 <p className='italic text-gray-700 dark:text-gray-300'>
                                   {eachVendor.vendor_name}
