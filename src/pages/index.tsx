@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
@@ -62,6 +63,8 @@ export default function HomePage(props: any) {
     socket.connected
   );
   const [depts, setdepts] = useState<Array<any>>([]);
+  const router = useRouter();
+  const { debugmode } = router.query;
   const [showautocomplete, setshowautocomplete] = useState<any>({
     depts: false,
     desc: false,
@@ -336,41 +339,48 @@ export default function HomePage(props: any) {
                       {autocompleteresults.rows &&
                         autocompleteresults.rows.map(
                           (eachVendor: any, vendorindex: number) => (
-                            <a
-                              key={vendorindex}
-                              className='flex w-full flex-row border-b border-gray-500 hover:bg-gray-200 hover:dark:bg-gray-700 lg:w-4/6'
-                              href={`/vendors/${encodeURIComponent(
-                                eachVendor.vendor_name.toLowerCase().trim()
-                              )}`}
-                            >
-                              <div className='mr-2'>
-                                <span>
-                                  <VendorElement
-                                    vendor_name={eachVendor.vendor_name}
-                                  />
-                                </span>
-                              </div>
+                            <>
+                              <a
+                                key={vendorindex}
+                                className='flex w-full flex-row border-b border-gray-500 hover:bg-gray-200 hover:dark:bg-gray-700 lg:w-4/6'
+                                href={`/vendors/${encodeURIComponent(
+                                  eachVendor.vendor_name.toLowerCase().trim()
+                                )}`}
+                              >
+                                <div className='mr-2'>
+                                  <span>
+                                    <VendorElement
+                                      vendor_name={eachVendor.vendor_name}
+                                    />
+                                  </span>
+                                </div>
 
-                              <div className='justify-right align-right bold right-align ml-auto  text-right font-bold tabular-nums'>
-                                <p className='tabular-nums'>
-                                  $
-                                  {parseInt(eachVendor.sum).toLocaleString(
-                                    'en-US'
-                                  )}
-                                </p>
-                              </div>
-                              {false && (
-                                <div className='justify-right align-right ml-2 mr-2 w-32 '>
-                                  <p className='justify-right right-align align-right text-right tabular-nums text-gray-600 dark:text-zinc-300'>
-                                    (
-                                    {parseInt(eachVendor.count).toLocaleString(
+                                <div className='justify-right align-right bold right-align ml-auto  text-right font-bold tabular-nums'>
+                                  <p className='tabular-nums'>
+                                    $
+                                    {parseInt(eachVendor.sum).toLocaleString(
                                       'en-US'
                                     )}
-                                    {' rows)'}
                                   </p>
                                 </div>
+                                {false && (
+                                  <div className='justify-right align-right ml-2 mr-2 w-32 '>
+                                    <p className='justify-right right-align align-right text-right tabular-nums text-gray-600 dark:text-zinc-300'>
+                                      (
+                                      {parseInt(
+                                        eachVendor.count
+                                      ).toLocaleString('en-US')}
+                                      {' rows)'}
+                                    </p>
+                                  </div>
+                                )}
+                              </a>
+                              {debugmode && (
+                                <p className='italic text-gray-700 dark:text-gray-300'>
+                                  {eachVendor.vendor_name}
+                                </p>
                               )}
-                            </a>
+                            </>
                           )
                         )}
                       {autocompleteresults.rows.length === 0 && (
