@@ -341,6 +341,11 @@ export default function HomePage(props: any) {
                         autocompleteresults.rows.map(
                           (eachVendor: any, vendorindex: number) => (
                             <>
+                              {debugmode && (
+                                <p className='italic text-gray-700 dark:text-gray-300'>
+                                  {eachVendor.vendor_name}
+                                </p>
+                              )}
                               <Link
                                 key={vendorindex}
                                 className='flex w-full flex-row border-b border-gray-500 hover:bg-gray-200 hover:dark:bg-gray-700 lg:w-4/6'
@@ -376,11 +381,6 @@ export default function HomePage(props: any) {
                                   </div>
                                 )}
                               </Link>
-                              {debugmode && (
-                                <p className='italic text-gray-700 dark:text-gray-300'>
-                                  {eachVendor.vendor_name}
-                                </p>
-                              )}
                             </>
                           )
                         )}
