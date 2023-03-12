@@ -76,6 +76,7 @@ export default function HomePage(props: any) {
   const deptsref = useRef([]);
   const [deptsloaded, setdeptsloaded] = useState<boolean>(false);
   const [filtereddepts, setfiltereddepts] = useState<Array<any>>([]);
+  const currentlyshowingvendorquery = useRef(null);
 
   socket.on('connected', (sendback: any) => {
     setsocketconnected(true);
@@ -101,11 +102,14 @@ export default function HomePage(props: any) {
   });
 
   socket.on('autocompleteresponse', (sendback: any) => {
-    console.log('response recieved!');
+    if (currentlyshowingvendorquery.current != initsearchquery.toUpperCase()) {
+      console.log('response recieved!');
 
-    setfirstloaded(true);
-    firstloadedref.current = true;
-    setautocompleteresults(sendback);
+      setfirstloaded(true);
+      firstloadedref.current = true;
+      setautocompleteresults(sendback);
+      currentlyshowingvendorquery.current = sendback.querystring;
+    }
   });
 
   socket.on('alldepts', (sendback: any) => {
