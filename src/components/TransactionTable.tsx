@@ -279,9 +279,14 @@ export function TransactionTable(props: transactiontableinterface) {
                         props.filters?.vendor?.query.toLowerCase() ===
                         jsonresponse.rows[0].vendor_name.toLowerCase()
                       ) {
-                        setvendorhasquantitydata(
+                        if (
+                          vendorhasquantitydata !==
                           jsonresponse.rows[0].hasquantity
-                        );
+                        ) {
+                          setvendorhasquantitydata(
+                            jsonresponse.rows[0].hasquantity
+                          );
+                        }
                       } else {
                         console.log(
                           'props filters and returned vendor name mismatch',
@@ -522,7 +527,9 @@ export function TransactionTable(props: transactiontableinterface) {
       }
     }
 
-    setvendorhasquantitydata(showqty);
+    if (showqty != vendorhasquantitydata) {
+      setvendorhasquantitydata(showqty);
+    }
   });
 
   useEffect(() => {
@@ -703,7 +710,7 @@ export function TransactionTable(props: transactiontableinterface) {
                 <th className={desktopnotamountcell}>
                   {eachItem.vendor_name && (
                     <Link
-                      href={`/vendors/${encodeURIComponent(
+                      href={`/vendor/${encodeURIComponent(
                         eachItem.vendor_name.toLowerCase().trim()
                       )}`}
                     >
@@ -866,7 +873,7 @@ export function TransactionTable(props: transactiontableinterface) {
                         Vendor:{' '}
                       </span>
                       <Link
-                        href={`/vendors/${encodeURIComponent(
+                        href={`/vendor/${encodeURIComponent(
                           eachItem.vendor_name.toLowerCase().trim()
                         )}`}
                       >
