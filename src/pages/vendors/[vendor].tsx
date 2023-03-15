@@ -156,8 +156,6 @@ export default function Vendors(props: any) {
               'description',
               'detailed_item_description',
               'quantity',
-
-              'unit_of_measure',
             ]}
             filters={{
               vendor: {

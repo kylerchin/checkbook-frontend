@@ -113,6 +113,11 @@ export function TransactionTable(props: transactiontableinterface) {
     Array<any>
   >([]);
 
+  const [vendorhasquantitydata, setvendorhasquantitydata] =
+    useState<boolean>(true);
+
+  const vendorhasquantitydataobj = useRef<any>({});
+
   const ticking = useRef(false);
   const lastKnownScrollPosition = useRef(0);
 
@@ -234,6 +239,49 @@ export function TransactionTable(props: transactiontableinterface) {
         .catch((error) => {
           console.error('Error:', error);
         });
+    }
+
+    if (props.filters?.vendor) {
+      if (props.filters.vendor.query) {
+        if (
+          props.filters.vendor.query.length > 0 &&
+          props.filters.vendor.matchtype === 'equals'
+        ) {
+          fetch(`${backends.http}/vendorhasquantity`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              vendor: props.filters.vendor.query,
+            }),
+          })
+            .then((response) => response.json())
+            .then((jsonresponse) => {
+              if (jsonresponse.rows) {
+                if (jsonresponse.rows[0]) {
+                  if (jsonresponse.rows[0].vendor) {
+                    vendorhasquantitydataobj.current[
+                      jsonresponse.rows[0].vendor
+                    ] = jsonresponse.rows[0].hasquantity;
+
+                    if (
+                      props.filters?.vendor?.query ===
+                      jsonresponse.rows[0].vendor
+                    ) {
+                      setvendorhasquantitydata(
+                        jsonresponse.rows[0].hasquantity
+                      );
+                    }
+                  }
+                }
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      }
     }
 
     fetch(`${backends.http}/fetchrows`, {
@@ -438,6 +486,25 @@ export function TransactionTable(props: transactiontableinterface) {
     if (socketconnectedref.current === true) {
       loadfirsttime();
     }
+
+    const showqty = true;
+
+    if (props.filters?.vendor?.query) {
+      if (props.filters.vendor.query.length > 0) {
+        if (typeof props.filters.vendor.query === 'string') {
+          if (
+            vendorhasquantitydataobj.current[props.filters.vendor.query] ===
+            false
+          ) {
+            setvendorhasquantitydata(
+              vendorhasquantitydataobj.current[props.filters.vendor.query]
+            );
+          }
+        }
+      }
+    }
+
+    setvendorhasquantitydata(showqty);
   });
 
   useEffect(() => {
@@ -574,7 +641,8 @@ export function TransactionTable(props: transactiontableinterface) {
             {props.optionalcolumns.includes('detailed_item_description') && (
               <th>Item</th>
             )}
-            {props.optionalcolumns.includes('quantity') && <th>Qty</th>}
+            {props.optionalcolumns.includes('quantity') &&
+              vendorhasquantitydata === true && <th>Qty</th>}
             <th>Amount</th>
           </tr>
         </thead>
@@ -664,11 +732,12 @@ export function TransactionTable(props: transactiontableinterface) {
                 </th>
               )}
 
-              {props.optionalcolumns.includes('quantity') && (
-                <th className='justify-right align-right 2xl:max-w-auto max-w-[200px] border-collapse border border-gray-500 px-0.5 text-right text-xs font-normal tabular-nums lg:px-1 lg:text-sm xl:max-w-xs xl:text-base'>
-                  {Number(eachItem.quantity) != 0 && eachItem.quantity}
-                </th>
-              )}
+              {props.optionalcolumns.includes('quantity') &&
+                vendorhasquantitydata === true && (
+                  <th className='justify-right align-right 2xl:max-w-auto max-w-[200px] border-collapse border border-gray-500 px-0.5 text-right text-xs font-normal tabular-nums lg:px-1 lg:text-sm xl:max-w-xs xl:text-base'>
+                    {Number(eachItem.quantity) != 0 && eachItem.quantity}
+                  </th>
+                )}
               <td className='justify-right align-right 2xl:max-w-auto  max-w-[200px] border-collapse border border-gray-500 px-1 text-right text-xs tabular-nums lg:px-2  lg:text-sm xl:max-w-xs xl:text-base'>
                 {parseFloat(eachItem.dollar_amount)
                   .toLocaleString('default', {
