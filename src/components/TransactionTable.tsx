@@ -259,21 +259,31 @@ export function TransactionTable(props: transactiontableinterface) {
             .then((response) => response.json())
             .then((jsonresponse) => {
               if (jsonresponse.rows) {
+                console.log('vendorhasquantity response', jsonresponse.rows);
+
                 if (jsonresponse.rows[0]) {
-                  if (jsonresponse.rows[0].vendor) {
+                  if (jsonresponse.rows[0].vendor_name) {
                     vendorhasquantitydataobj.current[
-                      jsonresponse.rows[0].vendor
+                      jsonresponse.rows[0].vendor_name.toLowerCase()
                     ] = jsonresponse.rows[0].hasquantity;
 
                     if (
-                      props.filters?.vendor?.query ===
-                      jsonresponse.rows[0].vendor
+                      props.filters?.vendor?.query.toLowerCase() ===
+                      jsonresponse.rows[0].vendor_name.toLowerCase()
                     ) {
                       setvendorhasquantitydata(
                         jsonresponse.rows[0].hasquantity
                       );
+                    } else {
+                      console.log(
+                        'props filters and returned vendor name mismatch',
+                        props.filters?.vendor?.query.toLowerCase(),
+                        jsonresponse.rows[0].vendor_name.toLowerCase()
+                      );
                     }
                   }
+                } else {
+                  console.log('no jsonresponse.rows[0]');
                 }
               }
             })
@@ -487,18 +497,17 @@ export function TransactionTable(props: transactiontableinterface) {
       loadfirsttime();
     }
 
-    const showqty = true;
+    let showqty = true;
 
     if (props.filters?.vendor?.query) {
       if (props.filters.vendor.query.length > 0) {
         if (typeof props.filters.vendor.query === 'string') {
           if (
-            vendorhasquantitydataobj.current[props.filters.vendor.query] ===
-            false
+            vendorhasquantitydataobj.current[
+              props.filters.vendor.query.toLowerCase()
+            ] === false
           ) {
-            setvendorhasquantitydata(
-              vendorhasquantitydataobj.current[props.filters.vendor.query]
-            );
+            showqty = false;
           }
         }
       }
