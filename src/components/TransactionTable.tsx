@@ -793,7 +793,7 @@ export function TransactionTable(props: transactiontableinterface) {
                         currencySign: 'accounting',
                         maximumFractionDigits: 0,
                       })
-                      .replace(/us/gi, '')}{' '}
+                      .replace(/us/gi, '')}
                     <span className=' text-sm text-gray-600 dark:text-gray-400'>
                       {(parseFloat(eachItem.dollar_amount) % 1)
                         .toLocaleString('default')
