@@ -738,7 +738,13 @@ export function TransactionTable(props: transactiontableinterface) {
               )}
               {props.optionalcolumns.includes('program') && (
                 <th className={desktopnotamountcell}>
-                  {titleCase(eachItem.program).replace(/ and /gi, ' & ')}
+                  <Link
+                    href={`/program/${encodeURIComponent(
+                      eachItem.program.toLowerCase().trim()
+                    )}`}
+                  >
+                    {titleCase(eachItem.program).replace(/ and /gi, ' & ')}
+                  </Link>
                 </th>
               )}
 
@@ -878,7 +884,15 @@ export function TransactionTable(props: transactiontableinterface) {
                     <span className='text-gray-600 dark:text-gray-400'>
                       Fund:{' '}
                     </span>
-                    {titleCase(eachItem.fund_name)}
+                    <Link
+                      href={`/fund/${encodeURIComponent(
+                        eachItem.fund_name.toLowerCase().trim()
+                      )}`}
+                    >
+                      <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
+                        {titleCase(eachItem.fund_name)}
+                      </span>
+                    </Link>
                   </span>
                 </p>
               )}
@@ -889,7 +903,15 @@ export function TransactionTable(props: transactiontableinterface) {
                       <span className='text-gray-600 dark:text-gray-400'>
                         Account:{' '}
                       </span>
-                      {titleCase(eachItem.account_name)}
+                      <Link
+                        href={`/account/${encodeURIComponent(
+                          eachItem.account_name.toLowerCase().trim()
+                        )}`}
+                      >
+                        <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
+                          {titleCase(eachItem.account_name)}
+                        </span>
+                      </Link>
                     </span>
                   </p>
                 )}
@@ -901,7 +923,15 @@ export function TransactionTable(props: transactiontableinterface) {
                       <span className='text-gray-600 dark:text-gray-400'>
                         Program:{' '}
                       </span>
-                      {titleCase(eachItem.program)}
+                      <Link
+                        href={`/program/${encodeURIComponent(
+                          eachItem.program.toLowerCase().trim()
+                        )}`}
+                      >
+                        <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
+                          {titleCase(eachItem.program)}
+                        </span>
+                      </Link>
                     </span>
                   </p>
                 )}
