@@ -71,7 +71,7 @@ const columnreadable = {
 };
 
 const desktopnotamountcell =
-  'max-w-[200px] xl:max-w-xs 2xl:max-w-auto justify-left align-left border-collapse border border-gray-500 px-0.5 lg:px-1 text-left text-xs lg:text-sm xl:text-base font-normal';
+  'max-w-[230px] xl:max-w-xs 2xl:max-w-auto justify-left align-left border-collapse border border-gray-500 px-0.5 lg:px-1 text-left text-xs lg:text-sm xl:text-base font-normal';
 
 interface vendorelementinterface {
   vendor_name: string;
@@ -665,11 +665,11 @@ export function TransactionTable(props: transactiontableinterface) {
               )}
 
               {props.optionalcolumns.includes('quantity') && (
-                <th className='justify-right align-right  border-collapse border border-gray-500 px-0.5 text-right text-xs font-normal tabular-nums lg:px-1 lg:text-sm xl:text-base'>
+                <th className='justify-right align-right 2xl:max-w-auto max-w-[200px] border-collapse border border-gray-500 px-0.5 text-right text-xs font-normal tabular-nums lg:px-1 lg:text-sm xl:max-w-xs xl:text-base'>
                   {Number(eachItem.quantity) != 0 && eachItem.quantity}
                 </th>
               )}
-              <td className='justify-right align-right border-collapse border border-gray-500 px-1 text-right text-xs tabular-nums  lg:px-2 lg:text-sm xl:text-base'>
+              <td className='justify-right align-right 2xl:max-w-auto  max-w-[200px] border-collapse border border-gray-500 px-1 text-right text-xs tabular-nums lg:px-2  lg:text-sm xl:max-w-xs xl:text-base'>
                 {parseFloat(eachItem.dollar_amount)
                   .toLocaleString('default', {
                     style: 'currency',
