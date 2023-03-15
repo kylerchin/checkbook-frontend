@@ -247,49 +247,55 @@ export function TransactionTable(props: transactiontableinterface) {
           props.filters.vendor.query.length > 0 &&
           props.filters.vendor.matchtype === 'equals'
         ) {
-          fetch(`${backends.http}/vendorhasquantity`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              vendor: props.filters.vendor.query,
-            }),
-          })
-            .then((response) => response.json())
-            .then((jsonresponse) => {
-              if (jsonresponse.rows) {
-                console.log('vendorhasquantity response', jsonresponse.rows);
-
-                if (jsonresponse.rows[0]) {
-                  if (jsonresponse.rows[0].vendor_name) {
-                    vendorhasquantitydataobj.current[
-                      jsonresponse.rows[0].vendor_name.toLowerCase()
-                    ] = jsonresponse.rows[0].hasquantity;
-
-                    if (
-                      props.filters?.vendor?.query.toLowerCase() ===
-                      jsonresponse.rows[0].vendor_name.toLowerCase()
-                    ) {
-                      setvendorhasquantitydata(
-                        jsonresponse.rows[0].hasquantity
-                      );
-                    } else {
-                      console.log(
-                        'props filters and returned vendor name mismatch',
-                        props.filters?.vendor?.query.toLowerCase(),
-                        jsonresponse.rows[0].vendor_name.toLowerCase()
-                      );
-                    }
-                  }
-                } else {
-                  console.log('no jsonresponse.rows[0]');
-                }
-              }
+          if (
+            typeof vendorhasquantitydataobj.current[
+              props.filters.vendor.query.toLowerCase()
+            ] === 'undefined'
+          ) {
+            fetch(`${backends.http}/vendorhasquantity`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                vendor: props.filters.vendor.query,
+              }),
             })
-            .catch((error) => {
-              console.error(error);
-            });
+              .then((response) => response.json())
+              .then((jsonresponse) => {
+                if (jsonresponse.rows) {
+                  console.log('vendorhasquantity response', jsonresponse.rows);
+
+                  if (jsonresponse.rows[0]) {
+                    if (jsonresponse.rows[0].vendor_name) {
+                      vendorhasquantitydataobj.current[
+                        jsonresponse.rows[0].vendor_name.toLowerCase()
+                      ] = jsonresponse.rows[0].hasquantity;
+
+                      if (
+                        props.filters?.vendor?.query.toLowerCase() ===
+                        jsonresponse.rows[0].vendor_name.toLowerCase()
+                      ) {
+                        setvendorhasquantitydata(
+                          jsonresponse.rows[0].hasquantity
+                        );
+                      } else {
+                        console.log(
+                          'props filters and returned vendor name mismatch',
+                          props.filters?.vendor?.query.toLowerCase(),
+                          jsonresponse.rows[0].vendor_name.toLowerCase()
+                        );
+                      }
+                    }
+                  } else {
+                    console.log('no jsonresponse.rows[0]');
+                  }
+                }
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          }
         }
       }
     }
