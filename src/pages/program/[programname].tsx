@@ -2,6 +2,7 @@ import Link from 'next/link';
 import * as React from 'react';
 import { titleCase } from 'title-case';
 
+import { isCommonwealth } from '@/components/isCommonwealth';
 import { Navbar } from '@/components/nav';
 import Seo from '@/components/Seo';
 import { TransactionTable } from '@/components/TransactionTable';
@@ -35,7 +36,7 @@ export default function Departments(props: any): JSX.Element {
         </Link>
 
         <h1>{titleCase(props.programname)}</h1>
-        <h4>Program</h4>
+        <h4>{isCommonwealth() ? 'Programme' : 'Program'}</h4>
         <div>
           <div className=''>
             <TransactionTable

@@ -8,6 +8,7 @@ import { io } from 'socket.io-client';
 import { titleCase } from 'true-case';
 
 import { departmentNameReplace } from '@/components/departmentNameReplace';
+import { isCommonwealth } from '@/components/isCommonwealth';
 import { simpleHash } from '@/components/simpleHash';
 import { vendorNameReplace } from '@/components/vendorNameReplace';
 
@@ -658,7 +659,9 @@ export function TransactionTable(props: transactiontableinterface) {
             {props.optionalcolumns.includes('vendor_name') && <th>Vendor</th>}
             {props.optionalcolumns.includes('fund_name') && <th>Fund</th>}
             {props.optionalcolumns.includes('account_name') && <th>Account</th>}
-            {props.optionalcolumns.includes('program') && <th>Program</th>}
+            {props.optionalcolumns.includes('program') && (
+              <th>{isCommonwealth() ? 'Programme' : 'Program'}</th>
+            )}
             {props.optionalcolumns.includes('expenditure_type') && (
               <th>Expend Type</th>
             )}
@@ -953,7 +956,7 @@ export function TransactionTable(props: transactiontableinterface) {
                   <p>
                     <span className=''>
                       <span className='text-gray-600 dark:text-gray-400'>
-                        Program:{' '}
+                        {isCommonwealth() ? 'Programme' : 'Program'}:{' '}
                       </span>
                       {eachItem.program && (
                         <Link
