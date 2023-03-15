@@ -27,6 +27,7 @@ export function isCommonwealth(): boolean {
       'en-SZ',
       'en-UG',
       'en-ZM',
+      'en-GB-oxendict',
       //add welsh
       'cy-GB'
     ];
