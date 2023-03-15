@@ -728,7 +728,9 @@ export function TransactionTable(props: transactiontableinterface) {
                       eachItem.fund_name.toLowerCase().trim()
                     )}`}
                   >
-                    {titleCase(eachItem.fund_name).replace(/ and /gi, ' & ')}
+                    <span className='underline decoration-sky-600/80 hover:decoration-sky-500'>
+                      {titleCase(eachItem.fund_name).replace(/ and /gi, ' & ')}
+                    </span>
                   </Link>
                 </th>
               )}
@@ -739,7 +741,13 @@ export function TransactionTable(props: transactiontableinterface) {
                       eachItem.account_name.toLowerCase().trim()
                     )}`}
                   >
-                    {titleCase(eachItem.account_name).replace(/ and /gi, ' & ')}
+                    {' '}
+                    <span className='underline decoration-sky-600/80 hover:decoration-sky-500'>
+                      {titleCase(eachItem.account_name).replace(
+                        / and /gi,
+                        ' & '
+                      )}
+                    </span>
                   </Link>
                 </th>
               )}
@@ -750,7 +758,10 @@ export function TransactionTable(props: transactiontableinterface) {
                       eachItem.program.toLowerCase().trim()
                     )}`}
                   >
-                    {titleCase(eachItem.program).replace(/ and /gi, ' & ')}
+                    {' '}
+                    <span className='underline decoration-sky-600/80 hover:decoration-sky-500'>
+                      {titleCase(eachItem.program).replace(/ and /gi, ' & ')}
+                    </span>
                   </Link>
                 </th>
               )}
