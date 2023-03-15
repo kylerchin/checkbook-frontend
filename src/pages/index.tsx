@@ -353,7 +353,7 @@ export default function HomePage(props: any) {
                               <Link
                                 key={vendorindex}
                                 className='flex w-full flex-row border-b border-gray-500 hover:bg-gray-200 hover:dark:bg-gray-700 lg:w-4/6'
-                                href={`/vendors/${encodeURIComponent(
+                                href={`/vendor/${encodeURIComponent(
                                   eachVendor.vendor_name.toLowerCase().trim()
                                 )}${debugmode ? `?debug=true` : ``}`}
                               >
