@@ -26,6 +26,7 @@ const columnsshortened: any = {
   di: 'detailed_item_description',
   a: 'account_name',
   q: 'quantity',
+  uom: 'unit_of_measure',
 };
 
 const columnsinverseshortened: any = {};
