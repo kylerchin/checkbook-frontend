@@ -760,16 +760,18 @@ export function TransactionTable(props: transactiontableinterface) {
               )}
               {props.optionalcolumns.includes('program') && (
                 <th className={desktopnotamountcell}>
-                  <Link
-                    href={`/program/${encodeURIComponent(
-                      eachItem.program.toLowerCase().trim()
-                    )}`}
-                  >
-                    {' '}
-                    <span className='underline decoration-sky-600/80 hover:decoration-sky-500'>
-                      {titleCase(eachItem.program).replace(/ and /gi, ' & ')}
-                    </span>
-                  </Link>
+                  {eachItem.program && (
+                    <Link
+                      href={`/program/${encodeURIComponent(
+                        eachItem.program.toLowerCase().trim()
+                      )}`}
+                    >
+                      {' '}
+                      <span className='underline decoration-sky-600/80 hover:decoration-sky-500'>
+                        {titleCase(eachItem.program).replace(/ and /gi, ' & ')}
+                      </span>
+                    </Link>
+                  )}
                 </th>
               )}
 
