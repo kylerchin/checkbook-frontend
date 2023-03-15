@@ -8,7 +8,11 @@ module.exports = {
   darkMode: 'class',
   theme: {
     colors: colors,
+
     extend: {
+      fontSize: {
+        '2xs': '0.5rem',
+      },
       fontFamily: {
         primary: ['Inter var', 'Inter', ...fontFamily.sans],
       },
