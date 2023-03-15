@@ -723,32 +723,39 @@ export function TransactionTable(props: transactiontableinterface) {
               )}
               {props.optionalcolumns.includes('fund_name') && (
                 <th className={desktopnotamountcell}>
-                  <Link
-                    href={`/fund/${encodeURIComponent(
-                      eachItem.fund_name.toLowerCase().trim()
-                    )}`}
-                  >
-                    <span className='underline decoration-sky-600/80 hover:decoration-sky-500'>
-                      {titleCase(eachItem.fund_name).replace(/ and /gi, ' & ')}
-                    </span>
-                  </Link>
+                  {eachItem.fund_name && (
+                    <Link
+                      href={`/fund/${encodeURIComponent(
+                        eachItem.fund_name.toLowerCase().trim()
+                      )}`}
+                    >
+                      <span className='underline decoration-sky-600/80 hover:decoration-sky-500'>
+                        {titleCase(eachItem.fund_name).replace(
+                          / and /gi,
+                          ' & '
+                        )}
+                      </span>
+                    </Link>
+                  )}
                 </th>
               )}
               {props.optionalcolumns.includes('account_name') && (
                 <th className={desktopnotamountcell}>
-                  <Link
-                    href={`/account/${encodeURIComponent(
-                      eachItem.account_name.toLowerCase().trim()
-                    )}`}
-                  >
-                    {' '}
-                    <span className='underline decoration-sky-600/80 hover:decoration-sky-500'>
-                      {titleCase(eachItem.account_name).replace(
-                        / and /gi,
-                        ' & '
-                      )}
-                    </span>
-                  </Link>
+                  {eachItem.account_name && (
+                    <Link
+                      href={`/account/${encodeURIComponent(
+                        eachItem.account_name.toLowerCase().trim()
+                      )}`}
+                    >
+                      {' '}
+                      <span className='underline decoration-sky-600/80 hover:decoration-sky-500'>
+                        {titleCase(eachItem.account_name).replace(
+                          / and /gi,
+                          ' & '
+                        )}
+                      </span>
+                    </Link>
+                  )}
                 </th>
               )}
               {props.optionalcolumns.includes('program') && (
@@ -896,24 +903,27 @@ export function TransactionTable(props: transactiontableinterface) {
                   </p>
                 )}
 
-              {props.optionalcolumns.includes('fund_name') && eachItem.program && (
-                <p>
-                  <span className=''>
-                    <span className='text-gray-600 dark:text-gray-400'>
-                      Fund:{' '}
-                    </span>
-                    <Link
-                      href={`/fund/${encodeURIComponent(
-                        eachItem.fund_name.toLowerCase().trim()
-                      )}`}
-                    >
-                      <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
-                        {titleCase(eachItem.fund_name)}
+              {props.optionalcolumns.includes('fund_name') &&
+                eachItem.fund_name && (
+                  <p>
+                    <span className=''>
+                      <span className='text-gray-600 dark:text-gray-400'>
+                        Fund:{' '}
                       </span>
-                    </Link>
-                  </span>
-                </p>
-              )}
+                      {eachItem.fund_name && (
+                        <Link
+                          href={`/fund/${encodeURIComponent(
+                            eachItem.fund_name.toLowerCase().trim()
+                          )}`}
+                        >
+                          <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
+                            {titleCase(eachItem.fund_name)}
+                          </span>
+                        </Link>
+                      )}
+                    </span>
+                  </p>
+                )}
               {props.optionalcolumns.includes('account_name') &&
                 eachItem.program && (
                   <p>
@@ -921,15 +931,17 @@ export function TransactionTable(props: transactiontableinterface) {
                       <span className='text-gray-600 dark:text-gray-400'>
                         Account:{' '}
                       </span>
-                      <Link
-                        href={`/account/${encodeURIComponent(
-                          eachItem.account_name.toLowerCase().trim()
-                        )}`}
-                      >
-                        <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
-                          {titleCase(eachItem.account_name)}
-                        </span>
-                      </Link>
+                      {eachItem.account_name && (
+                        <Link
+                          href={`/account/${encodeURIComponent(
+                            eachItem.account_name.toLowerCase().trim()
+                          )}`}
+                        >
+                          <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
+                            {titleCase(eachItem.account_name)}
+                          </span>
+                        </Link>
+                      )}
                     </span>
                   </p>
                 )}
@@ -941,15 +953,17 @@ export function TransactionTable(props: transactiontableinterface) {
                       <span className='text-gray-600 dark:text-gray-400'>
                         Program:{' '}
                       </span>
-                      <Link
-                        href={`/program/${encodeURIComponent(
-                          eachItem.program.toLowerCase().trim()
-                        )}`}
-                      >
-                        <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
-                          {titleCase(eachItem.program)}
-                        </span>
-                      </Link>
+                      {eachItem.program && (
+                        <Link
+                          href={`/program/${encodeURIComponent(
+                            eachItem.program.toLowerCase().trim()
+                          )}`}
+                        >
+                          <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
+                            {titleCase(eachItem.program)}
+                          </span>
+                        </Link>
+                      )}
                     </span>
                   </p>
                 )}
