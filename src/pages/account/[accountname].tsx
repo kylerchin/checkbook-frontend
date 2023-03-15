@@ -66,7 +66,7 @@ export default function Departments(props: any): JSX.Element {
 // This gets called on every request
 export async function getServerSideProps(context: any) {
   // Fetch data from external API
-
+  console.log(context.params.accountname);
   // Pass data to the page via props
   return { props: { accountname: context.params.accountname } };
 }

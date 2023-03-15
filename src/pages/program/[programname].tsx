@@ -68,5 +68,5 @@ export async function getServerSideProps(context: any) {
   // Fetch data from external API
 
   // Pass data to the page via props
-  return { props: { programname: context.params.accountname } };
+  return { props: { programname: context.params.programname } };
 }
