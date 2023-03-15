@@ -773,7 +773,7 @@ export function TransactionTable(props: transactiontableinterface) {
                     currencySign: 'accounting',
                     maximumFractionDigits: 0,
                   })
-                  .replace(/us/gi, '')}
+                  .replace(/us/gi, '').replace(/\)/, "")}
                 <span className='text-gray-600 dark:text-gray-400  lg:text-xs xl:text-sm'>
                   {(parseFloat(eachItem.dollar_amount) % 1)
                     .toLocaleString('default', {
@@ -782,6 +782,7 @@ export function TransactionTable(props: transactiontableinterface) {
                     })
                     .replace(/(-)?(0)?/, '')}
                 </span>
+                <span>{parseFloat(eachItem.dollar_amount) < 0 && ")"}</span>
               </td>
             </tr>
           ))}
@@ -820,12 +821,13 @@ export function TransactionTable(props: transactiontableinterface) {
                         currencySign: 'accounting',
                         maximumFractionDigits: 0,
                       })
-                      .replace(/us/gi, '')}
+                      .replace(/us/gi, '').replace(/\)/, "")}
                     <span className=' text-sm text-gray-600 dark:text-gray-400'>
                       {(parseFloat(eachItem.dollar_amount) % 1)
                         .toLocaleString('default')
                         .replace(/(-)?(0)?/, '')}
                     </span>
+                <span>{parseFloat(eachItem.dollar_amount) < 0 && ")"}</span>
                   </span>
                 </div>
               </div>
