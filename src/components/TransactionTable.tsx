@@ -153,15 +153,20 @@ export function TransactionTable(props: transactiontableinterface) {
   const lastRef = useRef(null);
 
   function isInViewport(element: any, buffer: any) {
-    const rect = element.getBoundingClientRect();
-    return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <=
-        (window.innerHeight + buffer ||
-          document.documentElement.clientHeight + buffer) &&
-      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
+    if (element) {
+      const rect = element.getBoundingClientRect();
+      return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <=
+          (window.innerHeight + buffer ||
+            document.documentElement.clientHeight + buffer) &&
+        rect.right <=
+          (window.innerWidth || document.documentElement.clientWidth)
+      );
+    } else {
+      return false;
+    }
   }
 
   //executed by new props change or scroll
@@ -852,7 +857,7 @@ export function TransactionTable(props: transactiontableinterface) {
               {props.optionalcolumns.includes('quantity') &&
                 vendorhasquantitydata === true &&
                 hideQuantityAllLoaded === false && (
-                  <th className='justify-right align-right 2xl:max-w-auto max-w-[200px] border-collapse border border-gray-500 px-0.5 text-right text-xs font-normal tabular-nums lg:px-1 lg:text-sm xl:max-w-xs xl:text-base'>
+                  <th className='justify-right align-right max-w-[100px] border-collapse border border-gray-500 px-0.5 text-right text-xs font-normal tabular-nums lg:px-1 lg:text-sm xl:max-w-[100px] xl:text-base 2xl:max-w-[200px]'>
                     {Number(eachItem.quantity) != 0 && eachItem.quantity}
                   </th>
                 )}
