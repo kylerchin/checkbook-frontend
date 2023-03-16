@@ -459,12 +459,15 @@ export function TransactionTable(props: transactiontableinterface) {
     }
 
     actOn.forEach((eachItem) => {
+      console.log('testing item', eachItem, isInViewport(eachItem, 100));
       if (eachItem) {
         if (isInViewport(eachItem, 100)) {
           loadMore = true;
         }
       }
     });
+
+    console.log('load more? ', loadMore);
 
     if (loadMore) {
       if (currentShownRows.current.length < sizeofsearch.current) {
@@ -878,7 +881,7 @@ export function TransactionTable(props: transactiontableinterface) {
         </tbody>
       </table>
       <div className='md:hidden'>
-        <div className='flex flex-col gap-y-2' ref={mobileTable}>
+        <div className='flex flex-col gap-y-2' ref={mobiletable}>
           {currentShownRows.current.map((eachItem: any, index: number) => (
             <div
               className='overflow-x-hidden rounded-sm bg-gray-200 px-2 py-1 dark:bg-gray-900'
