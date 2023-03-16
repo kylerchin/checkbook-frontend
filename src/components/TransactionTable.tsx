@@ -103,6 +103,8 @@ export function VendorElement(props: vendorelementinterface) {
 
 export function TransactionTable(props: transactiontableinterface) {
   const currentShownRows = useRef<Array<any>>([]);
+  const [hideQuantityAllLoaded, sethideQuantityAllLoaded] =
+    useState<boolean>(false);
   const [timeelapsed, settimeelapsed] = useState<number>();
   const [firstloaded, setfirstloaded] = useState<boolean>(false);
   const sizeofsearch = useRef<number>(0);
@@ -507,6 +509,14 @@ export function TransactionTable(props: transactiontableinterface) {
     }
   };
 
+  const sethideQuantityAllLoadedPre = (input: boolean) => {
+    console.log('current hideQuantityAllLoaded', hideQuantityAllLoaded);
+    console.log('switch hide quantity all loaded input', input);
+    if (input != hideQuantityAllLoaded) {
+      sethideQuantityAllLoaded(input);
+    }
+  };
+
   useEffect(() => {
     if (socketconnectedref.current === true) {
       loadfirsttime();
@@ -530,6 +540,31 @@ export function TransactionTable(props: transactiontableinterface) {
 
     if (showqty != vendorhasquantitydata) {
       setvendorhasquantitydata(showqty);
+    }
+
+    if (
+      firstloadedboolref.current === true &&
+      sizeofsearchstate === currentShownRows.current.length
+    ) {
+      const filteredqty = currentShownRows.current.filter((eachItem) => {
+        if (eachItem.quantity === null) {
+          return false;
+        } else {
+          if (eachItem.quantity > 0) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      });
+
+      if (filteredqty.length === 0) {
+        sethideQuantityAllLoadedPre(true);
+      } else {
+        sethideQuantityAllLoadedPre(false);
+      }
+    } else {
+      sethideQuantityAllLoadedPre(false);
     }
   });
 
@@ -670,7 +705,8 @@ export function TransactionTable(props: transactiontableinterface) {
               <th>Item</th>
             )}
             {props.optionalcolumns.includes('quantity') &&
-              vendorhasquantitydata === true && <th>Qty</th>}
+              vendorhasquantitydata === true &&
+              hideQuantityAllLoaded === false && <th>Qty</th>}
             <th>Amount</th>
           </tr>
         </thead>
@@ -799,7 +835,8 @@ export function TransactionTable(props: transactiontableinterface) {
               )}
 
               {props.optionalcolumns.includes('quantity') &&
-                vendorhasquantitydata === true && (
+                vendorhasquantitydata === true &&
+                hideQuantityAllLoaded === false && (
                   <th className='justify-right align-right 2xl:max-w-auto max-w-[200px] border-collapse border border-gray-500 px-0.5 text-right text-xs font-normal tabular-nums lg:px-1 lg:text-sm xl:max-w-xs xl:text-base'>
                     {Number(eachItem.quantity) != 0 && eachItem.quantity}
                   </th>
