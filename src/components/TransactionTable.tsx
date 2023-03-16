@@ -102,6 +102,8 @@ export function VendorElement(props: vendorelementinterface) {
 }
 
 export function TransactionTable(props: transactiontableinterface) {
+  const desktoptable = useRef(null);
+  const mobiletable = useRef(null);
   const currentShownRows = useRef<Array<any>>([]);
   const [hideQuantityAllLoaded, sethideQuantityAllLoaded] =
     useState<boolean>(false);
@@ -471,6 +473,15 @@ export function TransactionTable(props: transactiontableinterface) {
     }
   };
 
+  useEffect(() => {
+    const desktopRef = lastRef.current;
+    const mobileRef = lastRefMobile.current;
+
+    if (typeof window != 'undefined') {
+      window.addEventListener('scroll', checkIfLoadMore);
+    }
+  }, []);
+
   const setLastObjRefMobile = (ref: any, index: number, length: number) => {
     if (length - 1 === index) {
       lastRefMobile.current = ref;
@@ -686,6 +697,7 @@ export function TransactionTable(props: transactiontableinterface) {
         className={`hidden rounded-md px-1 py-1  ${
           recievedresponse === true ? 'md:block' : ''
         } lg:px-2`}
+        ref={desktoptable}
       >
         <thead>
           <tr className=' text-xs dark:bg-bruhlessdark lg:text-sm xl:text-lg'>
@@ -866,7 +878,7 @@ export function TransactionTable(props: transactiontableinterface) {
         </tbody>
       </table>
       <div className='md:hidden'>
-        <div className='flex flex-col gap-y-2'>
+        <div className='flex flex-col gap-y-2' ref={mobileTable}>
           {currentShownRows.current.map((eachItem: any, index: number) => (
             <div
               className='overflow-x-hidden rounded-sm bg-gray-200 px-2 py-1 dark:bg-gray-900'
