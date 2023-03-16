@@ -16,7 +16,9 @@ export default function Departments(props: any): JSX.Element {
       <Navbar themeChanger={props.themeChanger} />
       <div className='mx-auto mx-2 mt-2 dark:text-gray-100 md:mt-4'>
         <Seo
-          title={`${departmentNameReplace(props.deptname)} | LA Checkbook`}
+          title={`${departmentNameReplace(
+            props.deptname
+          )} | LA Checkbook Department`}
         />
         <Link href='/' className='underline'>
           <p className='underline hover:text-blue-900 dark:text-blue-200 hover:dark:text-blue-50'>
