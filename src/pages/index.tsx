@@ -57,6 +57,14 @@ export default function HomePage(props: any) {
   const [initsearchquery, setinitsearchquery] = useState('');
   const disableneedfirsttype = true;
   const [firstloaded, setfirstloaded] = useState<boolean>(false);
+  const [autocompleteresultsfund, setautocompleteresultsfund] =
+    useState<any>(null);
+  const [autocompleteresultsaccount, setautocompleteresultsaccount] =
+    useState<any>(null);
+
+  const [autocompleteresultsprogram, setautocompleteresultsprogram] =
+    useState<any>(null);
+
   const firstloadedref = useRef(false);
   const [autocompleteresults, setautocompleteresults] = useState<any>(null);
   const [firstqueryinserted, setfirstqueryinserted] = useState(false);
@@ -77,6 +85,10 @@ export default function HomePage(props: any) {
   const [deptsloaded, setdeptsloaded] = useState<boolean>(false);
   const [filtereddepts, setfiltereddepts] = useState<Array<any>>([]);
   const currentlyshowingvendorquery = useRef(null);
+  const currentlyshowingaccountquery = useRef(null);
+  const currentlyshowingprogramquery = useRef(null);
+
+  const currentlyshowingfundquery = useRef(null);
 
   socket.on('connected', (sendback: any) => {
     setsocketconnected(true);
@@ -103,12 +115,37 @@ export default function HomePage(props: any) {
 
   socket.on('autocompleteresponse', (sendback: any) => {
     if (currentlyshowingvendorquery.current != initsearchquery.toUpperCase()) {
-      console.log('response recieved!');
-
       setfirstloaded(true);
       firstloadedref.current = true;
       setautocompleteresults(sendback);
       currentlyshowingvendorquery.current = sendback.querystring;
+    }
+  });
+
+  socket.on('autocompleteresponsefund', (sendback: any) => {
+    if (currentlyshowingfundquery.current != initsearchquery.toUpperCase()) {
+      setfirstloaded(true);
+      firstloadedref.current = true;
+      setautocompleteresultsfund(sendback);
+      currentlyshowingfundquery.current = sendback.querystring;
+    }
+  });
+
+  socket.on('autocompleteresponseaccount', (sendback: any) => {
+    if (currentlyshowingaccountquery.current != initsearchquery.toUpperCase()) {
+      setfirstloaded(true);
+      firstloadedref.current = true;
+      setautocompleteresultsaccount(sendback);
+      currentlyshowingaccountquery.current = sendback.querystring;
+    }
+  });
+
+  socket.on('autocompleteresponseprogram', (sendback: any) => {
+    if (currentlyshowingprogramquery.current != initsearchquery.toUpperCase()) {
+      setfirstloaded(true);
+      firstloadedref.current = true;
+      setautocompleteresultsprogram(sendback);
+      currentlyshowingprogramquery.current = sendback.querystring;
     }
   });
 
@@ -311,95 +348,176 @@ export default function HomePage(props: any) {
                   </p>
                 )}
 
-              {(disableneedfirsttype || firstqueryinserted) &&
-                autocompleteresults && (
-                  <>
-                    <div className='flex flex-row align-bottom'>
-                      <h3>Vendors</h3>
-                      <p className='ml-2 mt-auto mb-[1px] align-bottom text-gray-700 dark:text-gray-300'>
-                        in {autocompleteresults.timeelapsed.toFixed(1)}ms
-                      </p>
-                      <ButtonToExpand
-                        showautocomplete={showautocomplete}
-                        setshowautocomplete={setshowautocomplete}
-                        value='vendors'
-                      />
-                    </div>
-
-                    <div
-                      className={`${showautocomplete.vendors ? '' : 'hidden'}`}
-                    >
-                      {autocompleteresults.aliasforwardingstatus === true && (
-                        <p className='italics text-gray-700 dark:text-gray-300'>
-                          Also showing results for{' '}
-                          <span className='font-semibold text-gray-700 dark:text-gray-200'>
-                            <VendorElement
-                              vendor_name={
-                                autocompleteresults.aliasforwardingto
-                              }
-                            />
-                          </span>
+              {(disableneedfirsttype || firstqueryinserted) && (
+                <>
+                  {autocompleteresultsaccount && (
+                    <>
+                      <div className='flex flex-row align-bottom'>
+                        <h3>Accounts</h3>
+                        <p className='ml-2 mt-auto mb-[1px] align-bottom text-gray-700 dark:text-gray-300'>
+                          {autocompleteresultsaccount.rows.length.toLocaleString(
+                            'default'
+                          )}
+                          {autocompleteresultsaccount.rows.length > 99
+                            ? '+'
+                            : ''}{' '}
+                          in {autocompleteresultsaccount.timeelapsed.toFixed(1)}
+                          ms
                         </p>
-                      )}
-                      {autocompleteresults.rows &&
-                        autocompleteresults.rows.map(
-                          (eachVendor: any, vendorindex: number) => (
-                            <>
-                              {debugmode && (
-                                <p className='italic text-gray-700 dark:text-gray-300'>
-                                  {eachVendor.vendor_name}
-                                </p>
-                              )}
-                              <Link
-                                key={vendorindex}
-                                className='flex w-full flex-row border-b border-gray-500 hover:bg-gray-200 hover:dark:bg-gray-700 lg:w-4/6'
-                                href={`/vendor/${encodeURIComponent(
-                                  eachVendor.vendor_name.toLowerCase().trim()
-                                )}${debugmode ? `?debug=true` : ``}`}
-                              >
-                                <div className='mr-2'>
-                                  <span>
-                                    <VendorElement
-                                      vendor_name={eachVendor.vendor_name}
-                                    />
-                                  </span>
-                                </div>
+                        <ButtonToExpand
+                          showautocomplete={showautocomplete}
+                          setshowautocomplete={setshowautocomplete}
+                          value='accounts'
+                        />
+                      </div>
 
-                                <div className='justify-right align-right bold right-align ml-auto  text-right font-bold tabular-nums'>
-                                  <p className='tabular-nums'>
-                                    $
-                                    {parseInt(eachVendor.sum).toLocaleString(
-                                      'en-US'
-                                    )}
-                                  </p>
-                                </div>
-                                {false && (
-                                  <div className='justify-right align-right ml-2 mr-2 w-32 '>
-                                    <p className='justify-right right-align align-right text-right tabular-nums text-gray-600 dark:text-zinc-300'>
-                                      (
-                                      {parseInt(
-                                        eachVendor.count
-                                      ).toLocaleString('en-US')}
-                                      {' rows)'}
+                      <div
+                        className={`${
+                          showautocomplete.accounts ? '' : 'hidden'
+                        }`}
+                      >
+                        {autocompleteresultsaccount.rows &&
+                          autocompleteresultsaccount.rows.map(
+                            (eachVendor: any, vendorindex: number) => (
+                              <>
+                                <Link
+                                  key={vendorindex}
+                                  className='flex w-full flex-row border-b border-gray-500 hover:bg-gray-200 hover:dark:bg-gray-700 lg:w-4/6'
+                                  href={`/account/${encodeURIComponent(
+                                    eachVendor.account_name.toLowerCase().trim()
+                                  )}${debugmode ? `?debug=true` : ``}`}
+                                >
+                                  <div className='mr-2'>
+                                    <span>
+                                      <VendorElement
+                                        vendor_name={eachVendor.account_name}
+                                      />
+                                    </span>
+                                  </div>
+
+                                  <div className='justify-right align-right bold right-align ml-auto  text-right font-bold tabular-nums'>
+                                    <p className='tabular-nums'>
+                                      $
+                                      {parseInt(eachVendor.sum).toLocaleString(
+                                        'en-US'
+                                      )}
                                     </p>
                                   </div>
-                                )}
-                              </Link>
-                            </>
-                          )
+                                  {false && (
+                                    <div className='justify-right align-right ml-2 mr-2 w-32 '>
+                                      <p className='justify-right right-align align-right text-right tabular-nums text-gray-600 dark:text-zinc-300'>
+                                        (
+                                        {parseInt(
+                                          eachVendor.count
+                                        ).toLocaleString('en-US')}
+                                        {' rows)'}
+                                      </p>
+                                    </div>
+                                  )}
+                                </Link>
+                              </>
+                            )
+                          )}
+                        {autocompleteresultsaccount.rows.length === 0 && (
+                          <p className='text-sm font-bold text-blue-900 dark:text-blue-100'>
+                            0 matching accounts found. Try a different search?
+                          </p>
                         )}
-                      {autocompleteresults.rows.length === 0 && (
-                        <p className='text-sm font-bold text-blue-900 dark:text-blue-100'>
-                          0 matching vendors found. Try a different search?
+                      </div>
+                    </>
+                  )}
+                  {autocompleteresults && (
+                    <>
+                      <div className='flex flex-row align-bottom'>
+                        <h3>Vendors</h3>
+                        <p className='ml-2 mt-auto mb-[1px] align-bottom text-gray-700 dark:text-gray-300'>
+                          in {autocompleteresults.timeelapsed.toFixed(1)}ms
                         </p>
-                      )}
-                    </div>
-                  </>
-                )}
+                        <ButtonToExpand
+                          showautocomplete={showautocomplete}
+                          setshowautocomplete={setshowautocomplete}
+                          value='vendors'
+                        />
+                      </div>
+
+                      <div
+                        className={`${
+                          showautocomplete.vendors ? '' : 'hidden'
+                        }`}
+                      >
+                        {autocompleteresults.aliasforwardingstatus === true && (
+                          <p className='italics text-gray-700 dark:text-gray-300'>
+                            Also showing results for{' '}
+                            <span className='font-semibold text-gray-700 dark:text-gray-200'>
+                              <VendorElement
+                                vendor_name={
+                                  autocompleteresults.aliasforwardingto
+                                }
+                              />
+                            </span>
+                          </p>
+                        )}
+                        {autocompleteresults.rows &&
+                          autocompleteresults.rows.map(
+                            (eachVendor: any, vendorindex: number) => (
+                              <>
+                                {debugmode && (
+                                  <p className='italic text-gray-700 dark:text-gray-300'>
+                                    {eachVendor.vendor_name}
+                                  </p>
+                                )}
+                                <Link
+                                  key={vendorindex}
+                                  className='flex w-full flex-row border-b border-gray-500 hover:bg-gray-200 hover:dark:bg-gray-700 lg:w-4/6'
+                                  href={`/vendor/${encodeURIComponent(
+                                    eachVendor.vendor_name.toLowerCase().trim()
+                                  )}${debugmode ? `?debug=true` : ``}`}
+                                >
+                                  <div className='mr-2'>
+                                    <span>
+                                      <VendorElement
+                                        vendor_name={eachVendor.vendor_name}
+                                      />
+                                    </span>
+                                  </div>
+
+                                  <div className='justify-right align-right bold right-align ml-auto  text-right font-bold tabular-nums'>
+                                    <p className='tabular-nums'>
+                                      $
+                                      {parseInt(eachVendor.sum).toLocaleString(
+                                        'en-US'
+                                      )}
+                                    </p>
+                                  </div>
+                                  {false && (
+                                    <div className='justify-right align-right ml-2 mr-2 w-32 '>
+                                      <p className='justify-right right-align align-right text-right tabular-nums text-gray-600 dark:text-zinc-300'>
+                                        (
+                                        {parseInt(
+                                          eachVendor.count
+                                        ).toLocaleString('en-US')}
+                                        {' rows)'}
+                                      </p>
+                                    </div>
+                                  )}
+                                </Link>
+                              </>
+                            )
+                          )}
+                        {autocompleteresults.rows.length === 0 && (
+                          <p className='text-sm font-bold text-blue-900 dark:text-blue-100'>
+                            0 matching vendors found. Try a different search?
+                          </p>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
             </div>
           </div>
-          <br/>
-          <br/>
+          <br />
+          <br />
         </section>
       </main>
     </>
