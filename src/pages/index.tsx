@@ -290,7 +290,7 @@ export default function HomePage(props: any) {
                         }}
                       ></div>
                     </div>
-                    <p className='mt-auto mb-auto ml-1'>
+                    <p className='mt-auto mb-auto ml-1 hidden md:block'>
                       {socketconnected ? 'Connected' : 'Connecting...'}
                     </p>
                   </div>
