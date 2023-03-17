@@ -398,6 +398,8 @@ export default function HomePage(props: any) {
                 )}
             </div>
           </div>
+          <br/>
+          <br/>
         </section>
       </main>
     </>
