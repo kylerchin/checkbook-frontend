@@ -78,8 +78,8 @@ export default function HomePage(props: any) {
     depts: true,
     desc: false,
     detailed_desc: false,
-    account: true,
-    fund: true,
+    accounts: true,
+    funds: true,
     vendors: true,
   });
   const deptsref = useRef([]);
@@ -299,10 +299,10 @@ export default function HomePage(props: any) {
               <div className='mt-2'>
                 <input
                   id='checkbooksearch1'
-                  className=' w-full rounded-full border-2 border-gray-700 bg-gray-100 px-2 py-2 dark:border-gray-300 dark:bg-bruhlessdark dark:text-gray-50'
+                  className=' focus:dark-gray-900 w-full rounded-full border-2 border-gray-700 bg-gray-100 px-2 py-2 dark:border-gray-300 dark:bg-bruhlessdark dark:text-gray-50 focus:dark:border-gray-100'
                   value={initsearchquery}
                   onChange={handleChange}
-                  autofocus={true}
+                  autoFocus={true}
                   placeholder='Search for a vendor, department, or keyword'
                 />
               </div>
