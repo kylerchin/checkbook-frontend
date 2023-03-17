@@ -322,34 +322,109 @@ export default function HomePage(props: any) {
                 />
               </div>
 
-              {showautocomplete.depts === true &&
-                deptsloaded === true &&
-                filtereddepts.map((eachDept: any, deptindex: number) => (
-                  <Link
-                    key={deptindex}
-                    className='flex w-full flex-row border-b  border-gray-500 hover:bg-gray-200 hover:bg-gray-200 hover:dark:bg-bruhlessdark lg:w-4/6 '
-                    href={`/dept/${encodeURIComponent(
-                      eachDept.department_name.toLowerCase().trim()
-                    )}${debugmode ? `?debug=true` : ``}`}
-                  >
-                    <div className='flex-grow'>
-                      {departmentNameReplace(eachDept.department_name)}
-                    </div>
-                    <div className='justify-right align-right bold right-align text-right font-bold tabular-nums'>
-                      ${parseInt(eachDept.sum).toLocaleString('en-US')}
-                    </div>
-                  </Link>
-                ))}
-              {deptsloaded &&
-                filtereddepts.length === 0 &&
-                showautocomplete.depts && (
-                  <p className='text-sm font-bold text-blue-900 dark:text-blue-100'>
-                    0 matching depts found. Try a different search?
-                  </p>
-                )}
+              {showautocomplete.depts === true && deptsloaded === true && (
+                <>
+                  {filtereddepts.map((eachDept: any, deptindex: number) => (
+                    <Link
+                      key={deptindex}
+                      className='flex w-full flex-row border-b  border-gray-500 hover:bg-gray-200 hover:bg-gray-200 hover:dark:bg-bruhlessdark lg:w-4/6 '
+                      href={`/dept/${encodeURIComponent(
+                        eachDept.department_name.toLowerCase().trim()
+                      )}${debugmode ? `?debug=true` : ``}`}
+                    >
+                      <div className='flex-grow'>
+                        {departmentNameReplace(eachDept.department_name)}
+                      </div>
+                      <div className='justify-right align-right bold right-align text-right font-bold tabular-nums'>
+                        ${parseInt(eachDept.sum).toLocaleString('en-US')}
+                      </div>
+                    </Link>
+                  ))}
+                  {filtereddepts.length > 0 && <br />}
+                  {deptsloaded &&
+                    filtereddepts.length === 0 &&
+                    showautocomplete.depts && (
+                      <p className='text-sm font-bold text-blue-900 dark:text-blue-100'>
+                        0 matching depts found. Try a different search?
+                      </p>
+                    )}
+                </>
+              )}
 
               {(disableneedfirsttype || firstqueryinserted) && (
                 <>
+                  {autocompleteresultsfund && (
+                    <>
+                      <div className='flex flex-row align-bottom'>
+                        <h3>Funds</h3>
+                        <p className='ml-2 mt-auto mb-[1px] align-bottom text-gray-700 dark:text-gray-300'>
+                          {autocompleteresultsfund.rows.length.toLocaleString(
+                            'default'
+                          )}
+                          {autocompleteresultsfund.rows.length > 99 ? '+' : ''}{' '}
+                          in {autocompleteresultsfund.timeelapsed.toFixed(1)}
+                          ms
+                        </p>
+                        <ButtonToExpand
+                          showautocomplete={showautocomplete}
+                          setshowautocomplete={setshowautocomplete}
+                          value='funds'
+                        />
+                      </div>
+
+                      <div
+                        className={`${showautocomplete.funds ? '' : 'hidden'}`}
+                      >
+                        {autocompleteresultsfund.rows &&
+                          autocompleteresultsfund.rows.map(
+                            (eachItem: any, vendorindex: number) => (
+                              <>
+                                <Link
+                                  key={vendorindex}
+                                  className='flex w-full flex-row border-b border-gray-500 hover:bg-gray-200 hover:dark:bg-gray-700 lg:w-4/6'
+                                  href={`/fund/${encodeURIComponent(
+                                    eachItem.fund_name.toLowerCase().trim()
+                                  )}${debugmode ? `?debug=true` : ``}`}
+                                >
+                                  <div className='mr-2'>
+                                    <span>
+                                      <VendorElement
+                                        vendor_name={eachItem.fund_name}
+                                      />
+                                    </span>
+                                  </div>
+
+                                  <div className='justify-right align-right bold right-align ml-auto  text-right font-bold tabular-nums'>
+                                    <p className='tabular-nums'>
+                                      $
+                                      {parseInt(eachItem.sum).toLocaleString(
+                                        'en-US'
+                                      )}
+                                    </p>
+                                  </div>
+                                  {false && (
+                                    <div className='justify-right align-right ml-2 mr-2 w-32 '>
+                                      <p className='justify-right right-align align-right text-right tabular-nums text-gray-600 dark:text-zinc-300'>
+                                        {parseInt(
+                                          eachItem.count
+                                        ).toLocaleString('en-US')}
+                                        {' rows)'}
+                                      </p>
+                                    </div>
+                                  )}
+                                </Link>
+                              </>
+                            )
+                          )}
+                        {autocompleteresultsfund.rows.length > 0 && <br />}
+                        {autocompleteresultsfund.rows.length === 0 && (
+                          <p className='text-sm font-bold text-blue-900 dark:text-blue-100'>
+                            0 matching accounts found. Try a different search?
+                          </p>
+                        )}
+                      </div>
+                    </>
+                  )}
                   {autocompleteresultsaccount && (
                     <>
                       <div className='flex flex-row align-bottom'>
@@ -417,6 +492,8 @@ export default function HomePage(props: any) {
                               </>
                             )
                           )}
+
+                        {autocompleteresultsaccount.rows.length > 0 && <br />}
                         {autocompleteresultsaccount.rows.length === 0 && (
                           <p className='text-sm font-bold text-blue-900 dark:text-blue-100'>
                             0 matching accounts found. Try a different search?
@@ -426,77 +503,6 @@ export default function HomePage(props: any) {
                     </>
                   )}
 
-                  {autocompleteresultsfund && (
-                    <>
-                      <div className='flex flex-row align-bottom'>
-                        <h3>Funds</h3>
-                        <p className='ml-2 mt-auto mb-[1px] align-bottom text-gray-700 dark:text-gray-300'>
-                          {autocompleteresultsfund.rows.length.toLocaleString(
-                            'default'
-                          )}
-                          {autocompleteresultsfund.rows.length > 99 ? '+' : ''}{' '}
-                          in {autocompleteresultsfund.timeelapsed.toFixed(1)}
-                          ms
-                        </p>
-                        <ButtonToExpand
-                          showautocomplete={showautocomplete}
-                          setshowautocomplete={setshowautocomplete}
-                          value='funds'
-                        />
-                      </div>
-
-                      <div
-                        className={`${showautocomplete.funds ? '' : 'hidden'}`}
-                      >
-                        {autocompleteresultsaccount.rows &&
-                          autocompleteresultsaccount.rows.map(
-                            (eachItem: any, vendorindex: number) => (
-                              <>
-                                <Link
-                                  key={vendorindex}
-                                  className='flex w-full flex-row border-b border-gray-500 hover:bg-gray-200 hover:dark:bg-gray-700 lg:w-4/6'
-                                  href={`/fund/${encodeURIComponent(
-                                    eachItem.fund_name.toLowerCase().trim()
-                                  )}${debugmode ? `?debug=true` : ``}`}
-                                >
-                                  <div className='mr-2'>
-                                    <span>
-                                      <VendorElement
-                                        vendor_name={eachItem.fund_name}
-                                      />
-                                    </span>
-                                  </div>
-
-                                  <div className='justify-right align-right bold right-align ml-auto  text-right font-bold tabular-nums'>
-                                    <p className='tabular-nums'>
-                                      $
-                                      {parseInt(eachItem.sum).toLocaleString(
-                                        'en-US'
-                                      )}
-                                    </p>
-                                  </div>
-                                  {false && (
-                                    <div className='justify-right align-right ml-2 mr-2 w-32 '>
-                                      <p className='justify-right right-align align-right text-right tabular-nums text-gray-600 dark:text-zinc-300'>
-                                        {parseInt(
-                                          eachItem.count
-                                        ).toLocaleString('en-US')}
-                                        {' rows)'}
-                                      </p>
-                                    </div>
-                                  )}
-                                </Link>
-                              </>
-                            )
-                          )}
-                        {autocompleteresultsaccount.rows.length === 0 && (
-                          <p className='text-sm font-bold text-blue-900 dark:text-blue-100'>
-                            0 matching accounts found. Try a different search?
-                          </p>
-                        )}
-                      </div>
-                    </>
-                  )}
                   {autocompleteresults && (
                     <>
                       <div className='flex flex-row align-bottom'>
@@ -584,6 +590,7 @@ export default function HomePage(props: any) {
                             0 matching vendors found. Try a different search?
                           </p>
                         )}
+                        {autocompleteresults.rows.length > 0 && <br />}
                       </div>
                     </>
                   )}
