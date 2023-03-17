@@ -302,6 +302,7 @@ export default function HomePage(props: any) {
                   className=' w-full rounded-full bg-gray-100 px-2 py-2 dark:bg-bruhlessdark dark:text-gray-50'
                   value={initsearchquery}
                   onChange={handleChange}
+                  autofocus={true}
                   placeholder='Search for a vendor, department, or keyword'
                 />
               </div>
