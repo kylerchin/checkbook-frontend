@@ -75,10 +75,11 @@ export default function HomePage(props: any) {
   const router = useRouter();
   const { debugmode } = router.query;
   const [showautocomplete, setshowautocomplete] = useState<any>({
-    depts: false,
+    depts: true,
     desc: false,
     detailed_desc: false,
-    account: false,
+    account: true,
+    fund: true,
     vendors: true,
   });
   const deptsref = useRef([]);
@@ -573,7 +574,6 @@ export default function HomePage(props: any) {
                                   {false && (
                                     <div className='justify-right align-right ml-2 mr-2 w-32 '>
                                       <p className='justify-right right-align align-right text-right tabular-nums text-gray-600 dark:text-zinc-300'>
-                                        (
                                         {parseInt(
                                           eachVendor.count
                                         ).toLocaleString('en-US')}
