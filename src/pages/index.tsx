@@ -431,7 +431,11 @@ export default function HomePage(props: any) {
                       <div className='flex flex-row align-bottom'>
                         <h3>Vendors</h3>
                         <p className='ml-2 mt-auto mb-[1px] align-bottom text-gray-700 dark:text-gray-300'>
-                          in {autocompleteresults.timeelapsed.toFixed(1)}ms
+                          {autocompleteresults.rows.length.toLocaleString(
+                            'default'
+                          )}
+                          {autocompleteresults.rows.length > 99 ? '+' : ''} in{' '}
+                          {autocompleteresults.timeelapsed.toFixed(1)}ms
                         </p>
                         <ButtonToExpand
                           showautocomplete={showautocomplete}
