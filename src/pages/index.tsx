@@ -299,7 +299,7 @@ export default function HomePage(props: any) {
               <div className='mt-2'>
                 <input
                   id='checkbooksearch1'
-                  className=' w-full rounded-full bg-gray-100 px-2 py-2 dark:bg-bruhlessdark dark:text-gray-50'
+                  className=' w-full rounded-full border-2 border-gray-700 bg-gray-100 px-2 py-2 dark:border-gray-300 dark:bg-bruhlessdark dark:text-gray-50'
                   value={initsearchquery}
                   onChange={handleChange}
                   autofocus={true}
