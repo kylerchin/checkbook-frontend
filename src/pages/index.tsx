@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 
 import { departmentNameReplace } from '@/components/departmentNameReplace';
+import { isCommonwealth } from '@/components/isCommonwealth';
 import { VendorElement } from '@/components/TransactionTable';
 
 import backends from '@/backends.json';
@@ -53,8 +54,31 @@ function ButtonToExpand(props: ButtonToExpandInterface) {
   );
 }
 
+function stringFromArrayUrl(array: Array<any>) {
+  let outstring = '';
+
+  const cleanedinputarray = array.filter(
+    (item) => item !== '' && item !== ' ' && item !== undefined && item !== null
+  );
+
+  if (cleanedinputarray.length > 0) {
+    outstring = '?';
+    outstring = outstring + array.join('&');
+  }
+
+  return outstring;
+}
+
 export default function HomePage(props: any) {
-  const [initsearchquery, setinitsearchquery] = useState('');
+  //if it has the url parameter search, then it will search for that, if not, put blank
+
+  const router = useRouter();
+  const { debugmode, search } = router.query;
+
+  const [initsearchquery, setinitsearchquery] = useState<string>(
+    search ? String(search) : ''
+  );
+
   const disableneedfirsttype = true;
   const [firstloaded, setfirstloaded] = useState<boolean>(false);
   const [autocompleteresultsfund, setautocompleteresultsfund] =
@@ -72,8 +96,7 @@ export default function HomePage(props: any) {
     socket.connected
   );
   const [depts, setdepts] = useState<Array<any>>([]);
-  const router = useRouter();
-  const { debugmode } = router.query;
+
   const [showautocomplete, setshowautocomplete] = useState<any>({
     depts: true,
     desc: false,
@@ -81,6 +104,7 @@ export default function HomePage(props: any) {
     accounts: true,
     funds: true,
     vendors: true,
+    programs: true,
   });
   const deptsref = useRef([]);
   const [deptsloaded, setdeptsloaded] = useState<boolean>(false);
@@ -166,6 +190,15 @@ export default function HomePage(props: any) {
   };
 
   useEffect(() => {
+    router.push(
+      `/${stringFromArrayUrl([
+        'initsearchquery=' + encodeURIComponent(initsearchquery),
+        debugmode ? 'debugmode=true' : '',
+      ])}`,
+      undefined,
+      { shallow: true }
+    );
+
     socket.emit('mainautocomplete', {
       querystring: initsearchquery,
     });
@@ -332,7 +365,12 @@ export default function HomePage(props: any) {
                       className='flex w-full flex-row border-b  border-gray-500 hover:bg-gray-200 hover:bg-gray-200 hover:dark:bg-bruhlessdark lg:w-4/6 '
                       href={`/dept/${encodeURIComponent(
                         eachDept.department_name.toLowerCase().trim()
-                      )}${debugmode ? `?debug=true` : ``}`}
+                      )}
+                      ${stringFromArrayUrl([
+                        debugmode ? `debug=true` : ``,
+                        `initsearch=${initsearchquery}`,
+                      ])}
+                      `}
                     >
                       <div className='flex-grow'>
                         {departmentNameReplace(eachDept.department_name)}
@@ -386,7 +424,10 @@ export default function HomePage(props: any) {
                                   className='flex w-full flex-row border-b border-gray-500 hover:bg-gray-200 hover:dark:bg-gray-700 lg:w-4/6'
                                   href={`/fund/${encodeURIComponent(
                                     eachItem.fund_name.toLowerCase().trim()
-                                  )}${debugmode ? `?debug=true` : ``}`}
+                                  )}${stringFromArrayUrl([
+                                    debugmode ? `debug=true` : ``,
+                                    `initsearch=${initsearchquery}`,
+                                  ])}`}
                                 >
                                   <div className='mr-2'>
                                     <span>
@@ -505,6 +546,89 @@ export default function HomePage(props: any) {
                     </>
                   )}
 
+                  {autocompleteresultsprogram && (
+                    <>
+                      <div className='flex flex-row align-bottom'>
+                        <h3>{isCommonwealth() ? 'Programmes' : 'Programs'}</h3>
+                        <p className='ml-2 mt-auto mb-[1px] align-bottom text-gray-700 dark:text-gray-300'>
+                          {autocompleteresultsprogram.rows.length.toLocaleString(
+                            'default'
+                          )}
+                          {autocompleteresultsprogram.rows.length > 99
+                            ? '+'
+                            : ''}{' '}
+                          in {autocompleteresultsprogram.timeelapsed.toFixed(1)}
+                          ms
+                        </p>
+                        <ButtonToExpand
+                          showautocomplete={showautocomplete}
+                          setshowautocomplete={setshowautocomplete}
+                          value='accounts'
+                        />
+                      </div>
+
+                      <div
+                        className={`${
+                          showautocomplete.programs ? '' : 'hidden'
+                        }`}
+                      >
+                        {autocompleteresultsprogram.rows &&
+                          autocompleteresultsprogram.rows.map(
+                            (eachItem: any, vendorindex: number) => (
+                              <>
+                                <Link
+                                  key={vendorindex}
+                                  className='flex w-full flex-row border-b border-gray-500 hover:bg-gray-200 hover:dark:bg-gray-700 lg:w-4/6'
+                                  href={`/program/${encodeURIComponent(
+                                    eachItem.program.toLowerCase().trim()
+                                  )}${stringFromArrayUrl([
+                                    debugmode ? `debug=true` : ``,
+                                    `initsearch=${initsearchquery}`,
+                                  ])}`}
+                                >
+                                  <div className='mr-2'>
+                                    <span>
+                                      <VendorElement
+                                        vendor_name={eachItem.program}
+                                      />
+                                    </span>
+                                  </div>
+
+                                  <div className='justify-right align-right bold right-align ml-auto  text-right font-bold tabular-nums'>
+                                    <p className='tabular-nums'>
+                                      $
+                                      {parseInt(eachItem.sum).toLocaleString(
+                                        'en-US'
+                                      )}
+                                    </p>
+                                  </div>
+                                  {false && (
+                                    <div className='justify-right align-right ml-2 mr-2 w-32 '>
+                                      <p className='justify-right right-align align-right text-right tabular-nums text-gray-600 dark:text-zinc-300'>
+                                        {parseInt(
+                                          eachItem.count
+                                        ).toLocaleString('en-US')}
+                                        {' rows)'}
+                                      </p>
+                                    </div>
+                                  )}
+                                </Link>
+                              </>
+                            )
+                          )}
+
+                        {autocompleteresultsprogram.rows.length > 0 && <br />}
+                        {autocompleteresultsprogram.rows.length === 0 && (
+                          <p className='text-sm font-bold text-blue-900 dark:text-blue-100'>
+                            0 matching{' '}
+                            {isCommonwealth() ? 'programmes' : 'programs'}{' '}
+                            found. Try a different search?
+                          </p>
+                        )}
+                      </div>
+                    </>
+                  )}
+
                   {autocompleteresults && (
                     <>
                       <div className='flex flex-row align-bottom'>
@@ -554,7 +678,10 @@ export default function HomePage(props: any) {
                                   className='flex w-full flex-row border-b border-gray-500 hover:bg-gray-200 hover:dark:bg-gray-700 lg:w-4/6'
                                   href={`/vendor/${encodeURIComponent(
                                     eachVendor.vendor_name.toLowerCase().trim()
-                                  )}${debugmode ? `?debug=true` : ``}`}
+                                  )}${stringFromArrayUrl([
+                                    debugmode ? `debug=true` : ``,
+                                    `initsearch=${initsearchquery}`,
+                                  ])}`}
                                 >
                                   <div className='mr-2'>
                                     <span>
