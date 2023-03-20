@@ -365,8 +365,7 @@ export default function HomePage(props: any) {
                       className='flex w-full flex-row border-b  border-gray-500 hover:bg-gray-200 hover:bg-gray-200 hover:dark:bg-bruhlessdark lg:w-4/6 '
                       href={`/dept/${encodeURIComponent(
                         eachDept.department_name.toLowerCase().trim()
-                      )}
-                      ${stringFromArrayUrl([
+                      )}${stringFromArrayUrl([
                         debugmode ? `debug=true` : ``,
                         `initsearch=${initsearchquery}`,
                       ])}
