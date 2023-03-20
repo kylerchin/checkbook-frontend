@@ -1,10 +1,10 @@
 import { mdiIncognitoCircle } from '@mdi/js';
 import Icon from '@mdi/react';
-import Link from 'next/link';
 import * as React from 'react';
 import { useEffect } from 'react';
 import { titleCase } from 'true-case';
 
+import { BackToSearch } from '@/components/backtosearch';
 import { departmentNameReplace } from '@/components/departmentNameReplace';
 import { Navbar } from '@/components/nav';
 import Seo from '@/components/Seo';
@@ -47,25 +47,7 @@ export default function Vendors(props: any) {
           )}|LA Checkbook Vendor`}
         />
 
-        <Link href='/' className='ml-2 underline'>
-          <p className='ml-2 underline hover:text-blue-900 dark:text-blue-200 hover:dark:text-blue-50'>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth={1.5}
-              stroke='currentColor'
-              className='mr-2 inline h-5 w-5'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18'
-              />
-            </svg>
-            Back to Search
-          </p>
-        </Link>
+        <BackToSearch />
 
         <h1 className='ml-2'>
           <>
