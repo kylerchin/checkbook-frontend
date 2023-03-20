@@ -563,7 +563,7 @@ export default function HomePage(props: any) {
                         <ButtonToExpand
                           showautocomplete={showautocomplete}
                           setshowautocomplete={setshowautocomplete}
-                          value='accounts'
+                          value='programs'
                         />
                       </div>
 
