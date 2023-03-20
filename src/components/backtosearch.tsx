@@ -6,8 +6,17 @@ export function BackToSearch(props: any) {
   const router = useRouter();
 
   const { initsearch } = router.query;
+
+  const calculateLink = () => {
+    if (initsearch) {
+      return `/?initsearchquery=${initsearch}`;
+    } else {
+      return '';
+    }
+  };
+
   return (
-    <Link href='/' className='ml-2 underline'>
+    <Link href={calculateLink()} className='ml-2 underline'>
       <p className='ml-2 underline hover:text-blue-900 dark:text-blue-200 hover:dark:text-blue-50'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
