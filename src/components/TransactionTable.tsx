@@ -1,5 +1,6 @@
 import { mdiIncognitoCircle } from '@mdi/js';
 import Icon from '@mdi/react';
+import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
@@ -31,6 +32,14 @@ const columnsshortened: any = {
 };
 
 const columnsinverseshortened: any = {};
+
+const linkHover = [
+  'decoration-sky-600',
+  'dark:decoration-sky-400',
+  'underline',
+  'hover:decoration-blue-700',
+  'dark:hover:decoration-cyan-400',
+];
 
 for (const key in columnsshortened) {
   columnsinverseshortened[columnsshortened[key]] = key;
@@ -758,7 +767,7 @@ export function TransactionTable(props: transactiontableinterface) {
                         eachItem.department_name.toLowerCase().trim()
                       )}`}
                     >
-                      <span className='underline decoration-sky-600/80 hover:decoration-sky-500'>
+                      <span className={classNames(linkHover)}>
                         {departmentNameReplace(eachItem.department_name)}
                       </span>
                     </Link>
@@ -773,7 +782,7 @@ export function TransactionTable(props: transactiontableinterface) {
                         eachItem.vendor_name.toLowerCase().trim()
                       )}`}
                     >
-                      <span className='underline decoration-sky-600/80 hover:decoration-sky-500'>
+                      <span className={classNames(linkHover)}>
                         <VendorElement vendor_name={eachItem.vendor_name} />
                       </span>
                     </Link>
@@ -788,7 +797,7 @@ export function TransactionTable(props: transactiontableinterface) {
                         eachItem.fund_name.toLowerCase().trim()
                       )}`}
                     >
-                      <span className='underline decoration-sky-600/80 hover:decoration-sky-500'>
+                      <span className={classNames(linkHover)}>
                         {titleCase(eachItem.fund_name).replace(
                           / and /gi,
                           ' & '
@@ -807,7 +816,7 @@ export function TransactionTable(props: transactiontableinterface) {
                       )}`}
                     >
                       {' '}
-                      <span className='underline decoration-sky-600/80 hover:decoration-sky-500'>
+                      <span className={classNames(linkHover)}>
                         {titleCase(eachItem.account_name).replace(
                           / and /gi,
                           ' & '
@@ -826,7 +835,7 @@ export function TransactionTable(props: transactiontableinterface) {
                       )}`}
                     >
                       {' '}
-                      <span className='underline decoration-sky-600/80 hover:decoration-sky-500'>
+                      <span className={classNames(linkHover)}>
                         {titleCase(eachItem.program).replace(/ and /gi, ' & ')}
                       </span>
                     </Link>
@@ -938,7 +947,7 @@ export function TransactionTable(props: transactiontableinterface) {
                         eachItem.department_name.toLowerCase().trim()
                       )}`}
                     >
-                      <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
+                      <span className={classNames(linkHover)}>
                         {departmentNameReplace(eachItem.department_name)}
                       </span>
                     </a>
@@ -957,7 +966,7 @@ export function TransactionTable(props: transactiontableinterface) {
                           eachItem.vendor_name.toLowerCase().trim()
                         )}`}
                       >
-                        <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
+                        <span className={classNames(linkHover)}>
                           <VendorElement vendor_name={eachItem.vendor_name} />
                         </span>
                       </Link>
@@ -978,7 +987,7 @@ export function TransactionTable(props: transactiontableinterface) {
                             eachItem.fund_name.toLowerCase().trim()
                           )}`}
                         >
-                          <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
+                          <span className={classNames(linkHover)}>
                             {titleCase(eachItem.fund_name)}
                           </span>
                         </Link>
@@ -999,7 +1008,7 @@ export function TransactionTable(props: transactiontableinterface) {
                             eachItem.account_name.toLowerCase().trim()
                           )}`}
                         >
-                          <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
+                          <span className={classNames(linkHover)}>
                             {titleCase(eachItem.account_name)}
                           </span>
                         </Link>
@@ -1021,7 +1030,7 @@ export function TransactionTable(props: transactiontableinterface) {
                             eachItem.program.toLowerCase().trim()
                           )}`}
                         >
-                          <span className='underline decoration-sky-500/80 hover:decoration-sky-500'>
+                          <span className={classNames(linkHover)}>
                             {titleCase(eachItem.program)}
                           </span>
                         </Link>

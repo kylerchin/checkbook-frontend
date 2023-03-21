@@ -192,7 +192,7 @@ export default function HomePage(props: any) {
   useEffect(() => {
     router.push(
       `/${stringFromArrayUrl([
-        'initsearchquery=' + encodeURIComponent(initsearchquery),
+        'search=' + encodeURIComponent(initsearchquery),
         debugmode ? 'debugmode=true' : '',
       ])}`,
       undefined,
@@ -430,9 +430,13 @@ export default function HomePage(props: any) {
                                 >
                                   <div className='mr-2'>
                                     <span>
-                                      <VendorElement
-                                        vendor_name={eachItem.fund_name}
-                                      />
+                                      <span>
+                                        <VendorElement
+                                          vendor_name={eachItem.fund_name}
+                                        />
+                                      </span>
+                                      <span> </span>
+                                      <span>{eachItem.fund_id}</span>
                                     </span>
                                   </div>
 

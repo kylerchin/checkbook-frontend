@@ -9,7 +9,7 @@ export function BackToSearch(props: any) {
 
   const calculateLink = () => {
     if (initsearch) {
-      return `/?initsearchquery=${initsearch}`;
+      return `/?search=${initsearch}`;
     } else {
       return '';
     }
