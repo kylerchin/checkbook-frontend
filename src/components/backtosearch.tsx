@@ -8,10 +8,11 @@ export function BackToSearch(props: any) {
   const { initsearch } = router.query;
 
   const calculateLink = () => {
+    console.log('back to search component: initsearch', initsearch);
     if (initsearch) {
       return `/?search=${initsearch}`;
     } else {
-      return '';
+      return '/';
     }
   };
 

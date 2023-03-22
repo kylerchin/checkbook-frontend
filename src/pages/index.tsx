@@ -506,7 +506,10 @@ export default function HomePage(props: any) {
                                   className='flex w-full flex-row border-b border-gray-500 hover:bg-gray-200 hover:dark:bg-gray-700 lg:w-4/6'
                                   href={`/account/${encodeURIComponent(
                                     eachVendor.account_name.toLowerCase().trim()
-                                  )}${debugmode ? `?debug=true` : ``}`}
+                                  )}${stringFromArrayUrl([
+                                    debugmode ? `debug=true` : ``,
+                                    `initsearch=${initsearchquery}`,
+                                  ])}`}
                                 >
                                   <div className='mr-2'>
                                     <span>
