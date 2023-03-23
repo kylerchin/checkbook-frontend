@@ -47,7 +47,7 @@ function ButtonToExpand(props: ButtonToExpandInterface) {
   return (
     <button
       onClick={changeParent}
-      className='ml-auto rounded-full bg-black px-3 py-1 text-white dark:border dark:border-gray-500 md:ml-4'
+      className='ml-auto rounded-full border border-gray-500 bg-black px-3 py-1 text-white dark:bg-zinc-200 dark:text-gray-900 md:ml-4'
     >
       {props.showautocomplete[props.value] ? 'Collapse' : 'Expand'}
     </button>
