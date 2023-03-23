@@ -28,6 +28,7 @@ const columnsshortened: any = {
   a: 'account_name',
   q: 'quantity',
   uom: 'unit_of_measure',
+  sj: 'settlement_judgment',
 };
 
 const columnsinverseshortened: any = {};
